@@ -97,7 +97,7 @@ const Header = () => {
                                         {
                                             activeForm === "login" ? (
                                                 <div className='flex gap-2 '>
-                                                    <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Do't have an account</h1>
+                                                    <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Do&apos;t have an account</h1>
                                                     <Button onClick={() => setActiveForm("register")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>sign Up</Button>
                                                 </div>
                                             ) : activeForm === "register" ? (

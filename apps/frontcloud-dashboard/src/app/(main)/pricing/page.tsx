@@ -144,7 +144,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
                 <Label>Features</Label>
                 <ul className=" list-inside">
                     {features.map((feature, index) => (
-                        <div className='flex items-start gap-x-1 py-2'>
+                        <div key={index} className='flex items-start gap-x-1 py-2'>
                             <CircleCheck color='white' fill='green' size={20} />
                             <li key={index} className='text-gray-500 text-sm'>  {feature}</li>
                         </div>
