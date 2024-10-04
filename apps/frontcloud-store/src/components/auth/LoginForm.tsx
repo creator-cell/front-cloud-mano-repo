@@ -64,7 +64,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                             <CustomFormField
                                 fieldType={FormFieldType.INPUT}
                                 name={"password"}
-                                type='password'
+                                type={showPassword ? "text" : 'password'}
                                 control={form.control}
                                 placeholder='password'
                                 className='px-12'

@@ -6,7 +6,6 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 
 import { logo } from "@/assets/logo/index"
-import { Badge } from '@/components/ui/badge'
 import useScroll from '@/hooks/useScroll';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
@@ -19,7 +18,6 @@ import {
     ModalFooter,
     ModalTrigger,
 } from "@/components/ui/animated-modal";
-import { motion } from "framer-motion";
 import LoginForm from '@/components/auth/LoginForm';
 
 type ActiveForm = "login" | "register" | "forgot-password";
@@ -37,7 +35,7 @@ const Header = () => {
             case "register":
                 return <SignUpForm title='Create an account' />;
             case "forgot-password":
-            // return <ForgotPasswordForm title='Forgot password' />;
+                return <ForgotPasswordForm title='Forgot password' />;
             default:
                 return null;
         }
@@ -106,7 +104,7 @@ const Header = () => {
                                                     <Button onClick={() => setActiveForm("login")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Login</Button>
                                                 </div>
                                             ) : activeForm === "forgot-password" ? (
-                                                <div className='flex gap-2'>
+                                                <div className='flex gap-2 mt-5'>
                                                     <h1 className=' text-[12px] cursor-pointer'>Already have an account</h1>
                                                     <Button onClick={() => setActiveForm("login")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Login</Button>
                                                 </div>
@@ -136,7 +134,7 @@ const SideImages = () => {
     return (
         <div className='h-full w-full'>
             <Image
-                src={images[0]}
+                src={images[0] ?? ""}
                 className="h-full w-full object-cover "
                 height="800"
                 width="500"
@@ -149,6 +147,7 @@ const SideImages = () => {
 
 import { ParallaxScroll } from "@/components/ui/parallax-scroll"
 import SignUpForm from '@/components/auth/SignUpForm';
+import ForgotPasswordForm from '@/components/auth/ForgotPasswordForm';
 
 export function ParallaxScrollDemo() {
     return <ParallaxScroll images={images} />;

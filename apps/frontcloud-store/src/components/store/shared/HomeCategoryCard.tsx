@@ -17,13 +17,13 @@ import GroceryImages from "@/assets/grocery/index";
 
 interface Data {
     title: string;
-    image?: string;
+    image?: string | undefined;
     description: string;
     href: string;
 }
 
 interface HomeCategoryCardProps {
-    data: Data;
+    data?: Data;
 }
 
 const HomeCategoryCard: React.FC<HomeCategoryCardProps> = ({ data }) => {

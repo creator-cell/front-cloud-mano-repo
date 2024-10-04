@@ -1,21 +1,19 @@
 "use client";
-import Carousal from '@/components/store/Carousal'
-import React from 'react'
 
+import React from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+
+import Carousal from '@/components/store/Carousal'
 import images from "@/assets/extra/hero-01.jpg"
 import { CustomHeading } from '@/components/custom/CustomHeading'
-import { CustomParagraph } from '@/components/custom/CustomParagraph'
 import { Button } from '@/components/ui/button'
-import { motion } from 'framer-motion'
-import Image from 'next/image';
-import SharedCarousal from '@/components/store/shared/SharedCarousal';
-import Banner from '@/components/store/Banner';
 import DiscountBanners from '@/components/store/shared/DiscountBanners';
 import ProductCategoryCarousal from '@/components/store/shared/ProductCategoryCarousal';
 import HomeCategoryCard from '@/components/store/shared/HomeCategoryCard';
 import OfferCard from '@/components/store/OfferCard';
 import ProductCard from '@/components/store/shared/ProductCard';
-import Link from 'next/link';
+
 
 
 
@@ -254,7 +252,6 @@ const StorePage = () => {
 
                 </div> */}
             </div>
-
             {/* Discount Banners */}
             <DiscountBanners />
 
