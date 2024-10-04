@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@repo/ui": "workspace:*",
     "@hello-pangea/dnd": "^17.0.0",
     "@hookform/resolvers": "^3.9.0",
     "@monaco-editor/react": "^4.6.0",

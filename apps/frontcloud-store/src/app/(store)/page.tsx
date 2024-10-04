@@ -17,6 +17,8 @@ import OfferCard from '@/components/store/OfferCard';
 import ProductCard from '@/components/store/shared/ProductCard';
 import Link from 'next/link';
 
+
+
 const breakpoints = {
     0: {
         slidesPerView: 1.2,
