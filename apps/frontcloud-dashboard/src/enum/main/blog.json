@@ -1,0 +1,60 @@
+{
+    "blogs": [
+        {
+            "title": "BigCommerce Customers Wovenbyrd and Joval Wines Win B2B Ecommerce Industry Awards",
+            "date": "September 5, 2024",
+            "description": "BigCommerce customers AS Colour, Inhaven and TradeTools were also recognized as finalists in their categories.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/blog1",
+            "imageUrl": "https://images.ctfassets.net/wowgx05xsdrr/4ql7HIyGUxgZHlprpfSP1n/dc8786ede217d0224e398c7995f4bb10/WWD-logo.png"
+        },
+        {
+            "title": "The Next Big Thing: BigCommerce Strengthens Enterprise Capabilities with Next Generation Composable Commerce, B2B Solutions, Omnichannel Integrations, AI and More",
+            "date": "August 27, 2024",
+            "description": "Today’s announcements include innovative functionality and partner integrations to help brands and retailers sell globally, improve conversion rates, build more beautiful storefronts and deliver incredible shopping experiences.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/blog2",
+            "imageUrl": "https://images.ctfassets.net/wowgx05xsdrr/4ql7HIyGUxgZHlprpfSP1n/dc8786ede217d0224e398c7995f4bb10/WWD-logo.png"
+        },
+        {
+            "title": "BigCommerce Announces 2024 Customer Award Winners",
+            "date": "August 26, 2024",
+            "description": "Annual awards program celebrates four exceptional BigCommerce customers for achievement in Design, Innovation, Emerging Brand and Shopper Experience.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/blog3",
+            "imageUrl": "https://images.ctfassets.net/wowgx05xsdrr/4ql7HIyGUxgZHlprpfSP1n/dc8786ede217d0224e398c7995f4bb10/WWD-logo.png"
+        },
+        {
+            "title": "Leading UK Sporting Goods Retailer SportsShoes Launches Composable Commerce Site on BigCommerce",
+            "date": "August 20, 2024",
+            "description": "Since the site launched earlier this year, SportsShoes has seen its sales conversion rate increase 19% year-over-year while average order value increased 10%.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/blog4",
+            "imageUrl": "https://images.ctfassets.net/wowgx05xsdrr/4ql7HIyGUxgZHlprpfSP1n/dc8786ede217d0224e398c7995f4bb10/WWD-logo.png"
+        },
+        {
+            "title": "Global Footwear Retailer Soletrader Unveils High-Performance Headless Ecommerce Site Using BigCommerce",
+            "date": "August 5, 2024",
+            "description": "Leading UK shoe seller sees major improvements in checkout and overall site speed after replatforming on BigCommerce.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/blog5",
+            "imageUrl": "https://images.ctfassets.net/wowgx05xsdrr/4ql7HIyGUxgZHlprpfSP1n/dc8786ede217d0224e398c7995f4bb10/WWD-logo.png"
+        },
+        {
+            "title": "BigCommerce Scores 24/24 Total Medals in 2024 Paradigm B2B Combine Midmarket and Enterprise Editions for Second Consecutive Year",
+            "date": "July 17, 2024",
+            "description": "Company scores more Gold medals than other participating platforms in the Midmarket Edition; receives customer accolades for its extensive partner ecosystem, rich application integrations, robust APIs and ease-of-use, validating the platform’s ability to modernize B2B operations to grow, scale and meet digital buyer needs.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/blog6",
+            "imageUrl": "https://images.ctfassets.net/wowgx05xsdrr/4ql7HIyGUxgZHlprpfSP1n/dc8786ede217d0224e398c7995f4bb10/WWD-logo.png"
+        },
+        {
+            "title": "BigCommerce Named a Leader in Both IDC MarketScape Worldwide Headless Digital Commerce Applications for Enterprise and Midmarket Growth 2024 Vendor Assessments",
+            "date": "July 1, 2024",
+            "description": "Platform’s strength in API-first, headless (MACH) architecture is recognized to deliver the critical functionalities, ease-of-use and flexibility large brands and retailers need to scale more efficiently, maintain high performance and create frictionless customer experiences.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/blog7",
+            "imageUrl": "https://images.ctfassets.net/wowgx05xsdrr/4ql7HIyGUxgZHlprpfSP1n/dc8786ede217d0224e398c7995f4bb10/WWD-logo.png"
+        }
+    ]
+}

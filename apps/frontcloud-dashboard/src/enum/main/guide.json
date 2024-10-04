@@ -1,0 +1,44 @@
+{
+    "heroSection": {
+        "title": "Ebooks and Guides",
+        "description": "Check out our free ebooks and guides. You’ll find helpful how-to's, industry trends, best practices and more to help grow your ecommerce business."
+    },
+    "replatformingGuide": {
+        "title": "Replatforming Guide: A Roadmap for Migrating Your Ecommerce Store",
+        "description": [
+            "Our team at BigCommerce understands the replatforming process, having worked with numerous enterprises to migrate their stores — and we’re here to help you every step of the way.",
+            "In this comprehensive guide, we walk through the five essential steps for managing a platform migration and provide migration success stories from our very own BigCommerce merchants."
+        ],
+        "cta": "Download"
+    },
+    "additionalGuides": {
+        "title": "Additional Guides",
+        "guides": [
+            {
+                "title": "Resilient Ecommerce Architecture",
+                "imageUrl": "addiGuide1",
+                "cta": "Download"
+            },
+            {
+                "title": "The Ultimate Guide to Ecommerce SEO",
+                "imageUrl": "addiGuide2",
+                "cta": "Download"
+            },
+            {
+                "title": "The Ultimate Guide to Ecommerce SEO",
+                "imageUrl": "addiGuide3",
+                "cta": "Download"
+            },
+            {
+                "title": "The Ultimate Guide to Ecommerce SEO",
+                "imageUrl": "addiGuide4",
+                "cta": "Download"
+            },
+            {
+                "title": "The Ultimate Guide to Ecommerce SEO",
+                "imageUrl": "addiGuide5",
+                "cta": "Download"
+            }
+        ]
+    }
+}

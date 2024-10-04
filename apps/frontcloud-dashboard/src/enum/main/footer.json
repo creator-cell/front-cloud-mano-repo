@@ -1,0 +1,88 @@
+[
+    {
+        "title": "FooterLinks",
+        "sections": [
+            {
+                "section": "Company",
+                "links": [
+                    {
+                        "label": "About Us",
+                        "href": "/aboutus"
+                    },
+                    {
+                        "label": "Leaders",
+                        "href": "/aboutus/leaders"
+                    },
+                    {
+                        "label": "Careers",
+                        "href": "/careers"
+                    },
+                    {
+                        "label": "Press",
+                        "href": "/press"
+                    },
+                    {
+                        "label": "Awards",
+                        "href": "/aboutus/awards"
+                    },
+                    {
+                        "label": "Investor Relations",
+                        "href": "/investor-relations"
+                    },
+                    {
+                        "label": "Sitemaps",
+                        "href": "/sitemap"
+                    }
+                ]
+            },
+            {
+                "section": "Help Center",
+                "links": [
+                    {
+                        "label": "Videos",
+                        "href": "/videos"
+                    },
+                    {
+                        "label": "Contact Tech Support",
+                        "href": "/tech-support"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "title": "Follow Us",
+        "sections":[
+            {
+                "section": "Follow Us",
+                "links": [
+                    {
+                        "label": "X",
+                        "href": "/#"
+                    },
+                    {
+                        "label": "Facebook",
+                        "href": "/#"
+                    },
+                    {
+                        "label": "LinkedIn",
+                        "href": "/#"
+                    },
+                    {
+                        "label": "YouTube",
+                        "href": "/#"
+                    },
+                    {
+                        "label": "Pinterest",
+                        "href": "/#"
+                    },
+                    {
+                        "label": "Instagram",
+                        "href": "/#"
+                    }
+                ]
+            }
+        ]
+       
+    }
+]

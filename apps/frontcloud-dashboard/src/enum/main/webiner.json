@@ -1,0 +1,73 @@
+{
+    "heroSection": {
+        "title": "Webinars",
+        "description": "View our on-demand webinars, covering everything from ecommerce industry trends and advice to tips on how to best utilize the BigCommerce platform."
+    },
+    "featuredWebinar": {
+        "title": "Featured Webinar",
+        "subtitle": "The Commerce Platform is on FIRE: Adapting to the New Era of Digital",
+            "description": "<p>Watch our on-demand webinar where guest speakers from Forrester, RMW Commerce Consulting, and BigCommerce shed light on the world of the shrinking commerce core, and how experience and operations are the new focal points for businesses adopting composable software.</p><p>﻿</p><p>In this webinar, we’ll explore: </p><p>﻿</p><ul><li>What is composability and what are its capabilities?</li><li>How can you break down organizational silos to support tech adoption?</li><li>How do you streamline vendor selection and solution engineering?</li></ul>",
+        "cta": "Watch Now"
+    },
+    "onDemandWebiner": {
+        "title": "On-Demand Webinars",
+        "webiners": [
+            {
+                "title": "Fueling Growth in 2024",
+                "imageUrl": "OnDWebiner1",
+                "cta": "Download"
+            },
+            {
+                "title": "Driving Ecommerce Growth for Home, Garden, and Furniture Brands",
+                "imageUrl": "OnDWebiner2",
+                "cta": "Download"
+            },
+            {
+                "title": "Confident Ecommerce: Replatfomring to a Modern Solution",
+                "imageUrl": "OnDWebiner3",
+                "cta": "Download"
+            },
+            {
+                "title": "The Evolution of B2B ecommerce",
+                "imageUrl": "OnDWebiner4",
+                "cta": "Download"
+            },
+            {
+                "title": "Omnichannel Insights from Commerce Thought Leaders",
+                "imageUrl": "OnDWebiner5",
+                "cta": "Download"
+            }
+        ]
+    },
+    
+        "resource":{
+            "title":"Additional resources" ,
+            "resources":  [
+            {
+                "title": "Case Studies",
+                "description": "See how some of our most successful merchants use BigCommerce to grow.",
+                "cta": "Read Our Case Studies",
+                "url": "/case-studies"
+            },
+            {
+                "title": "Ecommerce Blog",
+                "description": "See how some of our most successful merchants use BigCommerce to grow.",
+                "cta": "Latest BigCommerce News",
+                "url": "/ecommerce-blog"
+            },
+            {
+                "title": "Support Portal",
+                "description": "Contact BigCommerce Support or find answers with articles and videos.",
+                "cta": "Contact Support",
+                "url": "/support-portal"
+            },
+            {
+                "title": "Ecommerce Guides",
+                "description": "Launch and fine-tune a business using our in-depth guides.",
+                "cta": "See Our Guides",
+                "url": "/ecommerce-guides"
+            }
+        ]}
+    
+    
+}

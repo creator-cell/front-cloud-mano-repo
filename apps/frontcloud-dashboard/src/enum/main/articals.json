@@ -1,0 +1,60 @@
+{
+    "articles": [
+        {
+            "title": "BigCommerce is Adding More AI Tools to its Platform with the Help of Google",
+            "date": "August 27, 2024",
+            "description": "BigCommerce — the e-commerce platform used by businesses including apparel brand Badgley Mischka and furniture retailer Burrow — is beefing up its artificial intelligence tools to help merchants grow their online web stores and drive customer growth.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/article1",
+            "imageUrl": "img1"
+        },
+        {
+            "title": "How B2B Startup Inhaven is Reworking Vacation Rentals",
+            "date": "July 19, 2024",
+            "description": "Inhaven founder and CEO Ashley Ching uses her experience managing high-end brands and ecommerce to usher in a new level of quality furnishings to the burgeoning vacation rental market.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/article2",
+            "imageUrl": "img2"
+        },
+        {
+            "title": "BigCommerce Launches Storefront Technology Featuring Composable Architecture",
+            "date": "February 8, 2024",
+            "description": "BigCommerce has introduced a new storefront technology that aims to simplify the process of building online stores using a composable architecture.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/article3",
+            "imageUrl": "img3"
+        },
+        {
+            "title": "Despite Economic Challenges, Cyber Week 2023 Achieves Record-breaking Online Sales: A Conversation with Meghan Stabler of BigCommerce",
+            "date": "December 8, 2023",
+            "description": "BigCommerce’s senior vice president of marketing Meghan Stabler discusses the driving forces behind the remarkable growth of online sales during Cyber Week 2023.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/article4",
+            "imageUrl": "img4"
+        },
+        {
+            "title": "The Top 3 Fashion Ecommerce Trends Driving Holiday Sales",
+            "date": "December 7, 2023",
+            "description": "With recent data showing that consumers are still willing to spend on apparel and accessories, online retailers can foster holiday season fashion apparel sales with AI, user-generated content, and sustainability, writes Meghan Stabler, senior vice president of marketing at ecommerce technology provider BigCommerce.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/article5",
+            "imageUrl": "img5"
+        },
+        {
+            "title": "Holiday Retail Strategy: Doubling Down on AI and Omnichannel Approach Amid Economic Uncertainty",
+            "date": "December 1, 2023",
+            "description": "Meghan Stabler from BigCommerce discusses the shift toward technology-driven, customer-centric experiences, the rise of social commerce and BNPL.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/article6",
+            "imageUrl": "img6"
+        },
+        {
+            "title": "The Holiday Season’s Cybersecurity Crisis: Why Retailers are Under Heightened Pressure",
+            "date": "November 9, 2023",
+            "description": "While it’s clear that cybersecurity attacks are on the rise and the importance of robust cybersecurity measures in the retail sector is rapidly increasing, the forces driving this mounting pressure among retailers are less known.",
+            "linkText": "Continue Reading",
+            "linkHref": "https://example.com/article7",
+            "imageUrl": "img7"
+        }
+    ]
+}

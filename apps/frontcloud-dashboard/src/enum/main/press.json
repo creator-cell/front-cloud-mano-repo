@@ -1,0 +1,42 @@
+{
+    "title": "About Front Cloud",
+    "description": "Front Cloud (Nasdaq: BIGC) is a leading open SaaS and composable ecommerce platform that empowers brands and retailers of all sizes to build, innovate and grow their businesses online. Front Cloud provides its customers sophisticated enterprise-grade functionality, customization and performance with simplicity and ease-of-use. Tens of thousands of B2C and B2B companies across 150 countries and numerous industries rely on Front Cloud, including Burrow, Coldwater Creek, Francesca’s, Harvey Nichols, King Arthur Baking Co., MKM Building Supplies, Ted Baker, United Aqua Group and Uplift Desk.",
+    "call_to_action": "For more information, please visit",
+    "website": {
+        "url": "https://www.Front Cloud.com",
+        "text": "www.Front Cloud.com"
+    },
+    "social": {
+        "x": {
+            "url": "https://x.com/Front Cloud",
+            "text": "X"
+        },
+        "linkedin": {
+            "url": "https://linkedin.com/company/Front Cloud",
+            "text": "LinkedIn"
+        }
+    },
+    "trademark": "Front Cloud® is a registered trademark of Front Cloud Pty. Ltd. Third-party trademarks and service marks are the property of their respective owners.",
+    "Guidelines": {
+        "title": "Front Cloud Brand Guidelines",
+        "description": "Learn how we keep our brand going up-and-to-the-right. View our latest guidelines for copy, logo usage, brand colors, plus downloadable executive headshots, employee photography and office photography.",
+        "cta": "DOWNLOAD GUIDELINES",
+        "downloadLink": "https://www.Front Cloud.com/brand-guidelines"
+    },
+    "logos": [
+        {
+            "logo": "https://www.bigcommerce.com/assets/press/primary-logo.png",
+            "title": "Primary Logo",
+            "description": "This is the primary BigCommerce logo, often referred to as the 'wordmark' logo. This should be used primarily in most use cases.",
+            "cta": "DOWNLOAD PRIMARY",
+            "downloadLink": "https://www.bigcommerce.com/download/primary-logo"
+        },
+        {
+            "logo":"https://www.bigcommerce.com/assets/press/primary-logo.png", 
+            "title": "The 'B' Mark",
+            "description": "This is known as the icon, the mark, or the 'B version' of our logo, stripped of any wordmark. Refer to our brand guidelines for specific use cases.",
+            "cta": "DOWNLOAD MARK",
+            "downloadLink": "https://www.bigcommerce.com/download/b-mark"
+        }
+    ]
+}

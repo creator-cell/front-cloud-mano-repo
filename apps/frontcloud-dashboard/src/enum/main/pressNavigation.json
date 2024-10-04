@@ -1,0 +1,17 @@
+[
+    {
+        "label": "Event",
+        "href": "/press",
+        "id": "event"
+    },
+    {
+        "label": "Articles",
+        "href": "/press/articles",
+        "id": "articles"
+    },
+    {
+        "label": "Blogs",
+        "href": "/press/blogs",
+        "id": "blogs"
+    }
+]

@@ -1,0 +1,46 @@
+
+    {
+        "HeroSection": {
+            "title": "The Make It Big Podcast",
+            "description": "Get expert insights on the go with our biweekly audio series where global thought leaders discuss all things ecommerce — from industry news and trends to growth strategies and success stories.",
+            "year": "2021",
+            "cta": "Subscribe now",
+            "theme": {
+                "title_color": "White",
+                "background_image": "Mib_Podcast_2021_White.jpg",
+                "side_image":"HeroImg"
+            }
+        },
+        "Platforms":[
+            {
+                "name": "Apple",
+                "url": "applePodcasts"
+            },
+            {
+                "name": "Spotify",
+                "url": "spotifyPodcasts"
+            },
+            {
+                "name": "Google",
+                "url": "googlePodcasts"
+            },
+            {
+                "name": "YouTube",
+                "url": "youtubePodcasts"
+            }
+        ],
+        "FeaturedEpisodes":
+            {
+                "title":"Featured Episodes",
+                "Episodes":[
+                    {
+                        "episode":"Episode 38",
+                        "title": "How to be Successful in B2B Ecommerce With Brilliance Business Solutions",
+                        "description": "Founder and CEO of Brilliance Business Solutions, Lori McDonald, and Director of Product and Project, Eric Dingeldein sit down with the Make it Big Podcast to talk all things B2B and share their clients' successes with B2B Edition.",
+                        "cta": "Listen now"
+
+                    }
+                ]
+            }
+        
+    }

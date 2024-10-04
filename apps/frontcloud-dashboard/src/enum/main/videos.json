@@ -1,0 +1,75 @@
+{
+    "heroSection": {
+        "title": "BigCommerce Videos",
+        "description": "Explore BigCommerce's library of video content, from ecommerce insights and customer success stories to podcasts, livestreams, and more.",
+        "cta": "Watch Now"
+    },
+    "mainVideo": {
+        "title": "B2B Bites: A Make it Big Series",
+        "description": "Watch our video series B2B Bites where host Lance Owide interviews industry experts on the latest B2B news, trends, and opportunities.",
+        "cta": "Watch Now"
+    },
+    "videoLibrary": {
+        "title": "Video Library",
+        "library": [
+            {
+            "title": "Ecommerce Success Story: ABC Retail",
+            "videos": [
+                {
+                    "title": "Ecommerce Success Story: ABC Retail",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=x0yz0xvu1k"
+                },
+                {
+                    "title": "How to Scale Your Online Store",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=ugtvaq10y5"
+                },
+                {
+                    "title": "The Future of Ecommerce Technology",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=pwwbe1xz4a"
+                },
+                {
+                    "title": "Ecommerce Success Story: ABC Retail",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=x0yz0xvu1k"
+                },
+                {
+                    "title": "How to Scale Your Online Store",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=ugtvaq10y5"
+                },
+                {
+                    "title": "The Future of Ecommerce Technology",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=pwwbe1xz4a"
+                }
+            ]
+        },
+        {
+            "title": "Ecommerce Insights",
+            "videos": [
+                {
+                    "title": "Ecommerce Success Story: ABC Retail",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=x0yz0xvu1k"
+                },
+                {
+                    "title": "How to Scale Your Online Store",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=ugtvaq10y5"
+                },
+                {
+                    "title": "The Future of Ecommerce Technology",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=pwwbe1xz4a"
+                },
+                {
+                    "title": "Ecommerce Success Story: ABC Retail",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=x0yz0xvu1k"
+                },
+                {
+                    "title": "How to Scale Your Online Store",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=ugtvaq10y5"
+                },
+                {
+                    "title": "The Future of Ecommerce Technology",
+                    "videoUrl": "https://www.bigcommerce.com/resources/videos/?wchannelid=ungurgl2f4&wmediaid=pwwbe1xz4a"
+                }
+            ]
+        }
+    ]
+    }
+}
