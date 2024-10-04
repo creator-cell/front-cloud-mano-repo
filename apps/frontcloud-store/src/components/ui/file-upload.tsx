@@ -62,33 +62,33 @@ export const FileUpload = ({
                 break;
             case FileType.IMAGE_JPEG:
                 if (!newFiles[0]?.type.includes('image/jpeg')) {
-                    // // setError && setError('images', { type: 'fileType', message: 'Only JPEG files are allowed' });
                     return;
                 }
                 break;
             case FileType.IMAGE_PNG:
                 if (!newFiles[0]?.type.includes('image/png')) {
-                    // // setError && setError('images', { type: 'fileType', message: 'Only PNG files are allowed' });
                     return;
                 }
                 break;
             case FileType.IMAGE_WEBP:
                 if (!newFiles[0]?.type.includes('image/webp')) {
-                    // // setError && setError('images', { type: 'fileType', message: 'Only WEBP files are allowed' });
                     return;
                 }
                 break;
             case FileType.PDF:
-                if (!newFiles[0].type.includes('application/pdf')) {
+                if (!newFiles[0]?.type.includes('application/pdf')) {
                     toast.error('Only PDF files are allowed');
                     return;
                 }
                 break;
             case FileType.ANY_IMAGE:
-                if ((!newFiles[0]?.type.includes('image') || !ACCEPTED_FILE_TYPES.includes(newFiles[0]?.type)) && newFiles.length > 0) {
-                    return toast.error('Only image files are allowed');
-                } else if (newFiles[0]?.size > MAX_FILE_SIZE) {
-                    return toast.error('File size must be less than 5MB');
+                if (newFiles.length > 0) {
+                    const firstFile = newFiles[0];
+                    if ((!newFiles[0]?.type.includes('image') || !ACCEPTED_FILE_TYPES.includes(newFiles[0]?.type)) && newFiles.length > 0) {
+                        return toast.error('Only image files are allowed');
+                    } else if ((firstFile?.size ?? 0) > MAX_FILE_SIZE) {
+                        return toast.error('File size must be less than 5MB');
+                    }
                 }
                 break;
             default:
