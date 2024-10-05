@@ -5,12 +5,13 @@ import { Label } from '@/components/ui/label';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import {
+import { accordion } from "@repo/ui"
+const {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} from "@repo/ui/accordion"
+} = accordion
 
 interface Option {
     label: string;
@@ -41,7 +42,7 @@ const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({ name, options, on
             <AccordionItem value={`item-${name}`}>
                 <AccordionTrigger className='pt-0'>{name}</AccordionTrigger>
                 {options.map(option => (
-                    <AccordionContent className='flex items-center space-x-2 pl-3 '>
+                    <AccordionContent key={option.value} className='flex items-center space-x-2 pl-3 '>
                         <Checkbox
                             checked={selectedOptions.includes(option.value)}
                             onCheckedChange={() => handleCheckboxChange(option.value)}
