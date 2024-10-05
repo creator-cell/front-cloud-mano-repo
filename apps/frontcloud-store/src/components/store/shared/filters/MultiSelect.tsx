@@ -3,15 +3,16 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
 
-import { accordion } from "@repo/ui"
-const {
+import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} = accordion
+} from "@/components/ui/accordion"
+import { setFilter } from '@/Redux/slice/filterSlice';
+
 
 interface Option {
     label: string;
@@ -21,21 +22,19 @@ interface Option {
 interface CustomMultiSelectProps {
     name: string;
     options: Option[];
-    onChange: (selectedValues: string[]) => void;
+    category?: string | null;
 }
 
-const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({ name, options, onChange }) => {
-    const dispatch = useDispatch();
-    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({ name, options }) => {
+    const dispatch = useAppDispatch();
 
     const handleCheckboxChange = (value: string) => {
-        const updatedSelectedOptions = selectedOptions.includes(value)
-            ? selectedOptions.filter(option => option !== value) // Deselect if already selected
-            : [...selectedOptions, value]; // Add to selection if not selected
 
-        setSelectedOptions(updatedSelectedOptions);
-        onChange(updatedSelectedOptions); // Dispatch to Redux or handle state update
+        dispatch(setFilter({ type: name, value })); // Dispatch to Redux
     };
+    const filters = useAppSelector(state => state.productFilters.filters); // Access the filters from Redux state
+    const selectedOptions = filters[name] || [];
+
 
     return (
         <Accordion type="single" collapsible className="w-full border-b py-2 px-1 rounded-md shadow-none">

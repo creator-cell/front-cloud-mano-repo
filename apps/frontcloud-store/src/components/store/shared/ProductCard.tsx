@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     return (
         <Card
             className="w-full border p-4 pb-0 border-primary rounded-md cursor-pointer space-y-3 relative">
-            <CardContent onClick={() => router.push('/store/1')} className='mt-2 space-y-1'>
+            <CardContent onClick={() => router.push('/shop/1')} className='mt-2 space-y-1'>
                 <CardHeader>
                     <Image
                         src={GroceryImages.card1.price}

@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { authApi } from "../api/auth";
 import { UserApi } from "../api/user";
+import { RootReducer } from "../root.reduces";
 
 
 const persistConfig = {
@@ -22,12 +23,11 @@ const persistConfig = {
 
 
 
-// const ONE_DAY = 24 * 60 * 60 * 1000; 
+const ONE_DAY = 24 * 60 * 60 * 1000;
 
 
 const store = configureStore({
-  reducer: {
-  },
+  reducer: RootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -40,9 +40,9 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
-// setTimeout(() => {
-//   persistor.purge();
-// }, ONE_DAY);
+setTimeout(() => {
+  persistor.purge();
+}, ONE_DAY);
 
 export default store;
 setupListeners(store.dispatch);
