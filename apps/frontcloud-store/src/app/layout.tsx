@@ -6,6 +6,7 @@ import { Toaster } from 'sonner';
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import AppProvider from "@/Redux/provider";
 
 export const metadata: Metadata = {
     title: {
@@ -33,18 +34,20 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body >
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="light"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    {children}
-                    <Toaster
-                        position="top-right"
-                        richColors
-                    />
-                </ThemeProvider>
+                <AppProvider>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="light"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        {children}
+                        <Toaster
+                            position="top-right"
+                            richColors
+                        />
+                    </ThemeProvider>
+                </AppProvider>
             </body>
         </html>
     );

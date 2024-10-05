@@ -145,6 +145,7 @@ const ShopPage = () => {
             case 'clothing':
                 return (
                     <div>
+
                         <ClothingFilterComponent form={clothingForm} />
                     </div>
                 );
@@ -172,7 +173,36 @@ const ShopPage = () => {
             {/* filters */}
             <div className='max-w-xs w-full p-3'>
                 <div className=''>
-                    {renderFilters()}
+                    <CustomMultiSelect
+                        options={[{ label: 'Nike', value: 'Nike' }, { label: 'Adidas', value: 'Adidas' }, { label: 'Puma', value: 'Puma' }]}
+                        onChange={(selectedValues) => console.log(selectedValues)}
+                        name='brand'
+                    />
+                    <CustomMultiSelect
+                        options={[{ label: 'Nike', value: 'Nike' }, { label: 'Adidas', value: 'Adidas' }, { label: 'Puma', value: 'Puma' }]}
+                        onChange={(selectedValues) => console.log(selectedValues)}
+                        name='Category'
+                    />
+                    <CustomMultiSelect
+                        options={[{ label: 'Nike', value: 'Nike' }, { label: 'Adidas', value: 'Adidas' }, { label: 'Puma', value: 'Puma' }]}
+                        onChange={(selectedValues) => console.log(selectedValues)}
+                        name='colo'
+                    />
+                    <CustomMultiSelect
+                        options={[{ label: 'Nike', value: 'Nike' }, { label: 'Adidas', value: 'Adidas' }, { label: 'Puma', value: 'Puma' }]}
+                        onChange={(selectedValues) => console.log(selectedValues)}
+                        name='brand'
+                    />
+                    <CustomMultiSelect
+                        options={[{ label: 'Nike', value: 'Nike' }, { label: 'Adidas', value: 'Adidas' }, { label: 'Puma', value: 'Puma' }]}
+                        onChange={(selectedValues) => console.log(selectedValues)}
+                        name='brand'
+                    />
+                    <CustomMultiSelect
+                        options={[{ label: 'Nike', value: 'Nike' }, { label: 'Adidas', value: 'Adidas' }, { label: 'Puma', value: 'Puma' }]}
+                        onChange={(selectedValues) => console.log(selectedValues)}
+                        name='brand'
+                    />
                 </div>
             </div>
             {/* products */}
@@ -205,6 +235,7 @@ import { Form } from "@/components/ui/form";
 import { Label } from "@/components/ui/label";
 import CustomFormField from "@/components/common/CustomFormField";
 import { FormFieldType } from "@/enum/formTypes";
+import CustomMultiSelect from '@/components/store/shared/filters/MultiSelect';
 
 // Define Zod Schema for form validation
 const clothingFilterSchema = z.object({
