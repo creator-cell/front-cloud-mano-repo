@@ -35,7 +35,7 @@ const Carousal = forwardRef(({ images, children }: { images?: StaticImageData[] 
     }, [isClickable]);
 
     return (
-        <div className='size-full relative max-w-[90rem] mx-auto' >
+        <div className='size-full relative max-w-full mx-auto' >
             <Swiper
                 ref={swiperRef}
                 cssMode={true}
@@ -60,14 +60,14 @@ const Carousal = forwardRef(({ images, children }: { images?: StaticImageData[] 
 
             <ArrowButton
                 direction="prev"
-                className={`left-1 size-12 bg-[#00000080] text-white `}
+                className={`left-4 size-12 bg-[#00000080] text-white `}
                 arrowSize={30}
                 onClick={() => handleArrowClick('prev')}
             />
 
             <ArrowButton
                 direction="next"
-                className={` right-1 size-12 bg-[#00000080] text-white`}
+                className={` right-4 size-12 bg-[#00000080] text-white`}
                 arrowSize={30}
                 onClick={() => handleArrowClick('next')}
             />

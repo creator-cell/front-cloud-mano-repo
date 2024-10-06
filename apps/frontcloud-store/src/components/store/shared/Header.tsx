@@ -88,7 +88,7 @@ const Header = () => {
                                 <div className='col-span-3 overflow-hidden max-xsm:hidden h-full '>
                                     <SideImages />
                                 </div>
-                                <div className='col-span-4 px-6 xsm:px-0 sm:px-6  flex flex-col items-center justify-center '>
+                                <div className='col-span-4 px-6 xsm:px-0 sm:px-6  flex flex-col items-center justify-center overflow-hidden overflow-y-auto '>
                                     {/* render form here  */}
                                     <AuthForm activeForm={activeForm} />
                                     <div className='w-full flex items-center justify-between text-gray-500 max-w-sm px-4'>

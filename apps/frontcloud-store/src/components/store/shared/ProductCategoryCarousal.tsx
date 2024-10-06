@@ -19,9 +19,10 @@ interface CarousalProps {
     breakpoints: Breakpoints; // Add breakpoints prop
     autoplay?: boolean; // Add autoplay prop
     className?: string;
+    navigationArrows?: boolean;
 }
 
-const ProductCategoryCarousal = ({ children, breakpoints, autoplay = false, className }: CarousalProps) => {
+const ProductCategoryCarousal = ({ children, breakpoints, autoplay = false, className, navigationArrows = true }: CarousalProps) => {
     const swiperRef = useRef<SwiperRef>(null);
 
     const [activeIndex, setActiveIndex] = React.useState<number | undefined>(0);
@@ -63,20 +64,24 @@ const ProductCategoryCarousal = ({ children, breakpoints, autoplay = false, clas
                     </SwiperSlide>
                 ))}
             </Swiper>
+            {
+                navigationArrows &&
+                <React.Fragment>
+                    <ArrowButton
+                        direction="prev"
+                        className={`right-16 -top-14 size-10 bg-[#00000080] text-white max-sm:hidden`}
+                        arrowSize={30}
+                        onClick={() => handleArrowClick('prev')}
+                    />
 
-            <ArrowButton
-                direction="prev"
-                className={`right-16 -top-14 size-10 bg-[#00000080] text-white max-sm:hidden`}
-                arrowSize={30}
-                onClick={() => handleArrowClick('prev')}
-            />
-
-            <ArrowButton
-                direction="next"
-                className={`right-3 -top-14 size-10 bg-[#00000080] text-white max-sm:hidden`}
-                arrowSize={30}
-                onClick={() => handleArrowClick('next')}
-            />
+                    <ArrowButton
+                        direction="next"
+                        className={`right-3 -top-14 size-10 bg-[#00000080] text-white max-sm:hidden`}
+                        arrowSize={30}
+                        onClick={() => handleArrowClick('next')}
+                    />
+                </React.Fragment>
+            }
         </div>
     );
 };

@@ -170,7 +170,7 @@ const ShopPage = () => {
 
 
     return (
-        <div className='container flex max-lg:flex-col items-start gap-x-6'>
+        <div className='container flex max-lg:flex-col items-start gap-x-6 mt-8'>
             {/* filters */}
             <DesktopFilter
                 category={cta}
@@ -316,7 +316,7 @@ const DesktopFilter = ({
                         })}
                     </div>
                 ) : (
-                    <Label className='text-xs text-gray-500'>No filters selected</Label>
+                    <Label className='text-xs text-gray-500 ml-4'>No filters selected</Label>
                 )}
             </div>
             <div className=''>

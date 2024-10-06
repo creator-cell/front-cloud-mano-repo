@@ -13,7 +13,7 @@ export default function RootLayout({
 
     const isSticky = useScroll();
     return (
-        <div className="min-h-screen w-full flex gap-6 flex-col bg-white">
+        <div className="min-h-screen w-full flex flex-col bg-white">
             {
                 isSticky && <div className="h-[11px] w-full" />
             }

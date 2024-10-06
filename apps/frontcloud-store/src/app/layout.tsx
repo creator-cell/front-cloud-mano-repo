@@ -4,8 +4,6 @@ import 'swiper/css';
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from 'sonner';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import AppProvider from "@/Redux/provider";
 
 export const metadata: Metadata = {

@@ -10,9 +10,9 @@ export default function RootLayout({
 }>) {
 
     return (
-        <div className="relative">
+        <div className="relative flex flex-col min-h-screen">
             <Header />
-            <div>
+            <div className="flex-1">
                 {children}
             </div>
             <Footer />

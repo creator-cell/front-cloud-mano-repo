@@ -98,7 +98,7 @@ const fakeProducts = [
 const ContentPage = () => {
 
     return (
-        <section className='container'>
+        <section className='container mt-8'>
             <div className='flex flex-col items-center justify-start'>
                 <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Top Selling Items</CustomHeading>
                 <CustomParagraph className='text-black text-xs md:text-lg text-left pb-6'>22 items</CustomParagraph>

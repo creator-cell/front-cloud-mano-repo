@@ -332,7 +332,9 @@ const StorePage = () => {
             <section className='container'>
                 <div className='flex items-center justify-between'>
                     <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Top Selling Items</CustomHeading>
-                    <Button variant={"link"}  >View More</Button>
+                    <Button variant={"link"} asChild >
+                        <Link href='/content?category=electronics'>View More</Link>
+                    </Button>
                 </div>
 
                 <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4' >
