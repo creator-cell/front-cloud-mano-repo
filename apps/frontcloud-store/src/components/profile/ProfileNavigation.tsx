@@ -47,7 +47,7 @@ const NavigationLinks: NavigationLink[] = [
         link: '/profile/address'
     },
     {
-        name: 'My Account',
+        name: 'Change Password',
         icon: FaRegUser,
         activeIcon: FaUser,
         link: '/profile/my-account'
@@ -65,9 +65,9 @@ const ProfileNavigation = () => {
                 return (
                     <Link href={link.link} key={link.name}
                         className={cn("flex items-center p-2 pl-4 cursor-pointer transition duration-200",
-                            isActive ? "bg-blue-200" : "hover:bg-blue-100")}
+                            isActive ? "bg-primary/20 border-l-4 border-primary" : "hover:bg-primary/20")}
                     >
-                        {isActive ? <link.activeIcon className="mr-2 size-5" /> : <link.icon className="mr-2 size-5" />}
+                        {isActive ? <link.activeIcon className="mr-2 size-5 text-primary" /> : <link.icon className="mr-2 size-5" />}
                         <span className={isActive ? "text-primary" : ""}>{link.name}</span>
                     </Link>
                 );

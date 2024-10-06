@@ -1,10 +1,7 @@
-"use client";
-
-import { CustomHeading } from '@/components/custom/CustomHeading'
 import WishlistCard from '@/components/store/shared/WishlistCard';
+import { Label } from '@/components/ui/label'
 import React from 'react'
 
-// fakeProducts.ts
 const fakeProducts = [
     {
         productImg: "/assets/extra/product1.jpg", // Ensure this path is correct
@@ -64,20 +61,21 @@ const fakeProducts = [
     },
 ];
 
-
-const wishlistPage = () => {
+const WishlistPage = () => {
     return (
-        <section className='container mt-8'>
-            <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Wishlist</CustomHeading>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4'>
-                {
-                    fakeProducts.map((category, index) => (
-                        <WishlistCard key={index} card={category} />
-                    ))
-                }
-            </div>
-        </section>
+        <div>
+            <Label className='text-xl font-semibold'>My Wishlist History</Label>
+            <section className='container mt-8'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-4'>
+                    {
+                        fakeProducts.map((category, index) => (
+                            <WishlistCard key={index} card={category} />
+                        ))
+                    }
+                </div>
+            </section>
+        </div>
     )
 }
 
-export default wishlistPage
+export default WishlistPage

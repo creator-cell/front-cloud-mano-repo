@@ -2,20 +2,21 @@
 "use client";
 
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
 import ProductCategoryCarousal from '@/components/store/shared/ProductCategoryCarousal';
 import InfoCard from '@/components/profile/InfoCard';
-import ProfileDetails from '@/components/profile/ProfileDetails';
-import ProfileNavigation from '@/components/profile/ProfileNavigation';
 import OrderCard from '@/components/profile/OrderCard';
 import { product1, laptop } from "@/assets/extra/index";
 import { FaClock, FaHeart, FaShoppingBag } from 'react-icons/fa';
+import React from 'react';
 
-const image = "https://images.unsplash.com/photo-1554080353-a576cf803bda?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3387&q=80";
 
 
 
 const ProductBreakpoints = {
+    0: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+    },
     640: {
         slidesPerView: 2,
         spaceBetween: 20,
@@ -72,29 +73,13 @@ const fakeData: InfoCardData[] = [
 
 const ProfilePage = () => {
     return (
-        <div className='w-full flex-col bg-white space-y-12'>
-            <div className='w-full flex gap-x-2 h-full'>
-                <div className="flex justify-center relative space-x-6 rounded-md w-full">
-                    <div
-                        className={cn(
-                            "hidden lg:block h-[85vh] bg-gray-50 shadow-md w-full max-w-xs rounded-md space-y-6 border divide-y-2 sticky top-24 overflow-hidden"
-                        )}
-                    >
-                        <ProfileDetails />
-                        <ProfileNavigation />
-                    </div>
+        <React.Fragment>
+            <DashboardOverview />
+            <RecentOrders />
+            <BuyAgain />
+            <KeepShoppingFor />
+        </React.Fragment>
 
-                    <div className="relative flex items-start px-4 mb-12 w-full" style={{ maxWidth: "calc(1156px - 24rem)" }}>
-                        <div className="max-w-full bg-gray-50 mt-4 p-4 rounded-md min-h-screen w-full flex flex-col gap-5">
-                            <DashboardOverview />
-                            <RecentOrders />
-                            <BuyAgain />
-                            <KeepShoppingFor />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     );
 };
 
