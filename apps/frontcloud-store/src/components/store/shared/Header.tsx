@@ -71,56 +71,67 @@ const Header = () => {
                 </div>
                 <div className='text-lg flex  gap-2 items-center font-semibold mr-2'>
                     <Search size={20} className='block sm:hidden cursor-pointer' />
-                    <Button variant={"ghost"} className='relative group'>
-                        <ShoppingCart size={20} className='text-white cursor-pointer relative group-hover:text-black duration-150' />
+                    <Button variant={"ghost"} className='relative group' asChild>
+                        <Link href='/viewcart'>
+                            <ShoppingCart size={20} className='text-white cursor-pointer relative group-hover:text-black duration-150' />
+                        </Link>
                     </Button>
                     <Button variant={"ghost"} className='relative group' asChild>
                         <Link href='/wishlist'>
                             <Heart size={20} className='text-white cursor-pointer relative group-hover:text-black duration-100' />
                         </Link>
                     </Button>
+
                     <Modal>
                         <ModalTrigger variant={"outline"}>
                             Login
                         </ModalTrigger>
-                        <ModalBody className='!p-0 border-none  min-h-[80%]'>
-                            <ModalContent className='grid grid-cols-1 xsm:grid-cols-7 gap-3 xsm:gap-0 sm:gap-3 !p-0 items-center'>
-                                <div className='col-span-3 overflow-hidden max-xsm:hidden h-full '>
+                        <ModalBody className='!p-0 border-none min-h-[80%]'>
+                            <ModalContent className='grid grid-cols-1 xsm:grid-cols-7 gap-3 xsm:gap-0 sm:gap-3 !p-0 items-center overflow-hidden'>
+                                {/* Side images (fixed) */}
+                                <div className='col-span-3 overflow-hidden sticky inset-0 max-xsm:hidden h-full'>
                                     <SideImages />
                                 </div>
-                                <div className='col-span-4 px-6 xsm:px-0 sm:px-6  flex flex-col items-center justify-center overflow-hidden overflow-y-auto '>
-                                    {/* render form here  */}
-                                    <AuthForm activeForm={activeForm} />
-                                    <div className='w-full flex items-center justify-between text-gray-500 max-w-sm px-4'>
+
+                                {/* Form area */}
+                                <div className='col-span-4 flex flex-col h-full overflow-y-auto'>
+                                    {/* Add a scrollable container for the form content */}
+                                    <div className='flex-grow  px-6 py-5'>
+                                        <AuthForm activeForm={activeForm} />
+                                    </div>
+
+                                    {/* Bottom navigation (login/register/forgot buttons) */}
+                                    <div className='w-full flex items-center justify-between text-gray-500 max-w-sm px-6 py-4'>
                                         {
                                             activeForm === "login" ? (
-                                                <div className='flex gap-2 '>
-                                                    <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Do&apos;t have an account</h1>
-                                                    <Button onClick={() => setActiveForm("register")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>sign Up</Button>
+                                                <div className='flex gap-2'>
+                                                    <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Don&apos;t have an account?</h1>
+                                                    <Button onClick={() => setActiveForm("register")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Sign Up</Button>
                                                 </div>
                                             ) : activeForm === "register" ? (
                                                 <div className='flex gap-2'>
-                                                    <h1 className='text-[12px] cursor-pointer max-xsm:hidden '>Already have an account</h1>
+                                                    <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Already have an account?</h1>
                                                     <Button onClick={() => setActiveForm("login")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Login</Button>
                                                 </div>
                                             ) : activeForm === "forgot-password" ? (
-                                                <div className='flex gap-2 mt-5'>
-                                                    <h1 className=' text-[12px] cursor-pointer'>Already have an account</h1>
+                                                <div className='flex gap-2'>
+                                                    <h1 className=' text-[12px] cursor-pointer'>Already have an account?</h1>
                                                     <Button onClick={() => setActiveForm("login")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Login</Button>
                                                 </div>
                                             ) : null
                                         }
                                         {
-                                            activeForm === "forgot-password" ? null : (
+                                            activeForm !== "forgot-password" && (
                                                 <Button onClick={() => setActiveForm("forgot-password")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Forgot?</Button>
                                             )
                                         }
                                     </div>
-
                                 </div>
                             </ModalContent>
                         </ModalBody>
                     </Modal>
+
+
 
                 </div>
             </div>
@@ -132,7 +143,7 @@ export default Header
 
 const SideImages = () => {
     return (
-        <div className='h-full w-full'>
+        <div className='h-full w-full sticky left-0 top-0'>
             <Image
                 src={images[0] ?? ""}
                 className="h-full w-full object-cover "

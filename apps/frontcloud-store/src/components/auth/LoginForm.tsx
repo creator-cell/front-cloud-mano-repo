@@ -33,7 +33,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
 
     return (
-        <div className=' rounded-[5px] px-3 w-full max-w-sm' >
+        <div className=' rounded-[5px] px-3 w-full max-w-sm ' >
             <div className='pb-12'>
                 <h1 className='text-[25px] font-semibold text-dark-800   text-black text-center '>{title && title}</h1>
             </div>

@@ -20,9 +20,9 @@ const AddCategories = () => {
             <CategoryAddForm
                 hasParentCategory
                 parentCategoryOptions={[
-                    { label: "Electronics", value: "electronics" },
-                    { label: "Clothing", value: "clothing" },
-                    { label: "Footwear", value: "footwear" },
+                    { label: "Electronics", value: "1" },
+                    { label: "Clothing", value: "2" },
+                    { label: "Footwear", value: "3" },
                 ]} />
         </div >
     )

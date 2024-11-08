@@ -7,6 +7,7 @@ import SideBarOpenCloseContextProvider from "@/hooks/useSideBarOpenClode";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import StoreProvider from "@/store/StoreProvider";
 
 export const metadata: Metadata = {
     title: {
@@ -40,14 +41,15 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <SideBarOpenCloseContextProvider>
-
-                        {children}
-                        <Toaster
-                            position="top-right"
-                            richColors
-                        />
-                    </SideBarOpenCloseContextProvider>
+                    <StoreProvider>
+                        <SideBarOpenCloseContextProvider>
+                            {children}
+                            <Toaster
+                                position="top-right"
+                                richColors
+                            />
+                        </SideBarOpenCloseContextProvider>
+                    </StoreProvider>
                 </ThemeProvider>
             </body>
         </html>

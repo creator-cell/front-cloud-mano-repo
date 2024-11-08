@@ -31,8 +31,8 @@ const SignUpForm = ({ title }: SignUpFormProps) => {
     };
 
     return (
-        <div className='w-full  bg-white  px-3 py-2  '>
-            <div className='pb-12'>
+        <div className='w-full  bg-white flex flex-col gap-y-5  px-3 py-2  '>
+            <div className=''>
                 <h1 className='text-[25px] font-semibold text-dark-800   text-black text-center '>{title && title}</h1>
             </div>
             <Form {...form}>
