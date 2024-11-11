@@ -203,7 +203,7 @@ const ProductSubCategoryTable = () => {
                     onClick={() => router.push("/dashboard/products/product-subCategories/add-subCategories")}
                     className='bg-primary text-white'
                 >
-                    Add Category
+                    Add SubCategory
                 </Button>
 
                 <ConfirmationDialog

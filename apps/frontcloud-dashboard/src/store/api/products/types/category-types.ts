@@ -1,16 +1,45 @@
+import { ResponseType } from "@/store/types/responseType";
+
 export interface ProductCategoryType {
     CategoryID?: number;
-    parentCategory?: string;
-    categoryName: string;
+    CategoryName: string;
     url?: string;
-    description?: string;
+    Description?: string;
     sort_order?: number;
-    images?: any;
-    visibleInMenu?: boolean
-    metaTitle?: string;
-    metaKeywords?: string;
-    metaDescription?: string;
-    searchKeywords?: string;
+    images?: string;
+    VisibleInMenu?: boolean
+    seo: {
+        metaTitle?: string;
+        metaKeywords?: string;
+        metaDescription?: string;
+        searchKeywords?: string;
+    }
     CreatedAt?: string;
     UpdatedAt?: string;
 }
+export type ProductCategoryResponse = ResponseType<ProductCategoryType[]>;
+
+export type ProductCategory = {
+    categoryId?: number
+    categoryName: string;
+    visibleInMenu: boolean;
+    description?: string;
+    seo?: {
+        metaTitle?: string;
+        metaKeywords?: string;
+        metaDescription?: string;
+        searchKeywords?: string;
+    } | undefined;
+};
+export type ProductSubCategory = {
+    categoryId: number
+    subCategoryName: string;
+    visibleInMenu: boolean;
+    description?: string;
+    seo?: {
+        metaTitle?: string;
+        metaKeywords?: string;
+        metaDescription?: string;
+        searchKeywords?: string;
+    } | undefined;
+};

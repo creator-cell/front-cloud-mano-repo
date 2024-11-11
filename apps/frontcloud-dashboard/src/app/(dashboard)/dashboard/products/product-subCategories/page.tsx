@@ -14,7 +14,7 @@ const ProductSubCategories = () => {
     return (
         <div className='w-full flex flex-col gap-y-6  py-20 min-h-screen'>
             <div className='space-y-1'>
-                <CustomHeading variant={"pageHeading"} className='font-[100] text-black text-left'>Product Categories</CustomHeading>
+                <CustomHeading variant={"pageHeading"} className='font-[100] text-black text-left'>Product Sub Categories</CustomHeading>
                 <CustomParagraph variant={"xmedium"} className='text-gray-500 text-left'>Categories allow you to group products by similar attributes. The categories in your store are shown below.</CustomParagraph>
             </div>
             {

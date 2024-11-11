@@ -22,11 +22,8 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 
-import { CustomHeading } from '@/components/custom/CustomHeading'
-import { CustomParagraph } from '@/components/custom/CustomParagraph'
 import CommonDataTable from '@/components/common/CommonDataTable'
 import { useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import ConfirmationDialog from '@/components/common/ConfirmationDialog'
 import { ProductCategoryType } from '@/store/api/products/types/category-types'
@@ -105,7 +102,7 @@ const columns: ColumnDef<ProductCategoryType>[] = [
         enableHiding: false,
         header: "Actions",
         cell: ({ row }) => (
-            <Link href={"/dashboard/products/product-categories/add-categories"}>
+            <Link href={`/dashboard/products/product-categories/add-categories?id=${row.original.CategoryID}`}>
                 <PencilLine color='green' />
             </Link>
         ),

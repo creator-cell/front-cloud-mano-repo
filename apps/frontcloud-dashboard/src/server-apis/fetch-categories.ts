@@ -5,17 +5,17 @@ import { cookies } from "next/headers";
 import { ProductCategoryType } from "@/store/api/products/types/category-types";
 import { ReadonlyURLSearchParams } from "next/navigation";
 
-const token = cookies().get("token");
+// const token = cookies().get("token");
 
 export const fetchAllCategoies = unstable_cache(
     async (): Promise<{ message: string, data: ProductCategoryType[] } | null> => {
         try {
 
 
-            if (!token) {
-                console.error("Error: Missing authorization token.");
-                return null;
-            }
+            // if (!token) {
+            //     console.error("Error: Missing authorization token.");
+            //     return null;
+            // }
 
             const apiUrl = `${process.env.API_URL}/api/v1/products/Categories`;
 

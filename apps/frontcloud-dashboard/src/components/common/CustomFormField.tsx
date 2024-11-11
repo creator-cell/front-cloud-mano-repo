@@ -55,18 +55,16 @@ import {
 export interface CustomFormFieldProps<T extends FieldValues>
     extends React.InputHTMLAttributes<HTMLInputElement> {
     // control: Control<FormSchema>;
+    // name: "password" | "email";
     control: Control<T>;
     fieldType: FormFieldType;
-    // name: "password" | "email";
     name: Path<T>;
     label?: string;
     placeholder?: string;
-    // disabled?: boolean;
     type?: string;
     className?: string;
     selectOptions?: { label: string; value: string }[];
     style?: React.CSSProperties;
-    // defaultValue?: string;
     value?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | string | boolean | File[]) => void;
 }
@@ -103,11 +101,11 @@ const modules = {
 
 const RenderField = <T extends FieldValues>({ field, props }: { field: any; props: CustomFormFieldProps<T> }) => {
     const { className, onChange, value, control, fieldType, label, selectOptions, ...inputProps } = props; // Destructure unwanted props
-
+    const { defaultValue: defaultvalue, ...restfields } = props;
     const commonProps = {
         ...field,
         ...inputProps, // Spread only the acceptable input props
-        value: field.value ?? ''
+        value: field.value ?? '',
     };
     switch (props.fieldType) {
         case FormFieldType.INPUT:
@@ -118,7 +116,6 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
                         <Input
                             {...field}
                             {...commonProps}
-                            // defaultValue={defaultValue}
                             onChange={(e) => {
                                 field.onChange(e);
                                 props.onChange?.(e);
@@ -188,7 +185,6 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
                             field.onChange(value);
                             props.onChange?.(value);
                         }}
-                    // // defaultValue={defaultValue}
                     >
                         <SelectTrigger className={cn("w-full", className)}>
                             <SelectValue placeholder={props.placeholder} />
@@ -364,6 +360,7 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
                             props.onChange?.(value);
                         }}
                         modules={modules}
+                        {...field}
                     />
                 </FormControl>
             )
@@ -419,7 +416,7 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
 }
 
 const CustomFormField = <T extends FieldValues>(props: CustomFormFieldProps<T>) => {
-    const { control, fieldType, name, label, placeholder, type, className } = props;
+    const { control, name, label } = props;
 
     return (
         <FormField

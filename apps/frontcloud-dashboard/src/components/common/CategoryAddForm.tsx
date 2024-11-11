@@ -3,38 +3,46 @@
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
 import SectionLayout from '@/components/common/CommonSectionLayout'
 import CustomFormField from '@/components/common/CustomFormField';
-import { CustomHeading } from '@/components/custom/CustomHeading'
-import { CustomParagraph } from '@/components/custom/CustomParagraph'
 import { Button } from '@/components/ui/button';
-import { FileUpload } from '@/components/ui/file-upload';
 import { Form } from '@/components/ui/form'
-import { FileType } from '@/enum/fileTypes';
 import { FormFieldType } from '@/enum/formTypes';
-import { usePostCategoryMutation, usePostSubCategoryMutation } from '@/store/api/products/category';
+import { usePostCategoryMutation, usePostSubCategoryMutation, useUpdateCategoryMutation } from '@/store/api/products/category';
+import { ProductCategoryType } from '@/store/api/products/types/category-types';
 import addProductCategorySchema, { AddProductCategoryFormValues } from '@/zod/add-product-category.schema';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner';
 
 interface CategoryAddFormProps {
     hasParentCategory?: boolean;
-    parentCategoryOptions?: Array<{ label: string, value: string }>
+    parentCategoryOptions?: Array<{ label: string, value: string }>,
+    formValues?: ProductCategoryType
 
 }
 
 const CategoryAddForm: React.FC<CategoryAddFormProps> = ({
     hasParentCategory,
-    parentCategoryOptions
+    parentCategoryOptions,
+    formValues
 }) => {
+    console.log("🚀 ~ formValues:", formValues)
 
     const router = useRouter();
 
     const form = useForm<AddProductCategoryFormValues>({
         resolver: zodResolver(addProductCategorySchema),
-        mode: "all"
+        mode: "all",
+        defaultValues: formValues && {
+            categoryName: formValues.CategoryName,
+            visibleInMenu: formValues.VisibleInMenu ? "true" : "false",
+            description: formValues.Description,
+        }
     });
+
+
+
 
     const {
         register,
@@ -44,27 +52,38 @@ const CategoryAddForm: React.FC<CategoryAddFormProps> = ({
         formState: { errors },
     } = form;
 
+
+
     const [AddCategory, { isLoading }] = usePostCategoryMutation()
     const [AddSubCategory, { isLoading: isSubCategoryLoading }] = usePostSubCategoryMutation()
+    const [UpdateCategory, { isLoading: isUpdateLoading }] = useUpdateCategoryMutation()
 
 
     console.log("errror", errors)
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: AddProductCategoryFormValues) => {
         console.log("Form data:", data);
         try {
             if (hasParentCategory) {
-                const result = await AddCategory(data).unwrap().then(() => {
-                    console.log("Result", result)
-                    toast.success("Category created successfully")
-                    router.push('/dashboard/products/categories')
-                });
+                if (!data.categoryId) {
+                    toast.error("Please select a parent category")
+                    return;
+                }
+                const { categoryName: subCategoryName, categoryId, ...rest } = data;
+                const modifiedData = { subCategoryName, categoryId: parseInt(categoryId), ...rest };
 
-            } else {
-                const result = await AddSubCategory(data).unwrap().then(() => {
-                    console.log("Result", result)
+                const result = await AddSubCategory(modifiedData).unwrap().then((res) => {
+                    console.log("Result", res)
                     toast.success("Sub Category created successfully")
                     router.push('/dashboard/products/product-subCategories')
                 });
+            } else {
+                const { categoryId, ...rest } = data;
+                console.log("Result", rest)
+
+                const result = await AddCategory(rest).unwrap();
+                console.log("Result", result);
+                toast.success("Category created successfully");
+                router.push('dashboard/products/product-categories');
             }
         } catch (error) {
             console.log("Error", error)
@@ -79,8 +98,9 @@ const CategoryAddForm: React.FC<CategoryAddFormProps> = ({
                         hasParentCategory && (
                             <CustomFormField
                                 fieldType={FormFieldType.SELECT}
-                                name={"CategoryID"}
+                                name={"categoryId"}
                                 control={control}
+                                // defaultValue={formValues?.categoryId}
                                 selectOptions={parentCategoryOptions}
                                 label='Select Parent Category'
                                 className='ring-1 ring-gray-300'
@@ -95,14 +115,14 @@ const CategoryAddForm: React.FC<CategoryAddFormProps> = ({
                         label='Name'
                         className='ring-1 ring-gray-300'
                     />
-                    <CustomFormField
+                    {/* <CustomFormField
                         fieldType={FormFieldType.INPUT}
                         name={"url"}
                         control={control}
                         placeholder=' '
                         label='URL'
                         className='ring-1 ring-gray-300'
-                    />
+                    /> */}
                     <div className=' h-[25rem]'>
                         <CustomFormField
                             fieldType={FormFieldType.RICHTEXTEDITOR}
@@ -113,19 +133,19 @@ const CategoryAddForm: React.FC<CategoryAddFormProps> = ({
                             className=''
                         />
                     </div>
-                    <CustomFormField
+                    {/* <CustomFormField
                         fieldType={FormFieldType.INPUT}
                         name={"sort_order"}
                         control={control}
                         placeholder=' '
                         label='Sort Order'
                         className='ring-1 ring-gray-300'
-                    />
+                    /> */}
                     <CustomFormField
                         fieldType={FormFieldType.SELECT}
                         name={"visibleInMenu"}
                         control={control}
-                        defaultValue='visible'
+                        defaultValue='true'
                         selectOptions={[
                             { label: 'Visible', value: "true" },
                             { label: 'Hidden', value: "false" }
@@ -133,7 +153,7 @@ const CategoryAddForm: React.FC<CategoryAddFormProps> = ({
                         label='Visible in Menu'
                         className='ring-1 ring-gray-300'
                     />
-                    <div className=' py-5 space-y-2'>
+                    {/* <div className=' py-5 space-y-2'>
                         <CustomParagraph variant='medium' className=' text-black text-left'>Category Image</CustomParagraph>
                         <div className='ring-1 ring-gray-200'>
                             <FileUpload
@@ -143,7 +163,7 @@ const CategoryAddForm: React.FC<CategoryAddFormProps> = ({
                                 fileType={FileType.ANY_IMAGE}
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                 </SectionLayout>
                 <SectionLayout title='Search Engine Optimization' className='space-y-4 px-52 '>

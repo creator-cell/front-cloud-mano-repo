@@ -2,12 +2,12 @@ import *  as z from 'zod';
 
 
 export const addProductCategorySchema = z.object({
-    CategoryID: z.string().optional(),
+    categoryId: z.string().optional(),
     categoryName: z.string(),
-    url: z.string().optional(),
+    // url: z.string().optional(),
     description: z.string().optional(),
-    sort_order: z.number().optional(),
-    images: z.any(),
+    // sort_order: z.number().optional(),
+    // images: z.any(),
     visibleInMenu: z
         .enum(['true', 'false'])
         .optional()
