@@ -36,7 +36,7 @@ const CategoryAddForm: React.FC<CategoryAddFormProps> = ({
         mode: "all",
         defaultValues: formValues && {
             categoryName: formValues.CategoryName,
-            visibleInMenu: formValues.VisibleInMenu ? "true" : "false",
+            visibleInMenu: formValues.VisibleInMenu ? "true" : "false" as any,
             description: formValues.Description,
         }
     });

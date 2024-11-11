@@ -22,6 +22,8 @@ import { Label } from "@/components/ui/label";
 import { SideBarOpenCloseContext } from "@/hooks/useSideBarOpenClode";
 import ActionBarLayout from "@/components/common/CommonActionBarLayout";
 import useMediaQuery from "@/hooks/useMedia";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { closeSideBar, closeSubSidebarLink, openSideBar, openSubSidebarLink } from "@/store/sidebar";
 
 
 
@@ -33,21 +35,19 @@ export default function Dashboard({
     const pathName = usePathname()
     const router = useRouter()
 
-    const [open, setOpen] = useState(true);
-
-    const [openedSidebarLink, setOpenedSidebarLink] = useState<{ category: string; label: string } | null>(null);
+    const { openedSidebarLink, isSideBarOpen } = useAppSelector(state => state.sidebar)
 
     const isTablet = useMediaQuery('(max-width: 1024px)');
 
-    const { dispatch } = useContext(SideBarOpenCloseContext);
+    const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        if (open)
-            dispatch({ type: "OPEN", payload: true })
-        else
-            dispatch({ type: "CLOSE", payload: false })
-
-    }, [open, setOpen])
+    const handleSidebarToggle = () => {
+        if (isSideBarOpen && !isTablet) {
+            dispatch(closeSideBar());
+        } else {
+            dispatch(openSideBar());
+        }
+    };
 
 
     const sidebarSubLinks = useMemo(() => {
@@ -70,17 +70,17 @@ export default function Dashboard({
                 "h-screen"
             )}
         >
-            <Sidebar open={open} setOpen={setOpen} animate={false}  >
+            <Sidebar open={isSideBarOpen} setOpen={handleSidebarToggle} animate={false}  >
                 <SidebarBody className="justify-between gap-10 bg-light_medium_blue-100 text-white">
                     {/* #338ba8 */}
                     <div className="flex flex-col gap-y-8 flex-1 overflow-y-auto overflow-x-hidden">
                         <div className="h-auto  ">
-                            {open ?
+                            {isSideBarOpen ?
                                 <div className="flex px-4 items-start">
                                     <div className="flex items-center justify-center  w-full">
                                         <Logo />
                                     </div>
-                                    <Button variant={"ghost"} className=" hover:bg-transparent px-0 py-0" onClick={() => { setOpen(false); }}>
+                                    <Button variant={"ghost"} className=" hover:bg-transparent px-0 py-0" onClick={() => { dispatch(closeSideBar()) }}>
                                         <ChevronLeft size={20} />
                                     </Button>
                                 </div>
@@ -90,7 +90,7 @@ export default function Dashboard({
                                 </div>
                             }
                             {
-                                open &&
+                                isSideBarOpen &&
                                 <div className="mt-8 flex flex-col gap-y-5 ">
                                     <>
                                         <div className="px-4">
@@ -119,11 +119,11 @@ export default function Dashboard({
                         </div>
                         <div className="w-full h-px bg-gradient-to-r from-transparent via-white to-transparent" />
 
-                        <div className={`cursor-pointer ${open && "hidden"} px-4`} onClick={() => { setOpen(true); }} >
+                        <div className={`cursor-pointer ${isSideBarOpen && "hidden"} px-4`} onClick={() => { dispatch(openSideBar()) }} >
                             <ChevronRight size={24} />
                         </div>
                         {
-                            open && (
+                            isSideBarOpen && (
                                 <motion.div
                                     className="flex flex-col gap-y-1 overflow-hidden"
                                 >
@@ -137,7 +137,7 @@ export default function Dashboard({
                                                             return (
                                                                 <motion.div
                                                                     key={index}
-                                                                    onClick={() => setOpenedSidebarLink({ category: category.category, label: link.label })}
+                                                                    onClick={() => dispatch(openSubSidebarLink({ category: category.category, label: link.label }))}
                                                                     className={`w-full items-center group/link flex justify-between cursor-pointer first:mt-0 mt-1 py-1 px-3 hover:bg-gray-200 duration-100 hover:text-black  ${isActive ? "bg-gray-200 text-black " : "text-white"} duration-300`}
                                                                     initial={{ opacity: 0, x: 0 }}
                                                                     animate={{ opacity: 1, x: 0 }}
@@ -159,7 +159,7 @@ export default function Dashboard({
                                     ) : (
                                         <div className="flex flex-col gap-y-5 justify-start overflow-y-auto overflow-x-hidden">
                                             <motion.div
-                                                onClick={() => setOpenedSidebarLink(null)}
+                                                onClick={() => dispatch(closeSubSidebarLink())}
                                                 className="flex items-center justify-start gap-2 cursor-pointer"
                                                 initial={{ opacity: 0, x: -20 }}
                                                 animate={{ opacity: 1, x: 0 }}
@@ -221,8 +221,8 @@ export default function Dashboard({
                     <TopSection />
                 </ActionBarLayout>
                 <motion.div
-                    className={`flex flex-col gap-2 overflow-auto mx-auto ${open ? "px-6" : "pl-4"} `}
-                    animate={{ width: isTablet ? "100vw" : open ? 'calc(100vw - 301px)' : 'calc(100vw - 61px)' }}
+                    className={`flex flex-col gap-2 overflow-auto mx-auto ${isSideBarOpen ? "px-6" : "pl-4"} `}
+                    animate={{ width: isTablet ? "100vw" : isSideBarOpen ? 'calc(100vw - 301px)' : 'calc(100vw - 61px)' }}
                 >
                     <div className="min-w-[1024px] max-w-screen-2xl mx-auto">
                         {children}

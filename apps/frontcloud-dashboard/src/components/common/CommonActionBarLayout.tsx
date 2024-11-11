@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { SideBarOpenCloseContext } from '@/hooks/useSideBarOpenClode';
 import useMediaQuery from '@/hooks/useMedia';
 import { cn } from '@/lib/utils';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 
 
@@ -40,15 +41,16 @@ const ActionBarLayout: React.FC<ActionBarLayoutProps> = ({
     position = 'bottom'
 }) => {
 
-    const { state } = useContext(SideBarOpenCloseContext);
+    const { isSideBarOpen } = useAppSelector(state => state.sidebar);
+    const disatch = useAppDispatch()
     const isTablet = useMediaQuery('(max-width: 1024px)');
     const [width, setWidth] = useState('calc(100vw - 301px)'); // Default width
 
     React.useEffect(() => {
         // Update the width based on the state after the component mounts
-        const newWidth = isTablet ? "100vw" : state.sideBarOpen ? 'calc(100vw - 301px)' : 'calc(100vw - 61px)';
+        const newWidth = isTablet ? "100vw" : isSideBarOpen ? 'calc(100vw - 301px)' : 'calc(100vw - 61px)';
         setWidth(newWidth);
-    }, [isTablet, state.sideBarOpen]);
+    }, [isTablet, isSideBarOpen]);
 
     return (
         <motion.div

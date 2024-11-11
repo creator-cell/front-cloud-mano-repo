@@ -30,51 +30,14 @@ import useScroll from '@/hooks/useScroll';
 
 
 const Nav = () => {
-
-    // const [open, setOpen] = useState<number | null>(null);
-    // const [subMenuOpen, setSubMenuOpen] = useState<number | null>(null);
-    // const [subSubMenuOpen, setSubSubMenuOpen] = useState<number | null>(null);
     const [openMenu, setOpenMenu] = useState<boolean>(false);
-
-
-    // const handleMouseEnter = (index: number) => {
-    //     setOpen(index);
-    // };
-
-    // const handleMouseLeave = () => {
-    //     setOpen(null);
-    //     setSubMenuOpen(null);
-    //     setSubSubMenuOpen(null);
-    // };
-
-    // const handleSubMenuEnter = (index: number) => {
-    //     setSubMenuOpen(index);
-    // };
-
-    // const handleSubMenuLeave = () => {
-    //     setSubMenuOpen(null);
-    //     setSubSubMenuOpen(null);
-    // };
-
-
-
 
     const isMobile = useMediaQuery('(max-width: 640px)');
     const isSticky = useScroll()
 
 
-
     const [openCountry, setOpenCountry] = useState(false);
     const [selectedCountry, setSelectedCountry] = useState(0);
-
-
-    // const handleMouseEnterCountry = () => {
-    //     setOpenCountry(true);
-    // };
-
-    // const handleMouseLeaveCountry = () => {
-    //     setOpenCountry(false);
-    // };
 
 
 
@@ -269,9 +232,9 @@ const MobileNavBar: React.FC<MobileNavBarProps> = ({
                         <div>
                             <Button variant="default" className='uppercase text-[0.875rem] leading-[1.375rem] font-medium tracking-[0.05em] py-2 px-6 max-sm:py-0' >Request a Demo</Button>
                         </div>
-                        <SheetTrigger className='lg:hidden'>
+                        {/* <SheetTrigger className='lg:hidden'>
                             <Plus size={32} className='rotate-45' />
-                        </SheetTrigger>
+                        </SheetTrigger> */}
                     </div>
                 </div>
 
