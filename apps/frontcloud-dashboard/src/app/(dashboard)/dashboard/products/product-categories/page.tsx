@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react'
 
 
@@ -5,13 +7,15 @@ import { CustomHeading } from '@/components/custom/CustomHeading'
 import { CustomParagraph } from '@/components/custom/CustomParagraph'
 import ProductCategoriesTable from '@/components/dashboard/products/category/ProductCategoriesTable'
 import { fetchAllCategoies } from '@/server-apis/fetch-categories'
+import { useGetAllCategoriesQuery } from '@/store/api/products/category';
 
 
 
 
-const ProductCategories = async () => {
+const ProductCategories = () => {
 
-    const AllCategories = await fetchAllCategoies();
+    // const AllCategories = await fetchAllCategoies();
+    const { data: AllCategories } = useGetAllCategoriesQuery()
     console.log("🚀 ~ ProductCategories ~ AllCategories:", AllCategories)
 
     return (

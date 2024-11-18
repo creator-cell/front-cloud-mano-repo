@@ -271,7 +271,7 @@ const Product = () => {
                             cancelLabel='Cancle'
                             onConfirm={handleDelete}
                             isDisabled={table.getSelectedRowModel().rows.length < 1}
-                            triggerLabel={<Trash2 className="h-4 w-4  " />}
+                            triggerLabel={<Trash2 className="h-4 w-8 " />}
                             diasbledMessage='Select At least one product'
 
                         />

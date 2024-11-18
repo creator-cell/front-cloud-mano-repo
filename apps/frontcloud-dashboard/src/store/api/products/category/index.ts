@@ -6,18 +6,15 @@ export const ProductCategoryApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: "/api/v1/products" }),
     tagTypes: ["Category"],
     endpoints: (builder) => ({
+
+        getAllCategories: builder.query<ProductCategoryResponse, void>({
+            query: () => "/categories",
+        }),
         postCategory: builder.mutation<ProductCategoryType, ProductCategory>({
             query: (body) => ({
                 url: "/categories",
                 method: "POST",
                 body: body,
-            }),
-        }),
-        postSubCategory: builder.mutation<ProductCategoryType, ProductSubCategory>({
-            query: (body) => ({
-                url: "/categories/sub",
-                method: "POST",
-                body,
             }),
         }),
         updateCategory: builder.mutation<ProductCategoryType, { CategoryID: string, body: Partial<ProductCategory> }>({
@@ -30,12 +27,20 @@ export const ProductCategoryApi = createApi({
         getCategoryById: builder.query<ProductCategoryResponse, string>({
             query: (id) => `/categories?categoryId=${+id}`,
         }),
+        deleteCategory: builder.mutation<void, number[]>({
+            query: (ids) => ({
+                url: `/categories`,
+                method: "DELETE",
+                body: { ids }
+            }),
+        }),
     }),
 })
 
 export const {
+    useGetAllCategoriesQuery,
     usePostCategoryMutation,
     useGetCategoryByIdQuery,
-    usePostSubCategoryMutation,
     useUpdateCategoryMutation,
+    useDeleteCategoryMutation,
 } = ProductCategoryApi;

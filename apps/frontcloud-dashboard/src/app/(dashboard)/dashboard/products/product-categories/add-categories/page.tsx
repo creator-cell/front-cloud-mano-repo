@@ -14,10 +14,10 @@ const AddCategories = () => {
     const searchparams = useSearchParams()
     const categoryId = searchparams.get("id")
     console.log("🚀 ~ AddCategories ~ categoryId:", categoryId)
-    if (!categoryId) {
-        return
-    }
-    const { data, error, isLoading } = useGetCategoryByIdQuery(categoryId)
+    // if (!categoryId) {
+    //     return
+    // }
+    const { data, error, isLoading } = useGetCategoryByIdQuery(categoryId ?? "")
     console.log("🚀 ~ AddCategories ~ data:", data)
 
 
@@ -30,7 +30,7 @@ const AddCategories = () => {
             </div>
             {
                 data && data?.data.length > 0 &&
-                <CategoryAddForm formValues={data?.data?.[0]} />
+                <CategoryAddForm categoryID={categoryId ?? ""} formValues={data?.data?.[0]} />
             }
         </div >
     )

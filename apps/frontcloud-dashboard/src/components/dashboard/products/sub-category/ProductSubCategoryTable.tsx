@@ -1,15 +1,9 @@
 "use client"
 
-
-import React from 'react'
-
-
-
-import { ArrowUpDown, Ban, ChevronDown, MoreHorizontal, PencilLine, Trash2 } from "lucide-react"
-
+import React, { useEffect, useState } from 'react'
+import { ArrowUpDown, Ban, CheckCheck, PencilLine, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { CheckCheck } from 'lucide-react';
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -25,42 +19,11 @@ import CommonDataTable from '@/components/common/CommonDataTable'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ConfirmationDialog from '@/components/common/ConfirmationDialog'
+import { SubCategoryType } from '@/store/api/products/types/sub-category-types'
+import { useDeleteSubCategoryMutation } from '@/store/api/products/sub-category'
+import { toast } from 'sonner'
 
-
-
-export type Category = {
-    id: string
-    categoryName: string
-    parentCategory: string
-    products: number
-    productsInSubCats: number
-    visibleInMenu: boolean
-    action: string
-}
-
-const data: Category[] = [
-    {
-        id: "1",
-        categoryName: "Mobile",
-        parentCategory: "Electronics",
-        products: 120,
-        productsInSubCats: 80,
-        visibleInMenu: true,
-        action: "Edit",
-    },
-    {
-        id: "2",
-        categoryName: "Tshirts",
-        parentCategory: "Clothing",
-        products: 200,
-        productsInSubCats: 150,
-        visibleInMenu: false,
-        action: "Edit",
-    },
-]
-
-
-const columns: ColumnDef<Category>[] = [
+const columns: ColumnDef<SubCategoryType>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -84,89 +47,69 @@ const columns: ColumnDef<Category>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "categoryName",
-        header: "category Name",
+        accessorKey: "SubCategoryName",
+        header: "Subcategory Name",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("categoryName")}</div>
+            <div className="capitalize">{row.getValue("SubCategoryName")}</div>
         ),
     },
     {
-        accessorKey: "parentCategory",
-        header: "Parent Category",
+        accessorKey: "Description",
+        header: "Description",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("parentCategory")}</div>
+            <div
+                className="text-justify"
+                dangerouslySetInnerHTML={{ __html: row.getValue("Description") }}
+            />
         ),
     },
-
     {
-        accessorKey: "products",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Products
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase items-center flex justify-center">{row.getValue("products")}</div>,
-    },
-    {
-        accessorKey: "productsInSubCats",
-        header: () => <div className="text-right">Products In Sub Cats</div>,
-        cell: ({ row }) => {
-            const amount = parseFloat(row.getValue("productsInSubCats"))
-
-            // Format the amount as a dollar amount
-            const formatted = new Intl.NumberFormat("en-US", {
-                style: "currency",
-                currency: "USD",
-            }).format(amount)
-
-            return <div className="text-right font-medium items-center flex justify-center">{amount}</div>
-        },
-    },
-    {
-        accessorKey: "visibleInMenu",
-        header: "visible In Menu",
+        accessorKey: "VisibleInMenu",
+        header: "Visible In Menu",
         cell: ({ row }) => (
-            <div className="capitalize items-center flex justify-center">{
-                row.getValue("visibleInMenu") === true ? <CheckCheck size={20} color='green' /> : <Ban size={20} color='red' />
-            }</div>
+            <div className="flex justify-center">
+                {row.getValue("VisibleInMenu") === 1 ? (
+                    <CheckCheck size={20} color='green' />
+                ) : (
+                    <Ban size={20} color='red' />
+                )}
+            </div>
+        ),
+    },
+    {
+        accessorKey: "CreatedAt",
+        header: "Created At",
+        cell: ({ row }) => (
+            <div>{new Date(row.getValue("CreatedAt")).toLocaleDateString()}</div>
+        ),
+    },
+    {
+        accessorKey: "UpdatedAt",
+        header: "Updated At",
+        cell: ({ row }) => (
+            <div>{new Date(row.getValue("UpdatedAt")).toLocaleDateString()}</div>
         ),
     },
     {
         id: "actions",
         enableHiding: false,
         header: "Actions",
-        cell: ({ row }) => {
-            const payment = row.original
-
-            return (
-                <Link href={"/dashboard/products/product-subCategories/add-subCategories"}>
-                    <PencilLine color='green' />
-                </Link>
-            )
-        },
+        cell: ({ row }) => (
+            <Link href={`/dashboard/products/product-subCategories/add-subCategories?id=${row.original.SubCategoryID}`}>
+                <PencilLine color='green' />
+            </Link>
+        ),
     },
 ]
 
-
-const ProductSubCategoryTable = () => {
+const ProductSubCategoryTable = ({ data }: { data: SubCategoryType[] }) => {
+    console.log("🚀 ~ ProductSubCategoryTable ~ data:", data)
     const router = useRouter()
 
-    const handleDelete = () => {
-        console.log('Delete')
-    }
 
     const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        []
-    )
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
     const table = useReactTable({
@@ -188,6 +131,33 @@ const ProductSubCategoryTable = () => {
         },
     })
 
+    const [DeleteSubCategory] = useDeleteSubCategoryMutation()
+
+
+    const [selectedIds, setSelectedIds] = useState<number[]>([]); // Step 1: Define selectedIds as number[]
+
+    // Step 2: Filter out undefined values in useEffect
+    useEffect(() => {
+        const ids = table
+            .getSelectedRowModel()
+            .rows.map(row => row.original.CategoryID)
+            .filter((id): id is number => id !== undefined); // Ensure only numbers are stored
+        console.log("🚀 ~ useEffect ~ ids:", ids);
+        setSelectedIds(ids);
+    }, [rowSelection, table]);
+
+
+    const handleDelete = async () => {
+        try {
+            await DeleteSubCategory(selectedIds).unwrap()
+            toast.success("Category Deleted Successfully")
+            router.refresh()
+        } catch (err) {
+            console.error(err)
+            toast.error("Error Deleting Category")
+        }
+    }
+
     return (
         <div className='bg-white px-4 py-8 rounded-sm '>
             <CommonDataTable
@@ -195,10 +165,9 @@ const ProductSubCategoryTable = () => {
                 columns={columns}
                 table={table}
                 topClassName='gap-x-4'
-                tableSearchKeys={['categoryName']}
-                searchPlaceholder='Search for Categories'
+                tableSearchKeys={['SubCategoryName']}
+                searchPlaceholder='Search for Subcategories'
             >
-
                 <Button
                     onClick={() => router.push("/dashboard/products/product-subCategories/add-subCategories")}
                     className='bg-primary text-white'
@@ -208,16 +177,14 @@ const ProductSubCategoryTable = () => {
 
                 <ConfirmationDialog
                     title='Confirmation'
-                    description='WARNING: The selected products will be removed permanently. If the products appear in any Product Pick List options they will also be removed from those options. Are you sure?'
+                    description='WARNING: The selected subcategories will be removed permanently. Are you sure?'
                     confirmLabel='Delete'
-                    cancelLabel='Cancle'
+                    cancelLabel='Cancel'
                     onConfirm={handleDelete}
                     isDisabled={table.getSelectedRowModel().rows.length < 1}
-                    triggerLabel={<Trash2 className="h-4 w-4  " />}
-                    diasbledMessage='Select At least one Category'
-
+                    triggerLabel={<Trash2 className="h-4 w-4" />}
+                    diasbledMessage='Select at least one subcategory'
                 />
-
             </CommonDataTable>
         </div>
     )

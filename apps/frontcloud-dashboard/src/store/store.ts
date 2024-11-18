@@ -56,6 +56,7 @@ import { ProductCategoryApi } from "./api/products/category";
 import storage from "redux-persist/lib/storage";
 
 import SideBarSlice from "./sidebar/index";
+import { ProductSubCategoryApi } from "./api/products/sub-category";
 
 const persistConfig = {
   key: "userPackage",
@@ -73,13 +74,14 @@ export const store = configureStore({
     [AuthApi.reducerPath]: AuthApi.reducer,
     [UserApi.reducerPath]: UserApi.reducer,
     [ProductCategoryApi.reducerPath]: ProductCategoryApi.reducer,
+    [ProductSubCategoryApi.reducerPath]: ProductSubCategoryApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(AuthApi.middleware, UserApi.middleware, ProductCategoryApi.middleware),
+    }).concat(AuthApi.middleware, UserApi.middleware, ProductCategoryApi.middleware, ProductSubCategoryApi.middleware),
 });
 
 // Create the persistor with the `store` instance

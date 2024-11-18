@@ -1,13 +1,63 @@
 import { toPositiveNumber } from "@/utils/textFieldWithNumberValidation";
 import * as z from "zod";
 
-const isImageFile = (file: File) => {
-    const allowedFormats = ["image/webp", "image/jpeg", "image/png"];
-    return file && allowedFormats.includes(file.type);
-};
 
-const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+export const AddProductFormSchemaNew = z.object({
+    Product: z.object({
+        productName: z.string().min(3, "Name must be at least 3 characters long"),
+        SKU: z.string().min(2, "SKU must be at least 3 characters long").optional(),
+        productType: z.string().min(3, "Type must be at least 3 characters long").optional(),
+        Brand: z.string().min(3, "Brand must be at least 3 characters long").optional(),
+        ManufacturePartNumber: z.string().min(3, "Manufacture Part Number must be at least 3 characters long").optional(),
+        ProductUPC: z.string().min(3, "Product UPC must be at least 3 characters long").optional(),
+        GlobalTradeItemNumber: z.string().min(3, "Global Trade Item Number must be at least 3 characters long").optional(),
+        CategoryID: z.string().min(3, "Category ID must be at least 3 characters long"),
+        SubCategoryID: z.string().min(3, "Sub Category ID must be at least 3 characters long").optional(),
+        StoreID: z.string().min(1, "Store ID must be at least 3 characters long"),
+        Description: z.string().min(3, "Description must be at least 3 characters long").optional(),
+        IsDropShipped: z.boolean().optional(),
+    }),
+    ProductDimensions: z.object({
+        Weight: toPositiveNumber("Weight must be a positive number"),
+        Height: toPositiveNumber("Height must be a positive number"),
+        Width: toPositiveNumber("Width must be a positive number"),
+        Depth: toPositiveNumber("Depth must be a positive number").optional(),
+    }),
+    ProductTax: z.object({
+        TaxClass: z.string().min(3, "Tax Class must be at least 3 characters long").optional(),
+        TaxProviderTaxCode: z.string().min(3, "Tax Provider Tax Code must be at least 3 characters long").optional(),
+    }),
+    ProductInventory: z.object({
+        StockQuantity: toPositiveNumber("Stock Quantity must be a positive number"),
+        BinPickingNumber: z.string().min(3, "Bin Picking Number must be at least 3 characters long").optional(),
+        MinPurchaseQty: toPositiveNumber("Min Purchase Quantity must be a positive number").optional(),
+        MaxPurchaseQty: toPositiveNumber("Max Purchase Quantity must be a positive number").optional(),
+    }),
+    ProductPricing: z.object({
+        StorePrice: toPositiveNumber("Store Price must be a positive number"),
+        SupplierPrice: toPositiveNumber("Supplier Price must be a positive number").optional(),
+        PriceType: z.string().min(3, "Price Type must be at least 3 characters long").optional(),
+        DiscountType: z.string().min(3, "Discount Type must be at least 3 characters long").optional(),
+    }),
+    ProductShipping: z.object({
+        ShippingType: z.string().min(3, "Shipping Type must be at least 3 characters long").optional(),
+        ShippingPrice: toPositiveNumber("Shipping Price must be a positive number").optional(),
+        Weight: toPositiveNumber("Weight must be a positive number"),
+        Height: toPositiveNumber("Height must be a positive number"),
+        Width: toPositiveNumber("Width must be a positive number"),
+        Depth: toPositiveNumber("Depth must be a positive number").optional(),
+    }),
+    Seo: z.object({
+        MetaTitle: z.string().min(3, "Meta Title must be at least 3 characters long").optional(),
+        MetaDescription: z.string().min(3, "Meta Description must be at least 3 characters long").optional(),
+        MetaKeywords: z.string().min(3, "Meta Keywords must be at least 3 characters long").optional(),
+        Url: z.string().min(3, "URL must be at least 3 characters long").optional(),
+    }),
+
+})
+
+
+export type addProductFormValuesNew = z.infer<typeof AddProductFormSchemaNew>;
 
 
 export const AddProductFormSchema = z.object({
@@ -154,21 +204,8 @@ export const AddProductFormSchema = z.object({
         metaKeywords: z.string().min(3, "Meta Keywords must be at least 3 characters long").optional(),
         url: z.string().min(3, "URL must be at least 3 characters long").optional(),
     }),
-
-    // openGraphSharing: z.object({
-    //     objectType: z.string().min(3, "OG Title must be at least 3 characters long").optional(),
-    //     ogTitle: z.string().min(3, "OG Title must be at least 3 characters long").optional(),
-    //     useProductName: z.boolean().optional(),
-    //     ogImage: z.string().min(3, "OG Image must be at least 3 characters long").optional(),
-    // }),
     images: z.array(z.any()).optional(),
 
-    // images: z.array(z.instanceof(File))
-    //     .nonempty("Please upload at least one image") // Ensure at least one image is uploaded
-    //     .refine((files) => files.every(isImageFile), {
-    //         message: "All files must be in .webp, .jpg, or .png format",
-    //     })
-    //     .optional(),
 });
 
 

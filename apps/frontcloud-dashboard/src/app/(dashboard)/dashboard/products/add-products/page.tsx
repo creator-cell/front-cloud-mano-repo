@@ -11,7 +11,7 @@ import Link from 'next/link';
 import 'react-quill/dist/quill.snow.css';
 
 import { AdProductFormSections, ProductFormSectionIds } from '@/enum/dashboard/products/add';
-import { AddProductFormSchema, addProductFormValues } from '@/zod/addProduct.schema';
+import { AddProductFormSchema, AddProductFormSchemaNew, addProductFormValues, addProductFormValuesNew } from '@/zod/addProduct.schema';
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
 import { CustomParagraph } from '@/components/custom/CustomParagraph';
 import { SideBarOpenCloseContext } from '@/hooks/useSideBarOpenClode';
@@ -28,6 +28,9 @@ import { Form } from '@/components/ui/form';
 import { FormFieldType } from '@/enum/formTypes';
 import { FileType } from '@/enum/fileTypes';
 import VariantAttributeForm from '@/components/VariantOptionsForm';
+import { toast } from 'sonner';
+import { useAddProductsMutation } from '@/store/api/products';
+import { useRouter } from 'next/navigation';
 
 // Dynamically import ReactQuill with SSR disabled
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -36,9 +39,13 @@ const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 const AddProduct = () => {
 
-    const form = useForm<addProductFormValues>({
-        resolver: zodResolver(AddProductFormSchema),
+    const form = useForm<addProductFormValuesNew>({
+        resolver: zodResolver(AddProductFormSchemaNew),
         mode: 'all',
+        criteriaMode: 'all',
+        progressive: true,
+        reValidateMode: 'onChange',
+
     });
 
     const {
@@ -51,8 +58,19 @@ const AddProduct = () => {
     } = form;
 
     console.log("errror", errors)
-    const onSubmit = (data: any) => {
+    const router = useRouter();
+    const [AddProduct, { isLoading }] = useAddProductsMutation()
+
+    const onSubmit = async (data: any) => {
         console.log("Form data:", data);
+        try {
+            // await AddProduct(data).unwrap().then(res => {
+            //     router.replace('/dashboard/products')
+            // });
+        } catch (err) {
+            console.log("Error", err)
+            toast.error("Error")
+        }
     };
 
     const { state } = useContext(SideBarOpenCloseContext);
@@ -94,7 +112,7 @@ const AddProduct = () => {
 
 
 
-    const selectedCategory = watch("category");
+    const selectedCategory = watch("Product.CategoryID");
 
     const CategoryOptions = {
         "categories": [
@@ -118,11 +136,29 @@ const AddProduct = () => {
             },
         ]
     }
+    const discountTypeOptions = [
+        { label: "Percentage", value: "percentage" },
+        { label: "Fixed Amount", value: "fixed_amount" },
+        { label: "Buy One Get One Free (BOGO)", value: "bogo" },
+        { label: "Free Shipping", value: "free_shipping" },
+    ];
+    const priceTypeOptions = [
+        { label: "Retail Price", value: "retail_price" },
+        { label: "Wholesale Price", value: "wholesale_price" },
+        { label: "Cost Price", value: "cost_price" },
+        { label: "Discounted Price", value: "discounted_price" },
+        { label: "Dynamic Pricing", value: "dynamic_pricing" },
+    ];
+    const shippingTypeOptions = [
+        { label: "Standard Shipping", value: "standard_shipping" },
+        { label: "Express Shipping", value: "express_shipping" },
+        { label: "Overnight Shipping", value: "overnight_shipping" },
+        { label: "International Shipping", value: "international_shipping" },
+        { label: "Free Shipping", value: "free_shipping" },
+        { label: "Local Pickup", value: "local_pickup" },
+    ];
 
-    // React.useEffect(() => {
-    //     const category = CategoryOptions.categories.find(cat => cat.value === selectedCategory);
-    //     setSubcategories(category ? category.subcategories : []);
-    // }, [selectedCategory]);
+
 
     const subcategories = useMemo(() => {
         const category = CategoryOptions.categories.find(cat => cat.value === selectedCategory);
@@ -182,9 +218,9 @@ const AddProduct = () => {
                                 <div className='flex items-center gap-x-3 h-6 '>
                                     <CustomFormField
                                         fieldType={FormFieldType.CHECKBOX}
-                                        name={"visibleToStorefront"}
+                                        name={"Product.IsDropShipped"}
                                         control={control}
-                                        placeholder='Visible on Storefront'
+                                        placeholder='Is Drop Shipped'
                                         className='w-6 h-6'
                                     />
                                 </div>
@@ -193,7 +229,7 @@ const AddProduct = () => {
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>Product Name</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
-                                            name={"name"}
+                                            name={"Product.productName"}
                                             control={control}
                                             placeholder='Sample Product Name'
                                             className='ring-1 ring-gray-300 rounded-md'
@@ -203,7 +239,7 @@ const AddProduct = () => {
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>SKU</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
-                                            name={"SKU"}
+                                            name={"Product.SKU"}
                                             control={control}
                                             placeholder='THX-1138'
                                             className='ring-1 ring-gray-300 rounded-md'
@@ -213,39 +249,30 @@ const AddProduct = () => {
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>Product Type</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.SELECT}
-                                            name={"type"}
+                                            name={"Product.productType"}
                                             control={control}
                                             selectOptions={[
                                                 { label: "Physical", value: "physical" },
                                                 { label: "Digital", value: "digital" }]}
                                             defaultValue='physical'
+                                            placeholder='Select Product Type'
                                             className='ring-1 focus:border-none  ring-gray-300 rounded-md'
-                                        />
-                                    </div>
-                                    <div className='w-full flex flex-col gap-y-1'>
-                                        <Label variant='gray' size={"medium"} className=' font-[400]'>Default Price * (excluding tax)</Label>
-                                        <CustomFormField
-                                            fieldType={FormFieldType.INPUT}
-                                            name={"defaultPriceExcludingTax"}
-                                            control={control}
-                                            placeholder='$ 35'
-                                            className='ring-1 ring-gray-300 rounded-md'
                                         />
                                     </div>
                                     <div className='w-full flex flex-col gap-y-1'>
                                         <Label variant='gray' size={"medium"} className=' font-[400]'> Brand</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.SELECT}
-                                            name={"type"}
+                                            name={"Product.Brand"}
                                             control={control}
                                             selectOptions={[
                                                 { label: "Physical", value: "physical" },
                                                 { label: "Digital", value: "digital" }]}
-                                            placeholder=' '
+                                            placeholder='Select Brand'
                                             className='ring-1 focus:border-none  ring-gray-300 rounded-md'
                                         />
                                     </div>
-                                    <div className='w-full flex flex-col gap-y-1'>
+                                    {/* <div className='w-full flex flex-col gap-y-1'>
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>Weight</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
@@ -254,6 +281,20 @@ const AddProduct = () => {
                                             placeholder='20'
                                             className='ring-1 ring-gray-300 rounded-md'
                                         />
+                                    </div> */}
+                                    <div className='w-full flex flex-col gap-y-1'>
+                                        <Label variant='gray' size={"medium"} className=' font-[400]'> Select Store</Label>
+                                        <CustomFormField
+                                            fieldType={FormFieldType.SELECT}
+                                            name={"Product.StoreID"}
+                                            control={control}
+                                            selectOptions={[
+                                                { label: "Store 1", value: "1" },
+                                                { label: "Store 2", value: "2" },
+                                            ]}
+                                            placeholder='Select Store'
+                                            className='ring-1 focus:border-none  ring-gray-300 rounded-md'
+                                        />
                                     </div>
                                 </div>
                                 <div className='grid grid-cols-2 gap-x-5'>
@@ -261,7 +302,7 @@ const AddProduct = () => {
                                     <CustomFormField
                                         control={control}
                                         fieldType={FormFieldType.SELECT}
-                                        name={`category`}
+                                        name={`Product.CategoryID`}
                                         placeholder="Select Category"
                                         className="focus:ring-0"
                                         selectOptions={
@@ -276,7 +317,7 @@ const AddProduct = () => {
                                         <CustomFormField
                                             control={control}
                                             fieldType={FormFieldType.SELECT}
-                                            name={`subCategory`}
+                                            name={`Product.SubCategoryID`}
                                             placeholder="Select SubCategory"
                                             className="focus:ring-0"
                                             selectOptions={subcategories}
@@ -284,7 +325,6 @@ const AddProduct = () => {
                                     }
                                 </div>
                             </div>
-
                         </SectionLayout>
 
                         {/* Description */}
@@ -294,8 +334,8 @@ const AddProduct = () => {
                                 <ReactQuill
                                     theme="snow"
                                     className='h-72'
-                                    value={watch("description")}
-                                    onChange={(value) => setValue("description", value)}
+                                    value={watch("Product.Description")}
+                                    onChange={(value) => setValue("Product.Description", value)}
                                     modules={modules}
                                 />
                             </div>
@@ -303,13 +343,10 @@ const AddProduct = () => {
 
 
                         {/* Images & Videos */}
-                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.IMAGES_AND_VIDEOS} offsetHeight>
+                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.IMAGES_AND_VIDEOS} offsetHeight>
                             <div className='flex items-center justify-between'>
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Images & Videos</CustomParagraph>
-                                {/* <div className='space-x-2'>
-                                            <Button variant={"outline"} className="text-blue-500 w-fit px-5"> <Plus size={20} className='mr-2' /> Add Image</Button>
-                                            <Button variant={"outline"} className="text-blue-500 w-fit px-5"> <UploadCloud size={20} className='mr-2' /> Upload File</Button>
-                                        </div> */}
+
                             </div>
                             <div className='w-full flex flex-col gap-y-1 border'>
                                 <FileUpload
@@ -319,22 +356,22 @@ const AddProduct = () => {
                                     fileType={FileType.ANY_IMAGE}
                                 />
                             </div>
-                        </SectionLayout>
+                        </SectionLayout> */}
 
 
 
                         {/* Product Identifiers */}
                         <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.PRODUCT_IDENTIFIERS} offsetHeight>
-                            <CustomParagraph variant='medium' className=' text-black text-left'>Product Identifiers</CustomParagraph>
+                            <CustomParagraph variant='medium' className=' text-black text-left'>Product Inventory</CustomParagraph>
 
                             <div className='grid grid-cols-2 gap-x-7 gap-y-8 '>
                                 <div className='w-full flex flex-col gap-y-1'>
-                                    <Label variant='gray' size={"medium"} className=' font-[400]'>SKU</Label>
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Stock Quentity</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productIdentifiers.sku"}
+                                        name={"ProductInventory.StockQuantity"}
                                         control={control}
-                                        placeholder='THX-1138'
+                                        placeholder='123'
                                         className='ring-1 ring-gray-300 rounded-md'
                                     />
                                 </div>
@@ -342,7 +379,7 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Manufacturer Part Number (MPN)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productIdentifiers.manufacturerPartNumber"}
+                                        name={"Product.ManufacturePartNumber"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -352,7 +389,7 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Product UPC/EAN     </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productIdentifiers.UPC_EAN"}
+                                        name={"Product.ProductUPC"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -362,7 +399,7 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Global Trade Item Number (GTIN)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productIdentifiers.globalTradeItemNumber"}
+                                        name={"Product.GlobalTradeItemNumber"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -372,7 +409,7 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Bin Picking Number (BPN)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productIdentifiers.binPickingNumber"}
+                                        name={"ProductInventory.BinPickingNumber"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -387,63 +424,65 @@ const AddProduct = () => {
                             <CustomParagraph variant='medium' className=' text-black text-left'>Pricing</CustomParagraph>
                             <div className='grid grid-cols-2 gap-x-7 gap-y-8 '>
                                 <div className='w-full flex flex-col gap-y-1'>
-                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Default Price * (excluding tax)                                    </Label>
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Store Price * (excluding tax)                                    </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"pricing.defaultPrice"}
+                                        name={"ProductPricing.StorePrice"}
                                         control={control}
-                                        placeholder='$ 35'
+                                        placeholder='35'
+                                        startAdornment='$'
+                                        endAdornment='USD'
                                         className='ring-1 ring-gray-300 rounded-md'
                                     />
                                 </div>
-                            </div>
-                            <div>
-                                <Label variant='gray' size={"medium"} className=' font-[400]'>Tax Class</Label>
-                                <CustomFormField
-                                    fieldType={FormFieldType.SELECT}
-                                    name={"pricing.taxClass"}
-                                    control={control}
-                                    selectOptions={[
-                                        { label: "Default Tax Class", value: "default_tax_class" },
-                                        { label: "Non Taxable", value: "non_taxable" },
-                                        { label: "Shiping", value: "shiing" },
-                                        { label: "Gift Wrapping", value: "gift_wrapping" }
-                                    ]}
-                                    placeholder=' '
-                                    className='ring-1 focus:border-none  ring-gray-300 rounded-md'
-                                />
-                            </div>
-                            {/* advance pricing */}
 
-                            <div className='grid grid-cols-2 gap-x-7 gap-y-8 '>
+                                {/* advance pricing */}
                                 <div className='w-full flex flex-col gap-y-1'>
-                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Cost                                   </Label>
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Supplier Price</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"pricing.cost"}
+                                        name={"ProductPricing.SupplierPrice"}
                                         control={control}
-                                        placeholder='$ 0'
+                                        placeholder='20'
+                                        startAdornment='$'
+                                        endAdornment='USD'
                                         className='ring-1 ring-gray-300 rounded-md'
                                     />
                                 </div>
                                 <div className='w-full flex flex-col gap-y-1'>
-                                    <Label variant='gray' size={"medium"} className=' font-[400]'>MSRP                                   </Label>
-                                    <CustomFormField
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Discount Type                                   </Label>
+                                    {/* <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"pricing.MSRP"}
+                                        name={"ProductPricing.DiscountType"}
                                         control={control}
                                         placeholder='$ 0'
                                         className='ring-1 ring-gray-300 rounded-md'
+                                    /> */}
+                                    <CustomFormField
+                                        control={control}
+                                        fieldType={FormFieldType.SELECT}
+                                        name={`ProductPricing.DiscountType`}
+                                        placeholder="Select Discount Type"
+                                        className="focus:ring-0"
+                                        selectOptions={discountTypeOptions}
                                     />
                                 </div>
                                 <div className='w-full flex flex-col gap-y-1'>
-                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Sale Price                                   </Label>
-                                    <CustomFormField
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'> Price Type                                   </Label>
+                                    {/* <CustomFormField
                                         fieldType={FormFieldType.INPUT}
                                         name={"pricing.salePrice"}
                                         control={control}
                                         placeholder='$ 0'
                                         className='ring-1 ring-gray-300 rounded-md'
+                                    /> */}
+                                    <CustomFormField
+                                        control={control}
+                                        fieldType={FormFieldType.SELECT}
+                                        name={`ProductPricing.PriceType`}
+                                        placeholder="Select Price Type"
+                                        className="focus:ring-0"
+                                        selectOptions={priceTypeOptions}
                                     />
                                 </div>
                             </div>
@@ -455,11 +494,27 @@ const AddProduct = () => {
                                 </CustomParagraph>
 
                                 <div className='grid grid-cols-2 gap-x-7 gap-y-8 '>
+                                    <div>
+                                        <Label variant='gray' size={"medium"} className=' font-[400]'>Tax Class</Label>
+                                        <CustomFormField
+                                            fieldType={FormFieldType.SELECT}
+                                            name={"ProductTax.TaxClass"}
+                                            control={control}
+                                            selectOptions={[
+                                                { label: "Default Tax Class", value: "default_tax_class" },
+                                                { label: "Non Taxable", value: "non_taxable" },
+                                                { label: "Shiping", value: "shiing" },
+                                                { label: "Gift Wrapping", value: "gift_wrapping" }
+                                            ]}
+                                            placeholder=' '
+                                            className='ring-1 focus:border-none  ring-gray-300 rounded-md'
+                                        />
+                                    </div>
                                     <div className='w-full flex flex-col gap-y-1'>
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>Tax Provider Tax Code                                   </Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
-                                            name={"pricing.taxProviderTaxCode"}
+                                            name={"ProductTax.TaxProviderTaxCode"}
                                             control={control}
                                             placeholder='THX-1138'
                                             className='ring-1 ring-gray-300 rounded-md'
@@ -467,7 +522,7 @@ const AddProduct = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex flex-col gap-y-5'>
+                            {/* <div className='flex flex-col gap-y-5'>
                                 <CustomParagraph variant='medium' className=' text-black font-[700] text-left'>Bulk Pricing</CustomParagraph>
                                 <CustomParagraph variant='small' className=' text-black  text-left'>
                                     Create bulk pricing rules to offer price discounts based on quantity breaks.
@@ -490,12 +545,12 @@ const AddProduct = () => {
                                         />
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </SectionLayout>
 
 
                         {/* Inventory */}
-                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.INVENTORY} offsetHeight >
+                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.INVENTORY} offsetHeight >
                             <CustomParagraph variant='medium' className=' text-black text-left'>Inventory</CustomParagraph>
                             <div className='grid grid-cols-2 gap-x-7 gap-y-8 '>
                                 <div className='w-full flex flex-col gap-y-1'>
@@ -509,17 +564,17 @@ const AddProduct = () => {
                                 </div>
                             </div>
 
-                        </SectionLayout>
+                        </SectionLayout> */}
 
 
 
-                        <div className='w-full flex flex-col py-5 items-center justify-center gap-y-1'>
+                        {/* <div className='w-full flex flex-col py-5 items-center justify-center gap-y-1'>
                             <CustomParagraph variant='large' className='text-gray-700 font-[500]'>Product Options</CustomParagraph>
                             <CustomParagraph variant='small' className='text-gray-700 font-[300]'>Create product variations and customizations.</CustomParagraph>
-                        </div>
+                        </div> */}
 
                         {/* variations */}
-                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.VARIATIONS} offsetHeight>
+                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.VARIATIONS} offsetHeight>
                             <div className='flex flex-col gap-y-2'>
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Variations</CustomParagraph>
                                 <CustomParagraph variant='small' className='text-gray-700 font-[300]'>Add variant options like size and color to create variants for this product.</CustomParagraph>
@@ -528,7 +583,6 @@ const AddProduct = () => {
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Variant Options                                    </CustomParagraph>
                                 <div className='flex items-center flex-col gap-y-4'>
                                     <CustomParagraph variant='small' className='text-gray-700 font-[300]'>No Option has been added yet.</CustomParagraph>
-                                    {/* <Button type='button' variant={"outline"} className="text-blue-500 w-fit px-5"> <Plus size={20} className='mr-2' /> Add Option</Button> */}
                                     <VariantAttributeForm control={control} errors={errors} />
                                 </div>
                             </div>
@@ -541,7 +595,7 @@ const AddProduct = () => {
                                 </div>
                             </div>
 
-                        </SectionLayout>
+                        </SectionLayout> */}
                         {/* <ExampleWithProviders /> variant table */}
 
 
@@ -572,15 +626,15 @@ const AddProduct = () => {
 
 
 
-                        <div className='space-y-2'>
+                        {/* <div className='space-y-2'>
                             <CustomParagraph variant='medium' className=' text-black text-center'>Storefront                                    </CustomParagraph>
 
                             <CustomParagraph variant='small' className='text-gray-700 text-center font-[300]'>Setup what customers will see on the storefront.
                             </CustomParagraph>
-                        </div>
+                        </div> */}
 
                         {/* Storefront */}
-                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.STOREFRONT_DETAILS} offsetHeight >
+                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.STOREFRONT_DETAILS} offsetHeight >
                             <div className='flex flex-col gap-y-6'>
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Storefront Details</CustomParagraph>
                                 <CustomParagraph variant='small' className='text-gray-700 font-[300] flex items-center gap-x-3'> <Star /> Set as a Featured Product on my Storefront </CustomParagraph>
@@ -672,11 +726,11 @@ const AddProduct = () => {
                                     />
                                 </div>
                             </div>
-                        </SectionLayout>
+                        </SectionLayout> */}
 
 
                         {/* Custom Fields */}
-                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.CUSTOM_FIELDS} offsetHeight >
+                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.CUSTOM_FIELDS} offsetHeight >
                             <div className='flex flex-col gap-y-2'>
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Custom Fields</CustomParagraph>
                                 <CustomParagraph variant='small' className='text-gray-700 font-[300]'>
@@ -684,10 +738,10 @@ const AddProduct = () => {
                                 </CustomParagraph>
                             </div>
                             <Button variant={"ghost"} className="text-blue-500 w-fit px-5"> <Plus size={20} className='mr-2' /> Add Custom Fields</Button>
-                        </SectionLayout>
+                        </SectionLayout> */}
 
                         {/* Related Products */}
-                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.RELATED_PRODUCTS} offsetHeight>
+                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.RELATED_PRODUCTS} offsetHeight>
                             <CustomParagraph variant='medium' className=' text-black text-left'>Related Products</CustomParagraph>
                             <div className='grid grid-cols-2 gap-x-7 gap-y-8 '>
                                 <div className='w-full flex flex-col gap-y-1'>
@@ -700,7 +754,7 @@ const AddProduct = () => {
                                     />
                                 </div>
                             </div>
-                        </SectionLayout>
+                        </SectionLayout> */}
 
 
                         {/* Fulfillment */}
@@ -721,7 +775,7 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Weight (Ounces) </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"dimensionsWeight.weight"}
+                                        name={"ProductDimensions.Weight"}
                                         control={control}
                                         placeholder='0'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -731,9 +785,9 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Width (Inches)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"dimensionsWeight.width"}
+                                        name={"ProductDimensions.Width"}
                                         control={control}
-                                        placeholder=' '
+                                        placeholder='2'
                                         className='ring-1 ring-gray-300 rounded-md'
                                     />
                                 </div>
@@ -741,9 +795,9 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Height (Inches)      </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"dimensionsWeight.height"}
+                                        name={"ProductDimensions.Height"}
                                         control={control}
-                                        placeholder=' '
+                                        placeholder='12'
                                         className='ring-1 ring-gray-300 rounded-md'
                                     />
                                 </div>
@@ -751,9 +805,9 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Depth (Inches)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"dimensionsWeight.depth"}
+                                        name={"ProductDimensions.Depth"}
                                         control={control}
-                                        placeholder=' '
+                                        placeholder='3'
                                         className='ring-1 ring-gray-300 rounded-md'
                                     />
                                 </div>
@@ -766,19 +820,28 @@ const AddProduct = () => {
                             <div className='flex flex-col gap-y-6'>
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Shipping Details</CustomParagraph>
                             </div>
-                            <div className='grid grid-cols-2 gap-x-7 gap-y-8 '>
+                            <div className='grid grid-cols-2 gap-x-7 gap-y-8 items-end'>
                                 <div className='w-full flex flex-col gap-y-1'>
-                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Fixed Shipping Price                           </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"fixedShipingPrice"}
+                                        name={"ProductShipping.ShippingPrice"}
                                         control={control}
-                                        label='Default'
-                                        placeholder='$ 0'
+                                        label='Shiping Price'
+                                        placeholder='10'
+                                        startAdornment='$'
+                                        endAdornment='USD'
                                         className='ring-1 ring-gray-300 rounded-md'
                                     />
                                 </div>
-                                <div className='w-full flex flex-col gap-y-1 '>
+                                <CustomFormField
+                                    fieldType={FormFieldType.SELECT}
+                                    name={"ProductShipping.ShippingType"}
+                                    control={control}
+                                    selectOptions={shippingTypeOptions}
+                                    placeholder='select shipping type'
+                                    className='ring-1 focus:border-none  ring-gray-300 rounded-md'
+                                />
+                                {/* <div className='w-full flex flex-col gap-y-1 '>
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Sort Order                                </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.CHECKBOX}
@@ -787,13 +850,55 @@ const AddProduct = () => {
                                         placeholder='Free Shiping'
                                         className='ring-1 ring-gray-300 w-6 h-6 mt-2 '
                                     />
+                                </div> */}
+                            </div>
+                            <div className='grid grid-cols-2 gap-x-7 gap-y-8 '>
+                                <div className='w-full flex flex-col gap-y-1'>
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Weight (Ounces) </Label>
+                                    <CustomFormField
+                                        fieldType={FormFieldType.INPUT}
+                                        name={"ProductShipping.Weight"}
+                                        control={control}
+                                        placeholder='0'
+                                        className='ring-1 ring-gray-300 rounded-md'
+                                    />
+                                </div>
+                                <div className='w-full flex flex-col gap-y-1'>
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Width (Inches)</Label>
+                                    <CustomFormField
+                                        fieldType={FormFieldType.INPUT}
+                                        name={"ProductShipping.Width"}
+                                        control={control}
+                                        placeholder='2'
+                                        className='ring-1 ring-gray-300 rounded-md'
+                                    />
+                                </div>
+                                <div className='w-full flex flex-col gap-y-1'>
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Height (Inches)      </Label>
+                                    <CustomFormField
+                                        fieldType={FormFieldType.INPUT}
+                                        name={"ProductShipping.Height"}
+                                        control={control}
+                                        placeholder='12'
+                                        className='ring-1 ring-gray-300 rounded-md'
+                                    />
+                                </div>
+                                <div className='w-full flex flex-col gap-y-1'>
+                                    <Label variant='gray' size={"medium"} className=' font-[400]'>Depth (Inches)</Label>
+                                    <CustomFormField
+                                        fieldType={FormFieldType.INPUT}
+                                        name={"ProductShipping.Depth"}
+                                        control={control}
+                                        placeholder='3'
+                                        className='ring-1 ring-gray-300 rounded-md'
+                                    />
                                 </div>
                             </div>
                         </SectionLayout>
 
 
                         {/* Purchasability */}
-                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.PURCHASABILITY} offsetHeight >
+                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.PURCHASABILITY} offsetHeight >
                             <div className='flex flex-col gap-y-6'>
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Purchasability</CustomParagraph>
                             </div>
@@ -833,11 +938,11 @@ const AddProduct = () => {
                                     />
                                 </div>
                             </div>
-                        </SectionLayout>
+                        </SectionLayout> */}
 
 
                         {/* Gift Wrapping */}
-                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.GIFT_WRAPPING} offsetHeight >
+                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.GIFT_WRAPPING} offsetHeight >
                             <div className='flex flex-col gap-y-6'>
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Gift Wrapping</CustomParagraph>
                             </div>
@@ -856,7 +961,7 @@ const AddProduct = () => {
                                     />
                                 </div>
                             </div>
-                        </SectionLayout>
+                        </SectionLayout> */}
 
 
 
@@ -898,7 +1003,7 @@ const AddProduct = () => {
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Page Title  </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"seo.metaTitle"}
+                                        name={"Seo.MetaTitle"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300'
@@ -910,7 +1015,7 @@ const AddProduct = () => {
                                         <div className='w-full '>
                                             <CustomFormField
                                                 fieldType={FormFieldType.INPUT}
-                                                name={"seo.url"}
+                                                name={"Seo.Url"}
                                                 control={control}
                                                 placeholder='/product-url'
                                                 className='ring-1 ring-gray-300 '
@@ -925,7 +1030,7 @@ const AddProduct = () => {
                                 <div className='w-full '>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"seo.metaDescription"}
+                                        name={"Seo.MetaDescription"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 '
@@ -994,7 +1099,7 @@ const AddProduct = () => {
 
                         <ActionBarLayout>
                             <Button variant="ghost" className="text-gray-500 h-9 px-6">Cancle</Button>
-                            <Button variant="default" className="text-white capitalize tracking-wider h-9 px-6">Save</Button>
+                            <Button variant="default" className="text-white capitalize tracking-wider h-9 px-6" disabled={isLoading || isSubmitting}>Save</Button>
                         </ActionBarLayout>
 
                     </form>

@@ -25,18 +25,7 @@ export type ProductCategory = {
     visibleInMenu: boolean;
     description?: string;
     seo?: {
-        metaTitle?: string;
-        metaKeywords?: string;
-        metaDescription?: string;
-        searchKeywords?: string;
-    } | undefined;
-};
-export type ProductSubCategory = {
-    categoryId: number
-    subCategoryName: string;
-    visibleInMenu: boolean;
-    description?: string;
-    seo?: {
+        seoId?: number
         metaTitle?: string;
         metaKeywords?: string;
         metaDescription?: string;

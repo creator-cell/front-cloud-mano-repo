@@ -42,7 +42,7 @@ export default function Dashboard({
     const dispatch = useAppDispatch()
 
     const handleSidebarToggle = () => {
-        if (isSideBarOpen && !isTablet) {
+        if (isSideBarOpen) {
             dispatch(closeSideBar());
         } else {
             dispatch(openSideBar());
@@ -50,7 +50,9 @@ export default function Dashboard({
     };
 
 
+
     const sidebarSubLinks = useMemo(() => {
+        if (!openedSidebarLink) return [];
         // Find the category that matches the openedSidebarLink?.category
         const foundCategory = sidebarLinks.find(category => category.category === openedSidebarLink?.category);
 
@@ -127,7 +129,7 @@ export default function Dashboard({
                                 <motion.div
                                     className="flex flex-col gap-y-1 overflow-hidden"
                                 >
-                                    {!openedSidebarLink ? (
+                                    {openedSidebarLink === null ? (
                                         <div className="flex flex-col  overflow-y-auto overflow-x-hidden gap-y-1 white-scrollbar ">
                                             {
                                                 sidebarLinks.map((category, index) => (

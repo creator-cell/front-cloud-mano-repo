@@ -1,7 +1,7 @@
 "use client"
 
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 
 
@@ -27,6 +27,8 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import ConfirmationDialog from '@/components/common/ConfirmationDialog'
 import { ProductCategoryType } from '@/store/api/products/types/category-types'
+import { useDeleteCategoryMutation } from '@/store/api/products/category'
+import { toast } from 'sonner'
 
 
 
@@ -115,16 +117,14 @@ const columns: ColumnDef<ProductCategoryType>[] = [
 const ProductCategoriesTable = ({ datas }: { datas: ProductCategoryType[] }) => {
     const router = useRouter()
 
-    const handleDelete = () => {
-        console.log('Delete')
-    }
+
+    const [DeleteCategory] = useDeleteCategoryMutation()
+
+
 
     const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        []
-    )
-    const [columnVisibility, setColumnVisibility] =
-        React.useState<VisibilityState>({})
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+    const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
     const table = useReactTable({
@@ -145,6 +145,31 @@ const ProductCategoriesTable = ({ datas }: { datas: ProductCategoryType[] }) => 
             rowSelection,
         },
     })
+
+
+    const [selectedIds, setSelectedIds] = useState<number[]>([]); // Step 1: Define selectedIds as number[]
+
+    // Step 2: Filter out undefined values in useEffect
+    useEffect(() => {
+        const ids = table
+            .getSelectedRowModel()
+            .rows.map(row => row.original.CategoryID)
+            .filter((id): id is number => id !== undefined); // Ensure only numbers are stored
+        console.log("🚀 ~ useEffect ~ ids:", ids);
+        setSelectedIds(ids);
+    }, [rowSelection, table]);
+
+
+    const handleDelete = async () => {
+        try {
+            await DeleteCategory(selectedIds).unwrap()
+            toast.success("Category Deleted Successfully")
+            router.refresh()
+        } catch (err) {
+            console.error(err)
+            toast.error("Error Deleting Category")
+        }
+    }
 
     return (
         <div className='bg-white px-4 py-8 rounded-sm '>

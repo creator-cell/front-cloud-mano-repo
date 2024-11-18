@@ -66,6 +66,8 @@ export interface CustomFormFieldProps<T extends FieldValues>
     selectOptions?: { label: string; value: string }[];
     style?: React.CSSProperties;
     value?: string;
+    startAdornment?: React.ReactNode
+    endAdornment?: React.ReactNode
     onChange?: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | string | boolean | File[]) => void;
 }
 
@@ -110,7 +112,6 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
     switch (props.fieldType) {
         case FormFieldType.INPUT:
             return (
-                // border border-[#e0e0e0]
                 <div className='flex   rounded-[6px] w-full'>
                     <FormControl >
                         <Input
@@ -130,7 +131,6 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
                     <Input
                         {...field}
                         {...commonProps}
-                        // // defaultValue={defaultValue}
                         onChange={(e) => {
                             field.onChange(e);
                             props.onChange?.(e);
