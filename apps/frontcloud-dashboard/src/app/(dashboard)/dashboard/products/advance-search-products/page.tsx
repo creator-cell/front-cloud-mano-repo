@@ -5,29 +5,24 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import React from 'react'
 
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
 import { Button } from '@/components/ui/button';
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
 import { useForm } from 'react-hook-form';
-import AdvanceSearchSchema, { AdvanceSearchFormValued } from '@/zod/advance-search.schema';
+import AdvanceSearchSchema, { AdvanceSearchFormValues } from '@/zod/advance-search.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import CustomFormField from '@/components/common/CustomFormField';
 import { FormFieldType } from '@/enum/formTypes';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const SearchProduct = () => {
 
-    const form = useForm<AdvanceSearchFormValued>({
+    const form = useForm<AdvanceSearchFormValues>({
         resolver: zodResolver(AdvanceSearchSchema),
         mode: "onBlur",
+        reValidateMode: "onChange",
+        criteriaMode: "all",
+        progressive: true
     });
 
     const {
@@ -37,9 +32,33 @@ const SearchProduct = () => {
         formState: { errors },
     } = form;
 
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+
     console.log("errror", errors)
-    const onSubmit = (data: any) => {
-        console.log("Form data:", data);
+    const onSubmit = (data: AdvanceSearchFormValues) => {
+        const newSearchParams = new URLSearchParams(searchParams.toString());
+
+        // Map form data to query parameters
+        Object.entries(data).forEach(([key, value]) => {
+            if (typeof value === 'object' && value !== null) {
+                // Handle nested objects (e.g., priceRange)
+                Object.entries(value).forEach(([subKey, subValue]) => {
+                    if (subValue) {
+                        newSearchParams.set(`${key}.${subKey}`, String(subValue));
+                    }
+                });
+            } else if (value) {
+                newSearchParams.set(key, String(value));
+            } else {
+                newSearchParams.delete(key); // Remove empty or null values
+            }
+        });
+
+        // Update the URL
+        router.push(`/dashboard/products?${newSearchParams.toString()}`);
     };
 
     return (
@@ -111,7 +130,7 @@ const SearchProduct = () => {
                                 <CustomFormField
                                     fieldType={FormFieldType.SELECT}
                                     control={control}
-                                    name="brandName"
+                                    name="category"
                                     selectOptions={[
                                         { label: "FNO", value: "FNO" },
                                         { label: "USA", value: "USA" },

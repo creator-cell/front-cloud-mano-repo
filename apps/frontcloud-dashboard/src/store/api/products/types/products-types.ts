@@ -1,3 +1,5 @@
+import { ResponseType } from "@/store/types/responseType";
+
 export interface AddProductType {
     Product: {
         productName: string;
@@ -50,3 +52,24 @@ export interface AddProductType {
         Url?: string;
     };
 }
+
+
+
+export interface Product {
+    ProductID: number;
+    ProductName: string;
+    SKU: string;
+    StockQuantity: number;
+    StorePrice: string;
+    SupplierPrice: string;
+    PriceType: string;
+    DiscountType: string;
+}
+
+export interface Pagination {
+    totalCount: number;
+    totalPages: number;
+    currentPage: number;
+}
+
+export type ProductResponse = ResponseType<{ products: Product[]; pagination: Pagination; }>;

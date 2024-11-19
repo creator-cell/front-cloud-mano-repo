@@ -12,7 +12,7 @@ const AdvanceSearchSchema = z.object({
 
     brandName: z.string().optional(),
 
-    category: z.array(z.string())
+    category: z.string()
         .min(1, "At least one category must be selected")
         .optional(),
 
@@ -47,7 +47,7 @@ const AdvanceSearchSchema = z.object({
 });
 
 
-export type AdvanceSearchFormValued = z.infer<typeof AdvanceSearchSchema>;
+export type AdvanceSearchFormValues = z.infer<typeof AdvanceSearchSchema>;
 
 
 export default AdvanceSearchSchema;

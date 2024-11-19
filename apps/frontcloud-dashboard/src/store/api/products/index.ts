@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { AddProductType } from "./types/products-types";
+import { AddProductType, ProductResponse } from "./types/products-types";
 
 export const ProductApi = createApi({
     reducerPath: "products",
@@ -14,9 +14,26 @@ export const ProductApi = createApi({
             }),
             invalidatesTags: ["Products"],
         }),
+        getProducts: builder.query<ProductResponse, { storeId: number }>({
+            query: (body) => ({
+                url: `/products/${body.storeId}`,
+                method: "GET",
+            }),
+            providesTags: ["Products"],
+        }),
+        deleteProduct: builder.mutation<void, number[]>({
+            query: (ids) => ({
+                url: `/products`,
+                method: "DELETE",
+                body: { ids }
+            }),
+            invalidatesTags: ["Products"],
+        }),
     }),
 })
 
 export const {
-    useAddProductsMutation
+    useAddProductsMutation,
+    useGetProductsQuery,
+    useDeleteProductMutation
 } = ProductApi;
