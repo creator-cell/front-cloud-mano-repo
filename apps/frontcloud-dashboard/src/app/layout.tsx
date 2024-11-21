@@ -47,6 +47,7 @@ export default function RootLayout({
                             <Toaster
                                 position="top-right"
                                 richColors
+                                closeButton
                             />
                         </SideBarOpenCloseContextProvider>
                     </StoreProvider>

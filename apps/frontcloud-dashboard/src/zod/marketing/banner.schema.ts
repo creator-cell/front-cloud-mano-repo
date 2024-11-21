@@ -1,20 +1,22 @@
+import { toBoolean } from '@/utils/StringFieldAsBoolean';
 import { z } from 'zod';
 
 const bannerSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
+    marketingBannerName: z.string().min(1, 'Name is required'),
     content: z.string().min(1, 'Content is required'),
+    storeID: z.string(),
     location: z.object({
-        label: z.enum(['homepage', 'category', 'brand', 'search']).default('homepage'),
+        label: z.enum(['homepage', 'specificcategory', 'specificbrand', 'resultpage']),
         value: z.string().optional()
     }),
-    dateRange: z.object({
-        type: z.enum(["always", "date"]).optional(),
-        alwaysShow: z.boolean().optional(),
-        startDate: z.date().optional(),
-        endDate: z.date().optional()
-    }).optional(),
-    visible: z.boolean(),
-    placement: z.enum(['Top', 'Bottom']).default('Top'),
+    categoryID: z.string().optional(),
+    dateRange: z.string().optional(),
+    startDate: z.date().optional(),
+    endDate: z.date().optional(),
+    visible: z.boolean().optional(),
+    placement: z.enum(['top', 'bottom']),
+    image: z.any().optional(),
+    itemId: z.string().optional(),
 });
 
 

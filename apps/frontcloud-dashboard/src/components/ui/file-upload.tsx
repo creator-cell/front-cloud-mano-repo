@@ -5,7 +5,6 @@ import { FileUp, Trash2 } from 'lucide-react';
 import { useDropzone } from "react-dropzone";
 import { FileType } from "@/enum/fileTypes";
 import { UseFormSetError } from "react-hook-form";
-import { addProductFormValues } from "@/zod/addProduct.schema";
 import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -42,7 +41,7 @@ export const FileUpload = ({
 }: {
     onChange?: (files: File[]) => void;
     fileType?: FileType;
-    setError?: UseFormSetError<addProductFormValues>;
+    setError?: UseFormSetError<any>;
     clearErrors?: () => void;
     multiple?: boolean;
 }) => {
@@ -129,9 +128,17 @@ export const FileUpload = ({
                 break;
         }
 
+        if (multiple) {
+            setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+            onChange && onChange(validFiles);
+            return;
+        } else {
+            setFiles(validFiles);
+            onChange && onChange(validFiles);
+        }
 
-        setFiles((prevFiles) => [...prevFiles, ...validFiles]);
-        onChange && onChange(validFiles);
+        // setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+        // onChange && onChange(validFiles);
 
     }, [fileType, onChange]);
 

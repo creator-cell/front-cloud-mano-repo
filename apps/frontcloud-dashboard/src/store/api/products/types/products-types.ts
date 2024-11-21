@@ -1,10 +1,10 @@
 import { ResponseType } from "@/store/types/responseType";
 
 export interface AddProductType {
-    Product: {
-        productName: string;
+    product: {
+        ProductName: string;
         SKU?: string;
-        productType?: string;
+        ProductType?: string;
         Brand?: string;
         ManufacturePartNumber?: string;
         ProductUPC?: string;
@@ -15,37 +15,37 @@ export interface AddProductType {
         Description?: string;
         IsDropShipped?: boolean;
     };
-    ProductDimensions: {
+    productDimensions: {
         Weight: number;
         Height: number;
         Width: number;
         Depth?: number;
     };
-    ProductTax: {
+    productTax: {
         TaxClass?: string;
         TaxProviderTaxCode?: string;
     };
-    ProductInventory: {
+    productInventory: {
         StockQuantity: number;
         BinPickingNumber?: string;
         MinPurchaseQty?: number;
         MaxPurchaseQty?: number;
     };
-    ProductPricing: {
+    productPricing: {
         StorePrice: number;
         SupplierPrice?: number;
         PriceType?: string;
         DiscountType?: string;
     };
-    ProductShipping: {
-        ShippingType?: string;
-        ShippingPrice?: number;
-        Weight: number;
-        Height: number;
-        Width: number;
-        Depth?: number;
+    productShipping: {
+        ShippingType: string,
+        ShippingCost: number,
+        ShippingWeight: number,
+        ShippingHeight: number,
+        ShippingWidth: number,
+        ShippingDepth: number,
     };
-    Seo: {
+    seo: {
         MetaTitle?: string;
         MetaDescription?: string;
         MetaKeywords?: string;
@@ -73,3 +73,4 @@ export interface Pagination {
 }
 
 export type ProductResponse = ResponseType<{ products: Product[]; pagination: Pagination; }>;
+export type GetProductByIdResponse = ResponseType<AddProductType>;

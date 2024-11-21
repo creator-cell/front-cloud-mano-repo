@@ -42,9 +42,14 @@ const AddCategories = () => {
                 <CustomHeading variant={"pageHeading"} className='font-[100] text-black text-left'>Create a Sub Category</CustomHeading>
                 <CustomParagraph variant={"xmedium"} className='text-gray-500 text-left'>Products in your store are grouped by categories, which makes them easier to find. Fill out the form below to create a new category.</CustomParagraph>
             </div>
-            {
+            {subCategoryId ?
                 parentCategoryOptions && parentCategoryOptions.length > 0 && data && data?.data.length > 0 &&
                 <CategoryAddForm
+                    hasParentCategory
+                    parentCategoryOptions={parentCategoryOptions}
+                    categoryID={subCategoryId ?? ""}
+                    formValuesSubCategory={data?.data?.[0]}
+                /> : <CategoryAddForm
                     hasParentCategory
                     parentCategoryOptions={parentCategoryOptions}
                     categoryID={subCategoryId ?? ""}

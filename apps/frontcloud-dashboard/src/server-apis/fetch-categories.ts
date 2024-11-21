@@ -7,7 +7,9 @@ import { ReadonlyURLSearchParams } from "next/navigation";
 
 // const token = cookies().get("token");
 
-export const fetchAllCategoies = unstable_cache(
+export const fetchAllCategoies =
+    //  unstable_cache(
+
     async (): Promise<{ message: string, data: ProductCategoryType[] } | null> => {
         try {
 
@@ -43,10 +45,11 @@ export const fetchAllCategoies = unstable_cache(
             console.error("Error fetching applied jobs data:", error);
             return null;
         }
-    },
-    undefined,
-    {
-        tags: ["applied-jobs-query"],
-        revalidate: 30,
     }
-);
+//     ,
+//     undefined,
+//     {
+//         tags: ["applied-jobs-query"],
+//         revalidate: 30,
+//     }
+// );

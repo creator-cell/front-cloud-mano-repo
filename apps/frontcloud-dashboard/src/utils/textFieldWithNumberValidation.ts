@@ -1,13 +1,3 @@
-// import * as z from "zod";
-
-// // Reusable function to convert and validate numeric fields
-// export const toPositiveNumber = (errorMessage: string) => z.preprocess(
-//     (val) => parseFloat(String(val)), // Convert to number
-//     z.number().positive(`Required and ${errorMessage}`) // Ensure it's a positive number
-// );
-
-
-
 import * as z from "zod";
 
 // Reusable function to convert and validate numeric fields, allowing only 0-9 characters
