@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PageWrapper from '../../_components/PageWrapper';
 import SectionLayout from '@/components/common/CommonSectionLayout';
 import { useForm } from 'react-hook-form';
@@ -12,20 +12,41 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Grip } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
+import { useGetAllSocialLinksQuery, usePostSocialLinksMutation } from '@/store/api/storefront';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const SocialLinkPage = () => {
+
+    const router = useRouter()
+    const { data: SocialLinks } = useGetAllSocialLinksQuery()
+    console.log("🚀 ~ SocialLinkPage ~ data:", SocialLinks)
+
     const form = useForm<SocialLinks>({
         resolver: zodResolver(socialLinksSchema),
         mode: "all",
     });
-
-    const [fields, setFields] = useState<string[]>(Object.keys(socialLinksSchema.shape));
-
     const {
         control,
         handleSubmit,
+        setValue,
         formState: { errors },
     } = form;
+
+    useEffect(() => {
+        setValue('facebookUrl', SocialLinks?.data?.[0]?.FaceBookURL)
+        setValue('twitterUrl', SocialLinks?.data?.[0]?.TwitterURL)
+        setValue('linkedinUrl', SocialLinks?.data?.[0]?.LinkedinURL)
+        setValue('instagramUrl', SocialLinks?.data?.[0]?.InstagramURL)
+        setValue('youtubeUrl', SocialLinks?.data?.[0]?.YoutubeURL)
+        setValue('githubUrl', SocialLinks?.data?.[0]?.GithubURL)
+        setValue('tiktokUrl', SocialLinks?.data?.[0]?.TiktokURL)
+        setValue('pinterestUrl', SocialLinks?.data?.[0]?.PinterestURL)
+        setValue('snapchatUrl', SocialLinks?.data?.[0]?.SnapchatURL)
+    }, [SocialLinks])
+
+    const [fields, setFields] = useState<string[]>(Object.keys(socialLinksSchema.shape));
+
 
     const onDragEnd = (result: any) => {
         if (!result.destination) return;
@@ -37,8 +58,26 @@ const SocialLinkPage = () => {
         setFields(reorderedFields);
     };
 
-    const onSubmit = (data: SocialLinks) => {
+    const [PostSocialLinks, { isLoading }] = usePostSocialLinksMutation()
+
+    const onSubmit = async (data: SocialLinks) => {
         console.log("Form data:", data);
+
+        const Data = { ...data, storeId: "1" }
+        const promise = PostSocialLinks(Data).unwrap();
+
+        toast.promise(promise, {
+            loading: 'Saving...',
+            success: 'Social Links saved successfully',
+            error: 'Failed to save Social Links'
+        })
+        try {
+            await promise;
+            router.refresh();
+        } catch (e) {
+            console.error(e)
+        }
+
     };
 
     return (
@@ -78,6 +117,7 @@ const SocialLinkPage = () => {
                                                 )}
                                             </Draggable>
                                         ))}
+
                                         {provided.placeholder}
                                     </div>
                                 )}
@@ -85,7 +125,7 @@ const SocialLinkPage = () => {
                         </DragDropContext>
                         <ActionBarLayout>
                             <Button variant={"outline"} type='button' className='px-5'  >Calcle</Button>
-                            <Button className='px-4'>Save</Button>
+                            <Button disabled={isLoading} className='px-4'>Save</Button>
                         </ActionBarLayout>
                     </form>
                 </Form>

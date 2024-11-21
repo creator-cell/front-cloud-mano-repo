@@ -2,20 +2,22 @@ import *  as z from 'zod';
 
 
 export const addBlogSchema = z.object({
-    title: z.string(),
+    blogTitle: z.string(),
     url: z.string().optional(),
-    body: z.string().optional(),
-    auther: z.string().optional(),
+    blogBody: z.string().optional(),
+    blogAuthor: z.string().optional(),
+    isDraft: z.boolean().optional(),
     images: z.any(),
-    tags: z.array(z.object({
+    storeID: z.string().optional(),
+    blogTag: z.array(z.object({
         value: z.string(),
     })).optional(),
-
-
-    pageTitle: z.string().optional(),
-    metaKeywords: z.string().optional(),
-    metaDescription: z.string().optional(),
-    searchKeywords: z.string().optional(),
+    seo: z.object({
+        metaTitle: z.string().optional(),
+        metaKeywords: z.string().optional(),
+        metaDescription: z.string().optional(),
+        searchKeywords: z.string().optional(),
+    }).optional(),
 });
 
 export type AddBlogFormValues = z.infer<typeof addBlogSchema>;

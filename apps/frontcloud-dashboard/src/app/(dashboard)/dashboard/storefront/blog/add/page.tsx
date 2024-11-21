@@ -19,9 +19,15 @@ const BlogAddPage = () => {
 
     const router = useRouter();
 
+    const [CreateBlog, { isLoading }] = useCreateBlogMutation()
+
     const form = useForm<AddBlogFormValues>({
         resolver: zodResolver(addBlogSchema),
-        mode: "all"
+        mode: "all",
+        defaultValues: {
+            storeID: "1",
+            isDraft: false
+        }
     });
 
     const {
@@ -31,11 +37,71 @@ const BlogAddPage = () => {
         setValue,
         formState: { errors },
     } = form;
+    console.log("🚀 ~ BlogAddPage ~ watch:", watch("blogTag"))
 
     console.log("errror", errors)
-    const onSubmit = (data: any) => {
+    const onSubmit = async (data: AddBlogFormValues) => {
         console.log("Form data:", data);
+        try {
+            const { images, blogTag, seo, ...rest } = data;
+
+            const formData = new FormData();
+
+            // Append the basic fields
+            Object.keys(rest).forEach((key) => {
+                formData.append(key, data[key as keyof AddBlogFormValues]);
+            });
+
+            // Handle SEO fields individually
+            if (seo) {
+                formData.append('seo.metaTitle', seo.metaTitle || '');
+                formData.append('seo.metaKeywords', seo.metaKeywords || '');
+                formData.append('seo.metaDescription', seo.metaDescription || '');
+                formData.append('seo.searchKeywords', seo.searchKeywords || '');
+            }
+
+            // Handle tags: Check if blogTag has values and convert it to JSON
+            if (blogTag && blogTag.length > 0) {
+                formData.append('blogTag', JSON.stringify(blogTag));  // If you want to store tags as a string array
+            } else {
+                formData.append('blogTag', '[]');  // Empty array if no tags
+            }
+
+            // Handle images if available
+            if (images && images.length > 0) {
+                images.forEach((file: File) => {
+                    formData.append('image', file);
+                });
+            }
+
+            // Use your API or mutation to send the data
+            const promise = CreateBlog(formData).unwrap();
+
+            // Show toast based on the promise's state
+            toast.promise(promise, {
+                loading: 'Creating Blog...',
+                success: 'Blog Created Successfully',
+                error: 'Error While Creating Blog',
+            });
+
+            try {
+                // Await the result of the promise and perform redirection
+                await promise;
+                router.replace('/dashboard/storefront/blog');
+            } catch (err) {
+                console.error("Error while handling promise:", err);
+            }
+
+        } catch (err) {
+            console.error("Error in onSubmit:", err);
+        }
     };
+
+
+
+
+
+
     return (
         <PageWrapper title='New Blog Post' className='max-w-5xl'>
             <Form {...form}>
@@ -43,7 +109,7 @@ const BlogAddPage = () => {
                     <SectionLayout title='Content' className='w-full space-y-6 px-52'>
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"title"}
+                            name={"blogTitle"}
                             control={control}
                             placeholder=' '
                             label='Title'
@@ -52,7 +118,7 @@ const BlogAddPage = () => {
                         <div className=' h-[25rem]'>
                             <CustomFormField
                                 fieldType={FormFieldType.RICHTEXTEDITOR}
-                                name={"body"}
+                                name={"blogBody"}
                                 control={control}
                                 placeholder=' '
                                 label='Body'
@@ -61,7 +127,7 @@ const BlogAddPage = () => {
                         </div>
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"auther"}
+                            name={"blogAuthor"}
                             control={control}
                             placeholder=' '
                             label='Auther'
@@ -69,7 +135,7 @@ const BlogAddPage = () => {
                         />
 
                         <TagsInput
-                            name='tags'
+                            name='blogTag'
                             control={control}
                         />
 
@@ -89,7 +155,7 @@ const BlogAddPage = () => {
                     <SectionLayout title='Search Engine Optimization' className='space-y-4 px-52 '>
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"pageTitle"}
+                            name={"seo.metaTitle"}
                             control={control}
                             placeholder=' '
                             label='Page Title'
@@ -97,7 +163,7 @@ const BlogAddPage = () => {
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"metaKeywords"}
+                            name={"seo.metaKeywords"}
                             control={control}
                             placeholder=' '
                             label='Meta Keywords'
@@ -105,7 +171,7 @@ const BlogAddPage = () => {
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"metaDescription"}
+                            name={"seo.metaDescription"}
                             control={control}
                             placeholder=' '
                             label='Meta Description'
@@ -113,7 +179,7 @@ const BlogAddPage = () => {
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"searchKeywords"}
+                            name={"seo.searchKeywords"}
                             control={control}
                             placeholder=' '
                             label='Search Keywords'
@@ -122,8 +188,8 @@ const BlogAddPage = () => {
 
                         <ActionBarLayout>
                             <Button variant={"outline"} type='button' className='px-5' onClick={() => router.back()} >Calcle</Button>
-                            <Button type='button' className='px-4'>Save Draft</Button>
-                            <Button type='button' onClick={form.handleSubmit(onSubmit)} className='px-4'>Published Blog</Button>
+                            {/* <Button type='button' className='px-4'>Save Draft</Button> */}
+                            <Button type='button' disabled={isLoading} onClick={form.handleSubmit(onSubmit)} className='px-4'>Published Blog</Button>
                         </ActionBarLayout>
 
                     </SectionLayout>
@@ -143,6 +209,8 @@ import { useFieldArray, Control } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { CircleX } from 'lucide-react';
+import { useCreateBlogMutation } from '@/store/api/marketing/blog';
+import { toast } from 'sonner';
 
 
 interface TagsInputProps {
@@ -160,14 +228,15 @@ const TagsInput: React.FC<TagsInputProps> = ({ name, control, label }) => {
     const [tag, setTag] = useState('');
 
     const addTag = () => {
-        if (tag && !fields.some((field: any) => field.value === tag)) {
-            append({ value: tag }); // Append tag as a value string
+        if (tag && !fields.some((field: any) => field === tag)) {
+            append({ value: tag });
+            // Append tag directly as a string
             setTag('');
         }
     };
 
     const handleRemove = (index: number) => {
-        remove(index);
+        remove(index); // Directly remove by index
     };
 
     return (
@@ -190,9 +259,9 @@ const TagsInput: React.FC<TagsInputProps> = ({ name, control, label }) => {
 
             <div className="mt-2 w-full flex flex-wrap gap-5">
                 {fields.map((field: any, index) => (
-                    <div key={field.id} className="flex w-fit items-center gap-2 mb-2">
+                    <div key={index} className="flex w-fit items-center gap-2 mb-2">
                         <Badge className="px-4 py-2 relative">
-                            {field.value}
+                            {field.value} {/* Since it's a string, render directly */}
                             <CircleX
                                 color="white"
                                 onClick={() => handleRemove(index)}
@@ -206,3 +275,4 @@ const TagsInput: React.FC<TagsInputProps> = ({ name, control, label }) => {
         </div>
     );
 };
+

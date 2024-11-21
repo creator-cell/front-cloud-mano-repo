@@ -2,15 +2,15 @@ import { z } from "zod";
 
 
 const socialLinksSchema = z.object({
-    facebook: z.string().url().optional(),
-    twitter: z.string().url().optional(),
-    linkedin: z.string().url().optional(),
-    instagram: z.string().url().optional(),
-    youtube: z.string().url().optional(),
-    github: z.string().url().optional(),
-    tiktok: z.string().url().optional(),
-    pinterest: z.string().url().optional(),
-    snapchat: z.string().url().optional(),
+    facebookUrl: z.string().url().optional(),
+    twitterUrl: z.string().url().optional(),
+    linkedinUrl: z.string().url().optional(),
+    instagramUrl: z.string().url().optional(),
+    youtubeUrl: z.string().url().optional(),
+    githubUrl: z.string().url().optional(),
+    tiktokUrl: z.string().url().optional(),
+    pinterestUrl: z.string().url().optional(),
+    snapchatUrl: z.string().url().optional(),
 });
 
 export type SocialLinks = z.infer<typeof socialLinksSchema>;

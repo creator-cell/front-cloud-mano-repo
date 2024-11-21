@@ -103,7 +103,7 @@ const modules = {
 
 const RenderField = <T extends FieldValues>({ field, props }: { field: any; props: CustomFormFieldProps<T> }) => {
     const { className, onChange, value, control, fieldType, label, selectOptions, ...inputProps } = props; // Destructure unwanted props
-    const { defaultValue: defaultvalue, ...restfields } = props;
+    const { ...restfields } = props;
     const commonProps = {
         ...field,
         ...inputProps, // Spread only the acceptable input props
