@@ -1,4 +1,3 @@
-import { toBoolean } from '@/utils/StringFieldAsBoolean';
 import { z } from 'zod';
 
 const bannerSchema = z.object({
@@ -17,7 +16,12 @@ const bannerSchema = z.object({
     placement: z.enum(['top', 'bottom']),
     image: z.any().optional(),
     itemId: z.string().optional(),
-});
+}).refine(data => {
+    return !data.startDate || (data.startDate && data.endDate && data.startDate < data.endDate);
+}, {
+    message: 'End date must be after Start date',
+    path: ['endDate']
+})
 
 
 export type bannerFormValues = z.infer<typeof bannerSchema>;

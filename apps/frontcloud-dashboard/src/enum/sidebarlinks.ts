@@ -190,7 +190,13 @@ export const sidebarLinks: SidebarLink[] = [
                     },
                     {
                         label: "Home page carousal",
-                        page: "/dashboard/storefront/home-page-carousal"
+                        page: "/dashboard/storefront/home-page-carousal",
+                        subpage: [
+                            {
+                                label: "Add Carousal",
+                                page: "/dashboard/storefront/home-page-carousal/create"
+                            }
+                        ]
                     },
                     {
                         label: "social links",

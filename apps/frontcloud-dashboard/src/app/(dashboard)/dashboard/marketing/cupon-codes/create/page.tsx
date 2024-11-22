@@ -8,10 +8,11 @@ import couponSchema, { CouponFieldvalues } from '@/zod/marketing/create-coupon.s
 import { Form } from '@/components/ui/form';
 import CustomFormField from '@/components/common/CustomFormField';
 import { FormFieldType } from '@/enum/formTypes';
-import { DollarSignIcon } from 'lucide-react';
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { useCreateCouponMutation } from '@/store/api/marketing';
+import { toast } from 'sonner';
 
 const categoryOptions = [
     { label: 'Category 1', value: 'category1' },
@@ -30,7 +31,11 @@ const CreateCoupon = () => {
     const form = useForm<CouponFieldvalues>({
         resolver: zodResolver(couponSchema),
         defaultValues: {
-            discountType: "order_total_dollar"
+            discountType: "order_total_dollar",
+            enabled: true,
+            isUseLimit: false,
+            isCustomerUseLimit: false,
+            couponCondition: "all",
         },
         mode: "all"
     });
@@ -40,45 +45,65 @@ const CreateCoupon = () => {
         control,
         watch,
         formState: { errors },
+        reset,
         setValue
     } = form;
 
     console.log("errror", errors)
-    const onSubmit = (data: CouponFieldvalues) => {
+    const [CreateCoupon, { isLoading }] = useCreateCouponMutation()
+
+
+    const onSubmit = async (data: CouponFieldvalues) => {
         console.log("Form data:", data);
+        const promise = CreateCoupon(data).unwrap();
+
+        toast.promise(promise, {
+            loading: "Creating coupon...",
+            success: "Coupon created successfully",
+            error: "Failed to create coupon"
+        })
+        try {
+            await promise;
+            reset();
+            router.push("/dashboard/marketing/cupon-codes")
+
+        } catch (error) {
+            console.log("error", error)
+        }
     };
 
 
-    const appliedTo = watch("coupon_applied.appliedTo")
-    const limitTotalUses = watch("numberOfUses.limitTotalUses")
-    const limitUsesPerCustomer = watch("numberOfUses.limitUsesPerCustomer")
 
-    useEffect(() => {
-        if (appliedTo === "all_products") {
-            setValue("coupon_applied.category", [])
-            setValue("coupon_applied.products", [])
-        } else if (appliedTo === "specific_category") {
-            setValue("coupon_applied.products", [])
-        } else if (appliedTo === "specific_products") {
-            setValue("coupon_applied.category", [])
-        }
+    // const appliedTo = watch("coupon_applied.appliedTo")
+    // const limitTotalUses = watch("numberOfUses.limitTotalUses")
+    // const limitUsesPerCustomer = watch("numberOfUses.limitUsesPerCustomer")
 
-    }, [appliedTo])
+    // useEffect(() => {
+    //     if (appliedTo === "all_products") {
+    //         setValue("coupon_applied.category", [])
+    //         setValue("coupon_applied.products", [])
+    //     } else if (appliedTo === "specific_category") {
+    //         setValue("coupon_applied.products", [])
+    //     } else if (appliedTo === "specific_products") {
+    //         setValue("coupon_applied.category", [])
+    //     }
 
-    useEffect(() => {
-        if (!limitTotalUses) {
-            setValue("numberOfUses.totalusers", 0)
-        }
-        else if (!limitUsesPerCustomer) {
+    // }, [appliedTo])
 
-            setValue("numberOfUses.totalusers", 0)
+    // useEffect(() => {
+    //     if (!limitTotalUses) {
+    //         setValue("numberOfUses.totalusers", 0)
+    //     }
+    //     else if (!limitUsesPerCustomer) {
 
-        }
-    }, [limitTotalUses, limitUsesPerCustomer])
+    //         setValue("numberOfUses.totalusers", 0)
+
+    //     }
+    // }, [limitTotalUses, limitUsesPerCustomer])
 
 
 
-    console.log("values", watch("coupon_applied.category"))
+    // console.log("values", watch("coupon_applied.category"))
     return (
         <PageWrapper className='pb-40'>
             <Form {...form}>
@@ -106,26 +131,28 @@ const CreateCoupon = () => {
                             label='Discount type'
                             defaultValue='order_total_dollar'
                             selectOptions={[
-                                { label: "Dollar amount off the order total", value: "order_total_dollar" },
-                                { label: "Dollar amount off each item in the order", value: "item_dollar" },
-                                { label: "Percentage off each item in the order", value: "item_percentage" },
-                                { label: "Dollar amount off the shipping total", value: "shipping_dollar" },
-                                { label: "Free shipping", value: "free_shipping" },
+                                { label: "Dollar amount off the order total", value: "ordertotal" },
+                                { label: "Dollar amount off each item in the order", value: "eachitem" },
+                                { label: "Percentage off each item in the order", value: "eachitempercentage" },
+                                { label: "Free shipping", value: "freeshipping" },
                             ]}
                         />
                         {
                             watch("discountType") != "free_shipping" &&
                             <div className='flex w-full items-center gap-x-8 '>
 
-                                <div className='w-52'>
+                                <div className='w-52 relative'>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"discountAmount"}
+                                        name={"discount"}
                                         control={control}
                                         label='Discount amount'
-                                        placeholder='$0.00'
-                                        className='ring-1 ring-gray-400'
+                                        placeholder='0.00'
+                                        className='ring-1 ring-gray-400 peer ps-8'
                                     />
+                                    <div className='pointer-events-none inset-y-0 start-0 top-8 flex items-center justify-center ps-4 peer-disabled:opacity-50 absolute '>
+                                        $
+                                    </div>
                                 </div>
                                 <p className='pt-6'>
                                     {/* Dynamically update description based on selected discountType */}
@@ -148,17 +175,17 @@ const CreateCoupon = () => {
 
                             </div>
                         }
-                        <CustomFormField
+                        {/* <CustomFormField
                             fieldType={FormFieldType.INPUT}
                             name={"minimumPurchase"}
                             control={control}
                             label='Minimum purchase'
                             placeholder='$0.00'
                             className='ring-1 ring-gray-400'
-                        />
+                        /> */}
 
 
-                        <div className=''>
+                        {/* <div className=''>
                             <CustomFormField
                                 fieldType={FormFieldType.CHECKBOX}
                                 name={"numberOfUses.limitTotalUses"}
@@ -178,8 +205,8 @@ const CreateCoupon = () => {
                                     />
                                 </div>
                             }
-                        </div>
-                        <div className=''>
+                        </div> */}
+                        {/* <div className=''>
                             <CustomFormField
                                 fieldType={FormFieldType.CHECKBOX}
                                 name={"numberOfUses.limitUsesPerCustomer"}
@@ -199,11 +226,11 @@ const CreateCoupon = () => {
                                     />
                                 </div>
                             }
-                        </div>
+                        </div> */}
 
                         <CustomFormField
                             fieldType={FormFieldType.CHECKBOX}
-                            name={"excludeCartLevelDiscounts"}
+                            name={"cartLavelDiscount"}
                             control={control}
                             label='Exclude cart level discounts'
                             placeholder='This coupon does not apply on top of cart level discounts'
@@ -219,7 +246,7 @@ const CreateCoupon = () => {
 
                         <CustomFormField
                             fieldType={FormFieldType.DATE_PICKER}
-                            name={"expiration"}
+                            name={"expireDate"}
                             control={control}
                             label='Expiration date'
                         />
@@ -227,7 +254,7 @@ const CreateCoupon = () => {
 
                     </SectionLayout>
 
-                    <SectionLayout title='Coupon conditions'>
+                    {/* <SectionLayout title='Coupon conditions'>
                         <CustomFormField
                             fieldType={FormFieldType.RADIOGROUP}
                             name={"coupon_applied.appliedTo"}
@@ -259,7 +286,7 @@ const CreateCoupon = () => {
                                 selectOptions={productOptions}
                             />
                         }
-                    </SectionLayout>
+                    </SectionLayout> */}
 
                     <ActionBarLayout>
                         <Button variant={"outline"} type='button' className='px-5' onClick={() => router.back()} >Calcle</Button>
@@ -273,3 +300,25 @@ const CreateCoupon = () => {
 }
 
 export default CreateCoupon
+
+
+
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+
+// export default function Input13() {
+//     return (
+//         <div className="space-y-2">
+//             <Label htmlFor="input-13">Input with inline add-ons</Label>
+//             <div className="relative">
+//                 <Input id="input-13" className="peer pe-12 ps-6" placeholder="0.00" type="text" />
+//                 <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-sm text-muted-foreground peer-disabled:opacity-50">
+//                     €
+//                 </span>
+//                 <span className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-sm text-muted-foreground peer-disabled:opacity-50">
+//                     EUR
+//                 </span>
+//             </div>
+//         </div>
+//     );
+// }

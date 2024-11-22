@@ -125,7 +125,7 @@ const SocialLinkPage = () => {
                         </DragDropContext>
                         <ActionBarLayout>
                             <Button variant={"outline"} type='button' className='px-5'  >Calcle</Button>
-                            <Button disabled={isLoading} className='px-4'>Save</Button>
+                            <Button disabled={isLoading} className='px-4'>Update</Button>
                         </ActionBarLayout>
                     </form>
                 </Form>

@@ -1,12 +1,14 @@
+import { toPositiveNumber } from '@/utils/textFieldWithNumberValidation';
 import { z } from 'zod';
 
 const homePageCarousalSchema = z.object({
-    heading: z.string().min(1, "Heading is required"),
-    text: z.string().min(1, "Text is required"),
-    buttonText: z.string().min(1, "Button text is required"),
-    link: z.string().url("Invalid URL format"),
-    images: z.array(z.any()).optional(),
-    autoPlayTime: z.number().optional(),
+    carouselHeading: z.string().min(1, "Heading is required"),
+    carouselText: z.string().min(1, "Text is required"),
+    btnText: z.string().min(1, "Button text is required"),
+    carouselLink: z.string().url("Invalid URL format"),
+    image: z.array(z.any()).min(1, "Image is required"),
+    playTime: toPositiveNumber("autoPlay time needed"),
+    storeID: z.string().optional().default("1"),
 });
 
 export type homePageCarousalFormValues = z.infer<typeof homePageCarousalSchema>;

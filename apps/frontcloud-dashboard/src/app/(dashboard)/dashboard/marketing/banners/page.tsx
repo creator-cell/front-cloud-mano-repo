@@ -10,7 +10,7 @@ const BannerPage = async () => {
 
 
     return (
-        <PageWrapper title='Coupon codes' subTitle='Coupon codes allow you to provide customers with discounts on products available for purchase from your store.'>
+        <PageWrapper title='Create Banner' subTitle='Marketing Banners allow you to provide customers with discounts on products available for purchase from your store.'>
             {
                 AllBannerData?.data && AllBannerData?.data?.length > 0 &&
                 <MarketingBannerTable data={AllBannerData?.data} />

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { MarketingBannersResponse } from "./types/banner-types";
+import { get } from "http";
 
 export const MarketingApi = createApi({
     reducerPath: "marketing",
@@ -25,6 +26,14 @@ export const MarketingApi = createApi({
             }),
             invalidatesTags: ["Marketing"],
         }),
+        CreateCoupon: builder.mutation<void, any>({
+            query: (body) => ({
+                url: "/coupon",
+                method: "POST",
+                body,
+            }),
+        }),
+
     })
 
 })
@@ -32,5 +41,6 @@ export const MarketingApi = createApi({
 export const {
     useCreateMarketingBannerMutation,
     useGetAllMarketingBannersQuery,
-    useDeleteMarketingBannerMutation
+    useDeleteMarketingBannerMutation,
+    useCreateCouponMutation,
 } = MarketingApi

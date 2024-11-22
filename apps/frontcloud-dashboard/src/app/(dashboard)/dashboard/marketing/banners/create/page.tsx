@@ -45,6 +45,7 @@ const CreateBanners = () => {
         formState: { errors },
     } = form;
 
+    console.log("🚀 ~ CreateBanners ~ errors:", errors)
     const { data: AllCategories } = useGetAllCategoriesQuery();
 
     const parentCategoryOptions = useMemo(() => {
@@ -221,6 +222,7 @@ const CreateBanners = () => {
                             name={"dateRange"}
                             control={control}
                             label="Date range"
+                            className="w-fit"
                             selectOptions={[
                                 { label: "Always show", value: "false" },
                                 { label: "Show between dates", value: "true" },

@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PageWrapper from '../../_components/PageWrapper'
 import SectionLayout from '@/components/common/CommonSectionLayout'
 import { useForm } from 'react-hook-form';
@@ -25,7 +25,9 @@ const LogoPage = () => {
             font_color: '#000000',
             font_size: '28',
         },
-        mode: "all"
+        mode: "all",
+        reValidateMode: "onChange",
+        criteriaMode: "all",
     });
 
     const {
@@ -41,6 +43,18 @@ const LogoPage = () => {
         console.log("Form data:", data);
     };
 
+
+    useEffect(() => {
+
+        if (watch("logo_type") === 'logo_text') {
+            setValue("logo_image", null)
+        } else if (watch("logo_type") === 'logo_image') {
+            setValue("logo_text", undefined)
+            setValue("font_size", undefined)
+            setValue("font_color", undefined)
+        }
+
+    }, [watch("logo_type")])
 
     const fontColor = watch("font_color");
 
