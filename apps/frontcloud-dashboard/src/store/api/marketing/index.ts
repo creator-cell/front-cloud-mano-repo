@@ -21,7 +21,7 @@ export const MarketingApi = createApi({
         }),
         deleteMarketingBanner: builder.mutation<void, string>({
             query: (ids) => ({
-                url: `/banner?marketingBannerIds=${ids}`,
+                url: `/banner?MarketingBannerIds=${ids}`,
                 method: "DELETE",
             }),
             invalidatesTags: ["Marketing"],

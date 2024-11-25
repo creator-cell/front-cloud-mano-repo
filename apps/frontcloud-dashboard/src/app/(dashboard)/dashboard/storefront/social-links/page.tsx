@@ -34,15 +34,15 @@ const SocialLinkPage = () => {
     } = form;
 
     useEffect(() => {
-        setValue('facebookUrl', SocialLinks?.data?.[0]?.FaceBookURL)
-        setValue('twitterUrl', SocialLinks?.data?.[0]?.TwitterURL)
-        setValue('linkedinUrl', SocialLinks?.data?.[0]?.LinkedinURL)
-        setValue('instagramUrl', SocialLinks?.data?.[0]?.InstagramURL)
-        setValue('youtubeUrl', SocialLinks?.data?.[0]?.YoutubeURL)
-        setValue('githubUrl', SocialLinks?.data?.[0]?.GithubURL)
-        setValue('tiktokUrl', SocialLinks?.data?.[0]?.TiktokURL)
-        setValue('pinterestUrl', SocialLinks?.data?.[0]?.PinterestURL)
-        setValue('snapchatUrl', SocialLinks?.data?.[0]?.SnapchatURL)
+        setValue('FacebookUrl', SocialLinks?.Data?.[0]?.FaceBookURL)
+        setValue('TwitterUrl', SocialLinks?.Data?.[0]?.TwitterURL)
+        setValue('LinkedinUrl', SocialLinks?.Data?.[0]?.LinkedinURL)
+        setValue('InstagramUrl', SocialLinks?.Data?.[0]?.InstagramURL)
+        setValue('YoutubeUrl', SocialLinks?.Data?.[0]?.YoutubeURL)
+        setValue('GithubUrl', SocialLinks?.Data?.[0]?.GithubURL)
+        setValue('TiktokUrl', SocialLinks?.Data?.[0]?.TiktokURL)
+        setValue('PinterestUrl', SocialLinks?.Data?.[0]?.PinterestURL)
+        setValue('SnapchatUrl', SocialLinks?.Data?.[0]?.SnapchatURL)
     }, [SocialLinks])
 
     const [fields, setFields] = useState<string[]>(Object.keys(socialLinksSchema.shape));
@@ -61,9 +61,9 @@ const SocialLinkPage = () => {
     const [PostSocialLinks, { isLoading }] = usePostSocialLinksMutation()
 
     const onSubmit = async (data: SocialLinks) => {
-        console.log("Form data:", data);
 
-        const Data = { ...data, storeId: "1" }
+        const Data = { ...data, StoreId: 1 }
+        console.log("Form data:", Data);
         const promise = PostSocialLinks(Data).unwrap();
 
         toast.promise(promise, {

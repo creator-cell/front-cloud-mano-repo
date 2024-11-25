@@ -24,13 +24,13 @@ const CreateBanners = () => {
     const form = useForm<bannerFormValues>({
         resolver: zodResolver(bannerSchema),
         defaultValues: {
-            location: {
+            Location: {
                 label: "homepage",
             },
-            dateRange: "false",
-            storeID: "1",
-            placement: "top",
-            visible: true,
+            DateRange: "false",
+            StoreID: "1",
+            Placement: "top",
+            Visible: true,
         },
         mode: "all",
         reValidateMode: "onChange",
@@ -49,8 +49,8 @@ const CreateBanners = () => {
     const { data: AllCategories } = useGetAllCategoriesQuery();
 
     const parentCategoryOptions = useMemo(() => {
-        if (AllCategories && AllCategories.data.length > 0) {
-            return AllCategories.data.map((category) => ({
+        if (AllCategories && AllCategories.Data.length > 0) {
+            return AllCategories.Data.map((category) => ({
                 label: category.CategoryName,
                 value: category?.CategoryID?.toString() ?? " ",
             }));
@@ -67,7 +67,7 @@ const CreateBanners = () => {
 
         // Create a new FormData object
         const formData = new FormData();
-        const { image, location, ...rest } = data;
+        const { Image, Location, ...rest } = data;
 
         Object.keys(rest).forEach((key) => {
             // console.log("key", key)
@@ -76,18 +76,18 @@ const CreateBanners = () => {
             }
         });
 
-        if (data.image && data.image[0]) {
-            formData.append("image", data.image[0]);
+        if (data.Image && data.Image[0]) {
+            formData.append("Image", data.Image[0]);
         }
-        if (data.location && data.location.label) {
-            formData.append("location", data.location.label);
+        if (data.Location && data.Location.label) {
+            formData.append("Location", data.Location.label);
         }
         if (
-            data.location &&
-            data.location.label === "specificcategory" &&
-            data.location.value
+            data.Location &&
+            data.Location.label === "specificcategory" &&
+            data.Location.value
         ) {
-            formData.append("categoryID", data.location.value);
+            formData.append("categoryID", data.Location.value);
         }
 
         // Sending the FormData to the backend
@@ -111,20 +111,20 @@ const CreateBanners = () => {
     };
 
     useEffect(() => {
-        if (watch("dateRange") === "false") {
-            setValue("startDate", undefined);
-            setValue("endDate", undefined);
+        if (watch("DateRange") === "false") {
+            setValue("StartDate", undefined);
+            setValue("EndDate", undefined);
         }
-    }, [watch("dateRange")]);
+    }, [watch("DateRange")]);
 
     useEffect(() => {
         if (
-            watch("location.label") !== "specificcategory" ||
-            watch("location.label") !== "specificbrand"
+            watch("Location.label") !== "specificcategory" ||
+            watch("Location.label") !== "specificbrand"
         ) {
-            setValue("location.value", undefined);
+            setValue("Location.value", undefined);
         }
-    }, [watch("location.label")]);
+    }, [watch("Location.label")]);
 
     return (
         <PageWrapper
@@ -136,7 +136,7 @@ const CreateBanners = () => {
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"marketingBannerName"}
+                            name={"MarketingBannerName"}
                             control={control}
                             label="Name"
                             placeholder=" Name"
@@ -146,7 +146,7 @@ const CreateBanners = () => {
                         <div className="h-[25rem]">
                             <CustomFormField
                                 fieldType={FormFieldType.RICHTEXTEDITOR}
-                                name={"content"}
+                                name={"Content"}
                                 control={control}
                                 label="Content"
                             />
@@ -164,7 +164,7 @@ const CreateBanners = () => {
                         <div className="w-full flex flex-col gap-y-1 border">
                             <FileUpload
                                 onChange={(files) => {
-                                    setValue("image", files);
+                                    setValue("Image", files);
                                 }}
                                 fileType={FileType.ANY_IMAGE}
                                 multiple={false}
@@ -172,7 +172,7 @@ const CreateBanners = () => {
                         </div>
                         <CustomFormField
                             fieldType={FormFieldType.RADIOGROUP}
-                            name={"location.label"}
+                            name={"Location.label"}
                             control={control}
                             label="Location"
                             selectOptions={[
@@ -185,10 +185,10 @@ const CreateBanners = () => {
                         {
                             // parentCategoryOptions && parentCategoryOptions.length > 0 &&
                             <div className="pb-7">
-                                {watch("location.label") === "specificcategory" && (
+                                {watch("Location.label") === "specificcategory" && (
                                     <CustomFormField
                                         fieldType={FormFieldType.SELECT}
-                                        name="location.value"
+                                        name="Location.value"
                                         control={control}
                                         placeholder="Select category"
                                         label="Select category"
@@ -202,10 +202,10 @@ const CreateBanners = () => {
                                 )}
                             </div>
                         }
-                        {watch("location.label") === "specificbrand" && (
+                        {watch("Location.label") === "specificbrand" && (
                             <CustomFormField
                                 fieldType={FormFieldType.SELECT}
-                                name="location.value"
+                                name="Location.value"
                                 control={control}
                                 label="Select brand"
                                 defaultValue="brand1"
@@ -219,7 +219,7 @@ const CreateBanners = () => {
                         )}
                         <CustomFormField
                             fieldType={FormFieldType.RADIOGROUP}
-                            name={"dateRange"}
+                            name={"DateRange"}
                             control={control}
                             label="Date range"
                             className="w-fit"
@@ -228,17 +228,17 @@ const CreateBanners = () => {
                                 { label: "Show between dates", value: "true" },
                             ]}
                         />
-                        {watch("dateRange") === "true" && (
+                        {watch("DateRange") === "true" && (
                             <div className="flex items-center gap-x-6">
                                 <CustomFormField
                                     fieldType={FormFieldType.DATE_PICKER}
-                                    name={"startDate"}
+                                    name={"StartDate"}
                                     control={control}
                                     label="Start date"
                                 />
                                 <CustomFormField
                                     fieldType={FormFieldType.DATE_PICKER}
-                                    name={"endDate"}
+                                    name={"EndDate"}
                                     control={control}
                                     label="End date"
                                 />
@@ -246,15 +246,15 @@ const CreateBanners = () => {
                         )}
                         <CustomFormField
                             fieldType={FormFieldType.CHECKBOX}
-                            name={"visible"}
+                            name={"Visible"}
                             control={control}
-                            checked={watch("visible")}
+                            checked={watch("Visible")}
                             label="Visible"
                             placeholder="Yes, this banner should be visible on my web site"
                         />
                         <CustomFormField
                             fieldType={FormFieldType.RADIOGROUP}
-                            name={"placement"}
+                            name={"Placement"}
                             control={control}
                             label="Placement"
                             selectOptions={[

@@ -171,7 +171,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
         formState: { errors, isSubmitting },
     } = form;
 
-    console.log("errror", errors)
+    console.log("errror occured->", errors)
     const router = useRouter();
     const [AddProduct, { isLoading }] = useAddProductsMutation()
     const [UpdateProduct, { isLoading: isUpdating }] = useUpdateProductMutation()
@@ -180,13 +180,39 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
         console.log("Form data:", data);
         try {
             if (productData) {
-                await UpdateProduct(data).unwrap().then(res => {
+
+                const promise = UpdateProduct(data).unwrap()
+
+                toast.promise(promise, {
+                    loading: 'Updating Product...',
+                    success: 'Product Updated Successfully',
+                    error: 'Error updating Product',
+                })
+
+                try {
+                    await promise;
                     router.replace('/dashboard/products')
-                });
+                } catch (err) {
+                    console.log("Error", err)
+                    // toast.error("Error")
+                }
             } else {
-                await AddProduct(data).unwrap().then(res => {
+
+                const promise = AddProduct(data).unwrap()
+
+                toast.promise(promise, {
+                    loading: 'Adding Product...',
+                    success: 'Product Added Successfully',
+                    error: 'Error adding Product',
+                })
+
+                try {
+                    await promise;
                     router.replace('/dashboard/products')
-                });
+                } catch (err) {
+                    console.log("Error", err)
+                    // toast.error("Error")
+                }
             }
         } catch (err) {
             console.log("Error", err)

@@ -253,13 +253,23 @@ const ProductTable = ({ data }: ProductTableProps) => {
     const [DeleteProduct] = useDeleteProductMutation()
 
     const handleDelete = async () => {
+
+        const promise = DeleteProduct(selectedIds).unwrap()
+
+        toast.promise(promise, {
+            loading: "Deleting...",
+            success: "Category Deleted Successfully",
+            error: "Error Deleting Category"
+        })
+
         try {
-            await DeleteProduct(selectedIds).unwrap()
-            toast.success("Category Deleted Successfully")
+
+            await promise;
+            // toast.success("Category Deleted Successfully")
             router.refresh()
         } catch (err) {
             console.error(err)
-            toast.error("Error Deleting Category")
+            // toast.error("Error Deleting Category")
         }
     }
 

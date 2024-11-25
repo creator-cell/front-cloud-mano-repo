@@ -45,8 +45,8 @@ const HomePageCarousalContent = ({
         reValidateMode: "onChange",
         criteriaMode: "all",
         defaultValues: {
-            playTime: 5,
-            image: []
+            PlayTime: 5,
+            Image: []
         },
     });
 
@@ -74,7 +74,7 @@ const HomePageCarousalContent = ({
 
             // Exclude the 'image' field
             if (key === "image" && Array.isArray(value) && value[0] instanceof File) {
-                formData.append("image", value[0]);
+                formData.append("Image", value[0]);
             } else if (key !== "image" && (typeof value === "string" || typeof value === "number")) {
                 formData.append(key, String(value));
             }
@@ -95,7 +95,7 @@ const HomePageCarousalContent = ({
         }
 
     };
-    console.log("🚀 ~ watch()?.length:", watch("image")?.length)
+    console.log("🚀 ~ watch()?.length:", watch("Image")?.length)
 
 
     return (
@@ -108,7 +108,7 @@ const HomePageCarousalContent = ({
                     <div className="space-y-5">
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"carouselHeading"}
+                            name={"CarouselHeading"}
                             control={control}
                             placeholder="Heading"
                             label="Heading"
@@ -116,14 +116,14 @@ const HomePageCarousalContent = ({
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"carouselText"}
+                            name={"CarouselText"}
                             control={control}
                             label="Text"
                             className="ring-1 ring-gray-300 rounded-md p-2"
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"btnText"}
+                            name={"BtnText"}
                             control={control}
                             placeholder="Shop Now"
                             label="Button Text"
@@ -131,7 +131,7 @@ const HomePageCarousalContent = ({
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"carouselLink"}
+                            name={"CarouselLink"}
                             control={control}
                             label="Link"
                             className="ring-1 ring-gray-300 rounded-md p-2"
@@ -139,7 +139,7 @@ const HomePageCarousalContent = ({
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
                             control={control}
-                            name={"playTime"}
+                            name={"PlayTime"}
                             label="Auto Play Time"
                             className="ring-1 ring-gray-300 rounded-md p-2"
                         />
@@ -147,13 +147,13 @@ const HomePageCarousalContent = ({
                     <div className="w-full flex flex-col gap-y-1 border justify-center relative">
                         <FileUpload
                             onChange={(files) => {
-                                setValue("image", files);
+                                setValue("Image", files);
                             }}
                             fileType={FileType.ANY_IMAGE}
                             multiple={false}
                         />
                         {
-                            (watch("image")?.length < 1 && errors?.image) && <p className="text-red-500 absolute top-7 left-9">{errors?.image?.message}</p>
+                            (watch("Image")?.length < 1 && errors?.Image) && <p className="text-red-500 absolute top-7 left-9">{errors?.Image?.message}</p>
                         }
                     </div>
                 </SectionLayout >
@@ -163,13 +163,13 @@ const HomePageCarousalContent = ({
                 <SectionLayout title="Preview" className="flex mx-auto w-full ">
                     <div className="flex mx-auto w-full">
                         <div className="w-full aspect-video mt-8 border relative rounded-md text-white overflow-hidden flex flex-col gap-y-6 items-start justify-center px-12">
-                            {watch("image")?.[0] ?
+                            {watch("Image")?.[0] ?
                                 <>
                                     <Image
                                         src={
-                                            typeof watch("image")[0] === "string"
-                                                ? watch("image")[0]
-                                                : URL.createObjectURL(watch("image")[0] as File)
+                                            typeof watch("Image")[0] === "string"
+                                                ? watch("Image")[0]
+                                                : URL.createObjectURL(watch("Image")[0] as File)
                                         }
                                         alt="hero"
                                         layout="fill"
@@ -177,13 +177,13 @@ const HomePageCarousalContent = ({
                                         className="z-20"
                                     />
                                     <h1 className="text-4xl font-bold z-40">
-                                        {watch("carouselHeading") || "Default Heading"}
+                                        {watch("CarouselHeading") || "Default Heading"}
                                     </h1>
                                     <h3 className="text-xl font-thin z-40">
-                                        {watch("carouselText") || "Default Subtitle"}
+                                        {watch("CarouselText") || "Default Subtitle"}
                                     </h3>
                                     <Button className="z-40">
-                                        {watch("btnText") || "Shop Now"}
+                                        {watch("BtnText") || "Shop Now"}
                                     </Button>
                                 </> :
                                 <div className="w-full h-96 flex items-center justify-center bg-gray-200">

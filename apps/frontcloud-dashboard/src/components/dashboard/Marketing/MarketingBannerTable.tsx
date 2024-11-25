@@ -17,7 +17,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { CheckCheck, CirclePlus, CircleX, Ellipsis, PenLineIcon, Trash2 } from "lucide-react";
 import SectionLayout from '@/components/common/CommonSectionLayout';
 import Link from 'next/link';
-import PageWrapper from '@/app/(dashboard)/dashboard/_components/PageWrapper';
 import { MarketingBanner } from '@/store/api/marketing/types/banner-types';
 import Image from 'next/image';
 import { useDeleteMarketingBannerMutation } from '@/store/api/marketing';
@@ -30,6 +29,7 @@ interface MarketinBannerTableProps {
 }
 
 const MarketingBannerTable: React.FC<MarketinBannerTableProps> = ({ data }) => {
+    console.log("🚀 ~ data:", data)
 
     const router = useRouter();
 

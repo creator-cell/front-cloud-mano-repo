@@ -18,8 +18,8 @@ const page = async () => {
             subTitle="Coupon codes allow you to provide customers with discounts on products available for purchase from your store."
         >
             {
-                AllCoupons && AllCoupons?.data &&
-                <CouponTable data={AllCoupons?.data} />
+                AllCoupons && AllCoupons?.Data &&
+                <CouponTable data={AllCoupons?.Data} />
             }
         </PageWrapper>
     );

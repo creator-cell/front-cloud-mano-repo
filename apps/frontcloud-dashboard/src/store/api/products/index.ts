@@ -8,7 +8,7 @@ export const ProductApi = createApi({
     endpoints: (builder) => ({
         addProducts: builder.mutation<void, AddProductType>({
             query: (body) => ({
-                url: "/",
+                url: "/products",
                 method: "POST",
                 body,
             }),

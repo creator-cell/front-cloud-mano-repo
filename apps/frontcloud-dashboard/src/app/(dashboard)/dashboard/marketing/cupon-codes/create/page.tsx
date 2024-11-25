@@ -31,11 +31,11 @@ const CreateCoupon = () => {
     const form = useForm<CouponFieldvalues>({
         resolver: zodResolver(couponSchema),
         defaultValues: {
-            discountType: "order_total_dollar",
-            enabled: true,
-            isUseLimit: false,
-            isCustomerUseLimit: false,
-            couponCondition: "all",
+            DiscountType: "order_total_dollar",
+            Enabled: true,
+            IsUseLimit: false,
+            IsCustomerUseLimit: false,
+            CouponCondition: "all",
         },
         mode: "all"
     });
@@ -111,7 +111,7 @@ const CreateCoupon = () => {
                     <SectionLayout title='Coupon details' className='space-y-7'>
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"couponCode"}
+                            name={"CouponCode"}
                             control={control}
                             placeholder='AJSG6SD43B'
                             label='Coupon code'
@@ -119,14 +119,14 @@ const CreateCoupon = () => {
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"couponName"}
+                            name={"CouponName"}
                             control={control}
                             label='Coupon Name'
                             className='ring-1 ring-gray-400'
                         />
                         <CustomFormField
                             fieldType={FormFieldType.RADIOGROUP}
-                            name={"discountType"}
+                            name={"DiscountType"}
                             control={control}
                             label='Discount type'
                             defaultValue='order_total_dollar'
@@ -138,13 +138,13 @@ const CreateCoupon = () => {
                             ]}
                         />
                         {
-                            watch("discountType") != "free_shipping" &&
+                            watch("DiscountType") != "free_shipping" &&
                             <div className='flex w-full items-center gap-x-8 '>
 
                                 <div className='w-52 relative'>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"discount"}
+                                        name={"Discount"}
                                         control={control}
                                         label='Discount amount'
                                         placeholder='0.00'
@@ -157,7 +157,7 @@ const CreateCoupon = () => {
                                 <p className='pt-6'>
                                     {/* Dynamically update description based on selected discountType */}
                                     {(() => {
-                                        const discountType = watch("discountType");
+                                        const discountType = watch("DiscountType");
                                         switch (discountType) {
                                             case "order_total_dollar":
                                                 return " amount off the order total";
@@ -230,7 +230,7 @@ const CreateCoupon = () => {
 
                         <CustomFormField
                             fieldType={FormFieldType.CHECKBOX}
-                            name={"cartLavelDiscount"}
+                            name={"CartLavelDiscount"}
                             control={control}
                             label='Exclude cart level discounts'
                             placeholder='This coupon does not apply on top of cart level discounts'
@@ -238,7 +238,7 @@ const CreateCoupon = () => {
 
                         <CustomFormField
                             fieldType={FormFieldType.CHECKBOX}
-                            name={"enabled"}
+                            name={"Enabled"}
                             control={control}
                             label='Enabled'
                             placeholder='This coupon code is enabled and can be used.'
@@ -246,7 +246,7 @@ const CreateCoupon = () => {
 
                         <CustomFormField
                             fieldType={FormFieldType.DATE_PICKER}
-                            name={"expireDate"}
+                            name={"ExpireDate"}
                             control={control}
                             label='Expiration date'
                         />

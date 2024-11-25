@@ -208,10 +208,10 @@ const BlogTable = ({ data }: BlogPros) => {
         const promise = DeleteBlog(ids).unwrap()
 
         toast.promise(promise, {
-            loading: "Deleting Banners...",
+            loading: "Deleting Blog...",
             success: () => {
                 setDeleteModal(false)
-                return "Banners Deleted Successfully"
+                return "Blog Deleted Successfully"
             },
             error: "Error Deleting Category"
         })
@@ -302,7 +302,7 @@ const BlogTable = ({ data }: BlogPros) => {
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
-                                key={row.id}
+                                key={row.original.StoreBlogID}
                                 data-state={row.getIsSelected() && "selected"}
                             >
                                 {row.getVisibleCells().map((cell) => (

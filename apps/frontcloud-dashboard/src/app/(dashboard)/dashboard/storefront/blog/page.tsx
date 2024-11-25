@@ -7,6 +7,7 @@ import { fetchAllBlogposts } from '@/server-apis/fetch-all-blogposts'
 const BlogPage = async () => {
 
     const allBlogPoosts = await fetchAllBlogposts()
+    console.log("🚀 ~ BlogPage ~ allBlogPoosts:", allBlogPoosts)
 
     return (
         <PageWrapper title='Blog'>
