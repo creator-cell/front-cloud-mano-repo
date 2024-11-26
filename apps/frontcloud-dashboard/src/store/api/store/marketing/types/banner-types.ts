@@ -6,13 +6,13 @@ export interface MarketingBanner {
     MarketingBannerName: string;
     Content: string;
     StoreID: number;
-    Location: string;
+    Location: "homepage" | "specificcategory" | "specificbrand" | "resultpage"
     CategoryID: number;
     DateRange: number;
     StartDate: string; // ISO date string
     EndDate: string;   // ISO date string
     Visible: number;
-    Placement: string;
+    Placement: "top" | "bottom";
     CreatedAt: string; // ISO date string
     UpdatedAt: string; // ISO date string
     StoreName: string;

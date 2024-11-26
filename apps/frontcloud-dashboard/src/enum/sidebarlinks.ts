@@ -130,7 +130,7 @@ export const sidebarLinks: SidebarLink[] = [
                     subpage: [
                         {
                             label: "Add Brands",
-                            page: "/dashboard/products/brands/edit"
+                            page: "/dashboard/products/brands/create"
                         }
                     ]
                 },

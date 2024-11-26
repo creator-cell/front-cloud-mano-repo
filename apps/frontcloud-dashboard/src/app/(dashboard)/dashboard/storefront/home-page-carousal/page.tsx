@@ -1,36 +1,99 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PageWrapper from "../../_components/PageWrapper";
 import SectionLayout from "@/components/common/CommonSectionLayout";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { Droppable, Draggable, DragDropContext } from "@hello-pangea/dnd";
 import { motion } from "framer-motion";
-import { Grip, Edit, Plus } from "lucide-react";
+import { Grip, Edit, Plus, Trash2 } from "lucide-react";
 import ActionBarLayout from "@/components/common/CommonActionBarLayout";
-import { useGetAllHomePageCarousalQuery } from "@/store/api/store/storefront";
-import { HomePageCarouselData } from "@/store/api/store/storefront/types";
+import { HomePageCarouselData, HomePageCarouselResponse } from "@/store/api/store/storefront/types";
 import Link from "next/link";
+import { useDeleteHomePageCarousalMutation, useGetAllHomePageCarousalQuery } from "@/store/api/store/storefront/carousel";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const HomePageCarousalPage = () => {
-    const { data } = useGetAllHomePageCarousalQuery();
+
+    const router = useRouter();
+    // const { data, refetch } = useGetAllHomePageCarousalQuery();
+
+    const [carouselData, setCarouselData] = useState<HomePageCarouselData[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const fetchCarouselData = useCallback(async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("http://localhost:3000/api/v1/store/carousel");
+            if (!response.ok) {
+                throw new Error("Failed to fetch carousel data");
+            }
+            const result: HomePageCarouselResponse = await response.json();
+            setCarouselData(result.Data || []);
+        } catch (error) {
+            console.error("Error fetching carousel data:", error);
+            toast.error("Failed to load carousel data.");
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+    console.log("🚀 ~ HomePageCarousalPage ~ data:", carouselData)
+
+
+    const refetchCarouselData = useCallback(() => {
+        fetchCarouselData();
+    }, [fetchCarouselData]);
+
+
+    const [DeleteCaroucel, { isLoading }] = useDeleteHomePageCarousalMutation()
+
+
 
     const [selectedSlideIndex, setSelectedSlideIndex] = useState(0);
 
-    const slides: HomePageCarouselData[] = data?.Data || [];
+    // const slides: HomePageCarouselData[] = data?.Data || [];
 
     const onDragEnd = (result: any) => {
         if (!result.destination) return;
 
-        const reorderedSlides = [...slides];
-        const [removed] = reorderedSlides.splice(result.source.index, 1);
-        reorderedSlides.splice(result.destination.index, 0, removed);
+        // const reorderedSlides =data?.Data
+        // const [removed] = reorderedSlides.splice(result.source.index, 1);
+        // reorderedSlides.splice(result.destination.index, 0, removed);
 
     };
 
-    const handleSelectSlide = (index: number) => {
+    const handleSelectSlide = async (index: number) => {
         setSelectedSlideIndex(index);
     };
+    const handleDeleteSlide = async (id: number) => {
+
+        if (!id) {
+            toast.error("Slide not found");
+            return;
+        }
+
+        const promise = DeleteCaroucel(id);
+
+        toast.promise(promise, {
+            loading: "Deleting Slide",
+            success: "Slide Deleted",
+            error: "Failed to Delete Slide",
+        });
+
+        try {
+            await promise;
+            // await refetch();
+            refetchCarouselData();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    useEffect(() => {
+        fetchCarouselData();
+    }, [fetchCarouselData]);
+
 
 
     return (
@@ -45,7 +108,7 @@ const HomePageCarousalPage = () => {
                 </div>
                 <div className="w-full col-span-2 h-full border relative flex items-center justify-center">
                     <HomePageCarousalContent
-                        slides={slides}
+                        slides={carouselData || []}
                         selectedSlideIndex={selectedSlideIndex}
                     />
                 </div>
@@ -58,7 +121,7 @@ const HomePageCarousalPage = () => {
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
-                                    {slides.map((slide, index) => (
+                                    {carouselData?.map((slide, index) => (
                                         <Draggable
                                             key={slide.StoreCarouselID.toString()}
                                             draggableId={slide.StoreCarouselID.toString()}
@@ -93,11 +156,16 @@ const HomePageCarousalPage = () => {
                                                     <motion.div
                                                         whileTap={{ scale: 0.7 }}
                                                         initial={{ scale: 1 }}
-                                                        className="absolute top-3 right-3 bg-transparent"
+                                                        className="absolute top-3 right-3 bg-transparent flex gap-3"
                                                     >
                                                         <Link href={`/dashboard/storefront/home-page-carousal/create?id=${slide.StoreCarouselID}`}>
                                                             <Edit size={18} strokeWidth={2} color="green" />
                                                         </Link>
+                                                        <Button
+                                                            onClick={() => handleDeleteSlide(slide.StoreCarouselID)}
+                                                            variant="outline" disabled={isLoading} type="button" className="h-auto p-0 border-none" >
+                                                            <Trash2 size={18} strokeWidth={2} color="red" />
+                                                        </Button>
                                                     </motion.div>
                                                 </div>
                                             )}

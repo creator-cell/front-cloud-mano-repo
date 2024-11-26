@@ -3,7 +3,7 @@ import *  as z from 'zod';
 
 export const addBlogSchema = z.object({
     BlogTitle: z.string(),
-    url: z.string().optional(),
+    url: z.string().url().optional(),
     BlogBody: z.string().optional(),
     BlogAuthor: z.string().optional(),
     IsDraft: z.boolean().optional(),

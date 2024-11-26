@@ -1,13 +1,15 @@
-
+"use client";
 import React, { useState } from "react";
 import PageWrapper from "../../_components/PageWrapper";
 import { fetchAllCoupons } from "@/server-apis/fetch-all-coupones";
 import CouponTable from "@/components/dashboard/storefront/CouponCodesTable";
+import { useGetAllCouonCodesQuery } from "@/store/api/store/marketing/coupon-code";
 
 
-const page = async () => {
+const page = () => {
 
-    const AllCoupons = await fetchAllCoupons();
+    // const AllCoupons = await fetchAllCoupons();
+    const { data: AllCoupons, refetch } = useGetAllCouonCodesQuery()
     console.log("🚀 ~ CouponTable ~ AllCoupons:", AllCoupons)
 
 
@@ -19,7 +21,7 @@ const page = async () => {
         >
             {
                 AllCoupons && AllCoupons?.Data &&
-                <CouponTable data={AllCoupons?.Data} />
+                <CouponTable data={AllCoupons?.Data} refetch={refetch} />
             }
         </PageWrapper>
     );

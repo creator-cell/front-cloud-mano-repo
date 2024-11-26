@@ -10,11 +10,13 @@ import { FileUpload } from '@/components/ui/file-upload';
 import { Form } from '@/components/ui/form'
 import { FileType } from '@/enum/fileTypes';
 import { FormFieldType } from '@/enum/formTypes';
+import { usePostBrandMutation } from '@/store/api/products/brand';
 import brandSchema, { BrandFormValues } from '@/zod/edit-brand.schema';
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation';
 import React from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner';
 
 
 
@@ -24,7 +26,9 @@ const BrandEdit = () => {
 
     const form = useForm<BrandFormValues>({
         resolver: zodResolver(brandSchema),
-        mode: "all"
+        mode: "all",
+        reValidateMode: "onChange",
+        criteriaMode: "all"
     });
 
     const {
@@ -35,9 +39,42 @@ const BrandEdit = () => {
         formState: { errors },
     } = form;
 
+
+    const [PostBrand, { isLoading }] = usePostBrandMutation()
+
+
     console.log("errror", errors)
-    const onSubmit = (data: any) => {
+    const onSubmit = async (data: BrandFormValues) => {
+
         console.log("Form data:", data);
+
+        const formData = new FormData();
+
+
+        formData.append('BrandName', data.BrandName);
+        formData.append('BrandUrl', data.BrandUrl);
+        formData.append('Image', data.Image);
+        formData.append('Seo.MetaTitle', data.Seo.MetaTitle);
+        formData.append('Seo.MetaKeywords', data.Seo.MetaKeywords);
+        formData.append('Seo.MetaDescription', data.Seo.MetaDescription);
+        formData.append('Seo.SearchKeywords', data.Seo.SearchKeywords);
+
+
+        const promise = PostBrand(formData).unwrap();
+
+        toast.promise(promise, {
+            loading: 'Saving...',
+            success: 'Brand saved successfully',
+            error: 'Failed to save brand'
+        })
+
+        try {
+            await promise;
+            router.replace('/dashboard/products/brands')
+        } catch (error) {
+            console.log("error", error)
+        }
+
     };
     return (
         <div className='w-full flex flex-col gap-y-6  py-20 min-h-screen max-w-5xl'>
@@ -50,7 +87,7 @@ const BrandEdit = () => {
                     <SectionLayout title='Edit Brand ' className='w-full space-y-6 px-52'>
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"brandName"}
+                            name={"BrandName"}
                             control={control}
                             placeholder=' '
                             label='Name'
@@ -58,7 +95,7 @@ const BrandEdit = () => {
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"brandUrl"}
+                            name={"BrandUrl"}
                             control={control}
                             placeholder=' '
                             label='URL'
@@ -69,7 +106,7 @@ const BrandEdit = () => {
                             <div className='ring-1 ring-gray-200'>
                                 <FileUpload
                                     onChange={(files) => {
-                                        setValue("brandImage", files);
+                                        setValue("Image", files);
                                     }}
                                     fileType={FileType.ANY_IMAGE}
                                 />
@@ -77,7 +114,7 @@ const BrandEdit = () => {
                         </div>
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"pageTitle"}
+                            name={"Seo.MetaTitle"}
                             control={control}
                             placeholder=' '
                             label='Page Title'
@@ -85,7 +122,7 @@ const BrandEdit = () => {
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"metaKeywords"}
+                            name={"Seo.MetaKeywords"}
                             control={control}
                             placeholder=' '
                             label='Meta Keywords'
@@ -93,7 +130,7 @@ const BrandEdit = () => {
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"metaDescription"}
+                            name={"Seo.MetaDescription"}
                             control={control}
                             placeholder=' '
                             label='Meta Description'
@@ -101,7 +138,7 @@ const BrandEdit = () => {
                         />
                         <CustomFormField
                             fieldType={FormFieldType.INPUT}
-                            name={"searchKeywords"}
+                            name={"Seo.SearchKeywords"}
                             control={control}
                             placeholder=' '
                             label='Search Keywords'
@@ -110,7 +147,7 @@ const BrandEdit = () => {
 
                         <ActionBarLayout>
                             <Button variant={"outline"} type='button' className='px-5' onClick={() => router.back()} >Calcle</Button>
-                            <Button className='px-4'>Save Brand</Button>
+                            <Button disabled={isLoading} className='px-4'>Save Brand</Button>
                         </ActionBarLayout>
 
                     </SectionLayout>

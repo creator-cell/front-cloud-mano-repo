@@ -36,6 +36,14 @@ export const MarketingApi = createApi({
         getBannerById: builder.query<MarketingBannersResponse, string>({
             query: (id) => `/banner?MarketingBannerId=${id}`,
         }),
+        updateBanner: builder.mutation<void, { id: string, data: any }>({
+            query: ({ id, data }) => ({
+                url: `/banner/${id}`,
+                method: "PUT",
+                body: data,
+            }),
+            invalidatesTags: ["Marketing"],
+        }),
 
     })
 
@@ -46,5 +54,6 @@ export const {
     useGetAllMarketingBannersQuery,
     useDeleteMarketingBannerMutation,
     useCreateCouponMutation,
-    useGetBannerByIdQuery
+    useGetBannerByIdQuery,
+    useUpdateBannerMutation
 } = MarketingApi

@@ -40,14 +40,14 @@ const BannerAddEditForm: React.FC<BannerAddEditFormProps> = ({
                 Image: data.ImageURL,
                 Location: {
                     label: data.Location,
-                    value: data.Location === "specificcategory" ? data.CategoryID : "",
-                },
-                DateRange: data.DateRange,
-                StartDate: data.StartDate,
-                EndDate: data.EndDate,
-                StoreID: data.StoreID,
+                    value: data.Location === "specificcategory" ? data.CategoryID ? data?.Location === "specificcategory" ? data.CategoryID : " " : " " : " ",
+                } as any,
+                DateRange: data.DateRange === 1 ? "true" : "false",
+                StartDate: data.StartDate as any,
+                EndDate: data.EndDate as any,
+                StoreID: data.StoreID as any,
                 Placement: data.Placement,
-                Visible: data.Visible,
+                Visible: data.Visible === 1 ? true : false,
             }
             : {
                 Location: {
@@ -308,7 +308,9 @@ const BannerAddEditForm: React.FC<BannerAddEditFormProps> = ({
                             Calcle
                         </Button>
                         <Button disabled={isLoading} className="px-4">
-                            Save Banner
+                            {
+                                data ? "Update" : "Create"
+                            }
                         </Button>
                     </ActionBarLayout>
                 </form>

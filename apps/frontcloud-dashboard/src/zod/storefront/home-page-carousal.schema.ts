@@ -8,7 +8,6 @@ const homePageCarousalSchema = z.object({
     CarouselLink: z.string().url("Invalid URL format"),
     Image: z.array(z.any()).min(1, "Image is required"),
     PlayTime: toPositiveNumber("autoPlay time needed"),
-    StoreID: z.string().optional().default("1"),
 });
 
 export type homePageCarousalFormValues = z.infer<typeof homePageCarousalSchema>;

@@ -33,7 +33,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Input } from '@/components/ui/input'
-import { StoreBlog } from '@/store/api/store/marketing/types/blog-types'
+import { BlogData } from '@/store/api/store/marketing/types/blog-types'
 import { useRouter } from 'next/navigation'
 import { useDeleteBlogMutation } from '@/store/api/store/marketing/blog'
 import ConfirmationDialog from '@/components/common/ConfirmationDialog'
@@ -43,7 +43,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 
 
 interface BlogPros {
-    data: StoreBlog[]
+    data: BlogData[]
 }
 
 
@@ -56,7 +56,7 @@ const BlogTable = ({ data }: BlogPros) => {
     const [rowSelection, setRowSelection] = React.useState({})
 
 
-    const columns: ColumnDef<StoreBlog>[] = [
+    const columns: ColumnDef<BlogData>[] = [
         {
             id: "select",
             header: ({ table }) => (

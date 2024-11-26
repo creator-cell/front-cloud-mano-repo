@@ -25,31 +25,12 @@ import CommonDataTable from '@/components/common/CommonDataTable'
 import { useRouter } from 'next/navigation';
 import ConfirmationDialog from '@/components/common/ConfirmationDialog';
 import Link from 'next/link';
-
-export type Brand = {
-    id: string
-    brandName: string
-    products: number
-    action: string
-}
-
-const data: Brand[] = [
-    {
-        id: "1",
-        brandName: "Electronics",
-        products: 120,
-        action: "Edit",
-    },
-    {
-        id: "2",
-        brandName: "Clothing",
-        products: 200,
-        action: "Edit",
-    },
-]
+import { BrandData } from '@/store/api/products/types';
+import { useDeleteBrandsMutation, useGetAllBrandsQuery } from '@/store/api/products/brand';
+import { toast } from 'sonner';
 
 
-const columns: ColumnDef<Brand>[] = [
+const columns: ColumnDef<BrandData>[] = [
     {
         id: "select",
         header: ({ table }) => (
@@ -73,44 +54,64 @@ const columns: ColumnDef<Brand>[] = [
         enableHiding: false,
     },
     {
-        accessorKey: "brandName",
+        accessorKey: "BrandName",
         header: "Brand Name",
         cell: ({ row }) => (
-            <div className="capitalize">{row.getValue("brandName")}</div>
+            <div className="capitalize">{row.getValue("BrandName")}</div>
         ),
     },
-
     {
-        accessorKey: "products",
-        header: ({ column }) => {
-            return (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Products
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            )
+        accessorKey: "MetaTitle",
+        header: "Meta Title",
+        cell: ({ row }) => (
+            <div>{row.getValue("MetaTitle") || "N/A"}</div>
+        ),
+    },
+    {
+        accessorKey: "ImageURL",
+        header: "Image",
+        cell: ({ row }) => (
+            <div className="flex justify-center">
+                <img
+                    src={row.getValue("ImageURL")}
+                    alt={row.getValue("BrandName")}
+                    className="h-12 w-12 rounded"
+                />
+            </div>
+        ),
+    },
+    {
+        accessorKey: "CreatedAt",
+        header: "Created At",
+        cell: ({ row }) => {
+            const date = new Date(row.getValue("CreatedAt"));
+            return <div>{date.toLocaleDateString()}</div>;
         },
-        cell: ({ row }) => <div className="lowercase items-center flex justify-center">{row.getValue("products")}</div>,
     },
     {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => {
+            const brandId = row.original.BrandID;
             return (
-                <Link href={"/dashboard/products/brands/edit"}>
-                    <PencilLine size={20} color='green' />
-                </Link>
-            )
+                <div className="flex gap-2 items-center justify-center">
+                    <Link href={`/dashboard/products/brands/create?id=${brandId}`}>
+                        <PencilLine size={20} color="green" />
+                    </Link>
+                </div>
+            );
         },
     },
-]
+];
+
 
 
 const Brands = () => {
 
+
+    const [deleteModalOen, setDeleteModalOen] = useState(false)
+
+    const { data: AllBrands, refetch } = useGetAllBrandsQuery()
 
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -121,7 +122,7 @@ const Brands = () => {
     const [rowSelection, setRowSelection] = React.useState({})
 
     const table = useReactTable({
-        data,
+        data: AllBrands?.Data || [],
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
@@ -140,31 +141,27 @@ const Brands = () => {
     })
 
     const router = useRouter()
+    const [DeleteBrand, { isLoading }] = useDeleteBrandsMutation()
 
-    const handleDelete = () => {
-        console.log('Delete')
-    }
+    const handleDelete = async () => {
+        const ids = table.getSelectedRowModel().rows.map(row => row.original.BrandID).join(',')
 
-    const [brandInput, setBrandInput] = useState<string>("")
-    const [brands, setBrands] = useState<string[]>([])
+        const promise = DeleteBrand(ids).unwrap()
 
-    const handleAddBrand = () => {
-        if (brandInput.trim() !== "") {
-            setBrands([...brands, brandInput.trim()])
-            setBrandInput("")
+        toast.promise(promise, {
+            loading: 'Deleting Brand',
+            success: 'Brand Deleted Successfully',
+            error: 'Error Deleting Brand'
+        })
+        try {
+            await promise;
+            setDeleteModalOen(false)
+            refetch();
+        } catch (error) {
+            console.log(error)
         }
     }
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault()
-            handleAddBrand()
-        }
-    }
-
-    const removeBrand = (brandToRemove: string) => {
-        setBrands(brands.filter(brand => brand !== brandToRemove))
-    }
 
 
     return (
@@ -175,23 +172,25 @@ const Brands = () => {
             </div>
             <div className='bg-white px-4 pb-8 rounded-sm '>
                 <CommonDataTable
-                    data={data}
+                    data={AllBrands?.Data || []}
                     columns={columns}
                     table={table}
                     topClassName='gap-x-4'
                     tableSearchKeys={['categoryName']}
                     searchPlaceholder='Search for Categories'
                 >
-                    <Button className='' onClick={() => router.push('/dashboard/products/brands/edit')}>Add New Brand</Button>
+                    <Button className='' onClick={() => router.push('/dashboard/products/brands/create')}>Add New Brand</Button>
                     <ConfirmationDialog
                         title='Confirmation'
                         description='WARNING: The selected Brands will be removed permanently. If the Brand appear in any Product Pick List options they will also be removed from those options. Are you sure?'
                         confirmLabel='Delete'
                         cancelLabel='Cancle'
                         onConfirm={handleDelete}
-                        isDisabled={table.getSelectedRowModel().rows.length < 1}
-                        triggerLabel={<Trash2 className="h-4 w-4  " />}
+                        isDisabled={table.getSelectedRowModel().rows.length < 1 && isLoading}
+                        triggerLabel={<Trash2 className="h-4 w-12  " />}
                         diasbledMessage='Select At least one Brand'
+                        open={deleteModalOen}
+                        onClose={setDeleteModalOen}
 
                     />
 

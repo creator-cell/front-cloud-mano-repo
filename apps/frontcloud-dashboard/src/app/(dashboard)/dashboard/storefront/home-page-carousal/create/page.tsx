@@ -15,10 +15,10 @@ import { FileUpload } from "@/components/ui/file-upload";
 import { FileType } from "@/enum/fileTypes";
 import ActionBarLayout from "@/components/common/CommonActionBarLayout";
 import PageWrapper from "../../../_components/PageWrapper";
-import { useCreateHomePageCarousalMutation, useGetCarousalByIdQuery, useUpdateHomePageCarousalMutation } from "@/store/api/store/storefront";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { HomePageCarouselData } from "@/store/api/store/storefront/types";
+import { useCreateHomePageCarousalMutation, useGetHomePageCarousalByIdQuery, useUpdateHomePageCarousalMutation } from "@/store/api/store/storefront/carousel";
 
 
 const AddCarousal = () => {
@@ -27,7 +27,7 @@ const AddCarousal = () => {
 
     const id = searchParams.get('id')
 
-    const { data } = useGetCarousalByIdQuery(id ?? "");
+    const { data } = useGetHomePageCarousalByIdQuery(id ?? "");
     console.log("🚀 ~ AddCarousal ~ data:", data)
 
 
@@ -69,11 +69,11 @@ const HomePageCarousalContent = ({
             CarouselHeading: data?.CarouselHeading,
             CarouselText: data?.CarouselText,
             BtnText: data?.BtnText,
-            Image: data?.ImageURL ? [data?.ImageURL] : []
+            Image: data?.ImageURL ? [data?.ImageURL] : [],
 
         } : {
             PlayTime: 5,
-            Image: []
+            Image: [],
         },
     });
 
@@ -104,6 +104,8 @@ const HomePageCarousalContent = ({
             return new File([blob], fileName, { type: blob.type });
         };
 
+        formData.append("StoreID", "1");
+
         for (const key of Object.keys(data)) {
             const value = data[key as keyof homePageCarousalFormValues];
 
@@ -125,8 +127,8 @@ const HomePageCarousalContent = ({
         }
 
         try {
-            if (data) {
-                console.log("🚀 ~ handleSubmitSlideData ~ data:", data);
+            if (data && SlideId) {
+                // console.log("🚀 ~ handleSubmitSlideData ~ data:", data);
                 if (!SlideId) {
                     toast.error("Slide ID is missing");
                     return;

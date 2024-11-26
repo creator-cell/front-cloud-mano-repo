@@ -19,13 +19,20 @@ import { useRouter } from "next/navigation";
 import SectionLayout from "@/components/common/CommonSectionLayout";
 import Link from "next/link";
 import { Coupon } from "@/store/api/store/storefront/types";
+import { toast } from "sonner";
+import ConfirmationDialog from "@/components/common/ConfirmationDialog";
+import { useDeleteCouponCodeMutation } from "@/store/api/store/marketing/coupon-code";
 
 interface CouponTableProps {
     data: Coupon[];
+    refetch: () => void;
 }
 
-const CouponTable: React.FC<CouponTableProps> = ({ data }) => {
+const CouponTable: React.FC<CouponTableProps> = ({ data, refetch }) => {
     console.log("🚀 ~ CouponTable ~ data:", data);
+
+    const [deleteModal, setDeleteModal] = useState(false)
+    const router = useRouter()
 
     const initialColumns: ColumnDef<Coupon>[] = [
         {
@@ -122,6 +129,37 @@ const CouponTable: React.FC<CouponTableProps> = ({ data }) => {
         getPaginationRowModel: getPaginationRowModel(),
     });
 
+
+    const [DeleteCouponCode, { isLoading }] = useDeleteCouponCodeMutation()
+
+    const handleDelete = async () => {
+
+        const ids = table.getSelectedRowModel().rows.map((row) => row.original.StoreCouponID).join(',')
+        console.log("🚀 ~ handleDelete ~ ids:", ids)
+
+        if (!ids) {
+            toast.error('Select at least one coupon code')
+            return;
+        }
+
+        const promise = DeleteCouponCode(ids).unwrap()
+
+        toast.promise(promise, {
+            loading: 'Deleting...',
+            success: 'Coupon code deleted successfully',
+            error: 'Failed to delete coupon code'
+        })
+
+        try {
+            await promise
+            refetch()
+        } catch (err) {
+            console.error(err)
+        } finally {
+            setDeleteModal(false)
+        }
+    }
+
     return (
         <SectionLayout className="px-4 rounded-md">
             <div className="flex items-center gap-x-5">
@@ -131,9 +169,18 @@ const CouponTable: React.FC<CouponTableProps> = ({ data }) => {
                         <span>Add Coupon</span>
                     </Link>
                 </Button>
-                <Button>
-                    <Trash2 size={20} color="white" />
-                </Button>
+                <ConfirmationDialog
+                    title='Confirmation'
+                    description='WARNING: The selected Banners will be removed permanently. If the Banner appear in any Banner List options they will also be removed from those options. Are you sure?'
+                    confirmLabel='Delete'
+                    cancelLabel='Cancle'
+                    onConfirm={handleDelete}
+                    isDisabled={table.getSelectedRowModel().rows.length < 1 || isLoading}
+                    triggerLabel={<Trash2 className="h-4 w-8  " />}
+                    diasbledMessage='Select At least one Category'
+                    open={deleteModal}
+                    onClose={setDeleteModal}
+                />
             </div>
             <Table>
                 <TableHeader>

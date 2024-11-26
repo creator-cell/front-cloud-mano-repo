@@ -11,6 +11,9 @@ import { ProductApi } from "./api/products";
 import { MarketingApi } from "./api/store/marketing";
 import { BlogApi } from "./api/store/marketing/blog";
 import { StoreFrontApi } from "./api/store/storefront";
+import { storeFrontCarouselApi } from "./api/store/storefront/carousel";
+import { BrandApi } from "./api/products/brand";
+import { MarketingCouponCodeApi } from "./api/store/marketing/coupon-code";
 
 const persistConfig = {
   key: "userPackage",
@@ -33,6 +36,9 @@ export const store = configureStore({
     [MarketingApi.reducerPath]: MarketingApi.reducer,
     [BlogApi.reducerPath]: BlogApi.reducer,
     [StoreFrontApi.reducerPath]: StoreFrontApi.reducer,
+    [storeFrontCarouselApi.reducerPath]: storeFrontCarouselApi.reducer,
+    [BrandApi.reducerPath]: BrandApi.reducer,
+    [MarketingCouponCodeApi.reducerPath]: MarketingCouponCodeApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -47,6 +53,9 @@ export const store = configureStore({
       MarketingApi.middleware,
       BlogApi.middleware,
       StoreFrontApi.middleware,
+      storeFrontCarouselApi.middleware,
+      BrandApi.middleware,
+      MarketingCouponCodeApi.middleware,
     ),
 });
 
