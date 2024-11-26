@@ -8,9 +8,9 @@ import storage from "redux-persist/lib/storage";
 import SideBarSlice from "./sidebar/index";
 import { ProductSubCategoryApi } from "./api/products/sub-category";
 import { ProductApi } from "./api/products";
-import { MarketingApi } from "./api/marketing";
-import { BlogApi } from "./api/marketing/blog";
-import { StoreFrontApi } from "./api/storefront";
+import { MarketingApi } from "./api/store/marketing";
+import { BlogApi } from "./api/store/marketing/blog";
+import { StoreFrontApi } from "./api/store/storefront";
 
 const persistConfig = {
   key: "userPackage",

@@ -57,8 +57,8 @@ const AddProduct = () => {
 
     console.log("🚀 ~ AddCategories ~ AllCategories:", AllCategories)
     const parentCategoryOptions = useMemo(() => {
-        if (AllCategories && AllCategories.data.length > 0) {
-            return AllCategories.data.map((category) => ({
+        if (AllCategories && AllCategories.Data.length > 0) {
+            return AllCategories.Data.map((category) => ({
                 label: category.CategoryName,
                 value: category?.CategoryID?.toString() ?? " ",
             }));
@@ -69,7 +69,7 @@ const AddProduct = () => {
 
 
     let camelCaseData;
-    if (data && data.data) {
+    if (data && data.Data) {
         // camelCaseData = camelcaseKeys(data?.data, { deep: true });
     }
 
@@ -77,9 +77,9 @@ const AddProduct = () => {
     return (
         <div className='w-full '>
             {
-                productId ? data?.data?.product && (
+                productId ? data?.Data?.product && (
                     <AddProductFrom
-                        productData={data?.data}
+                        productData={data?.Data}
                         parentCategoryOptions={parentCategoryOptions}
                     />
                 ) : (

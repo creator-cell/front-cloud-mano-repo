@@ -12,7 +12,7 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Grip } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
-import { useGetAllSocialLinksQuery, usePostSocialLinksMutation } from '@/store/api/storefront';
+import { useGetAllSocialLinksQuery, usePostSocialLinksMutation } from '@/store/api/store/storefront';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 

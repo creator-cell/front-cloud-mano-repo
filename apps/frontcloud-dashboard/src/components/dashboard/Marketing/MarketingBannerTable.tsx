@@ -17,9 +17,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { CheckCheck, CirclePlus, CircleX, Ellipsis, PenLineIcon, Trash2 } from "lucide-react";
 import SectionLayout from '@/components/common/CommonSectionLayout';
 import Link from 'next/link';
-import { MarketingBanner } from '@/store/api/marketing/types/banner-types';
+import { MarketingBanner } from '@/store/api/store/marketing/types/banner-types';
 import Image from 'next/image';
-import { useDeleteMarketingBannerMutation } from '@/store/api/marketing';
+import { useDeleteMarketingBannerMutation } from '@/store/api/store/marketing';
 import ConfirmationDialog from '@/components/common/ConfirmationDialog';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -121,9 +121,11 @@ const MarketingBannerTable: React.FC<MarketinBannerTableProps> = ({ data }) => {
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem className="cursor-pointer">
-                                <PenLineIcon className="mr-2 h-4 w-4" />
-                                <span>Edit</span>
+                            <DropdownMenuItem className="cursor-pointer" asChild>
+                                <Link href={`/dashboard/marketing/banners/create?id=${row.original.MarketingBannerID}`}>
+                                    <PenLineIcon className="mr-2 h-4 w-4" />
+                                    <span>Edit</span>
+                                </Link>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />

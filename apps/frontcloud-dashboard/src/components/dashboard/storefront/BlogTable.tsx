@@ -33,9 +33,9 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { Input } from '@/components/ui/input'
-import { StoreBlog } from '@/store/api/marketing/types/blog-types'
+import { StoreBlog } from '@/store/api/store/marketing/types/blog-types'
 import { useRouter } from 'next/navigation'
-import { useDeleteBlogMutation } from '@/store/api/marketing/blog'
+import { useDeleteBlogMutation } from '@/store/api/store/marketing/blog'
 import ConfirmationDialog from '@/components/common/ConfirmationDialog'
 import { toast } from 'sonner'
 import { Checkbox } from '@/components/ui/checkbox'

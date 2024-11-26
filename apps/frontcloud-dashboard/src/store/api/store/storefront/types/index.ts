@@ -1,14 +1,23 @@
 import { ResponseType } from "@/store/types/responseType";
 
-export interface HomePageCarouselData {
-    carouselHeading: string;
-    carouselText: string;
-    btnText: string;
-    carouselLink: string;
-    image: Array<File | string>;
-    playTime: number;
-    storeID: string;
+export type HomePageCarouselData = {
+    StoreCarouselID: number;
+    CarouselHeading: string;
+    CarouselText: string;
+    BtnText: string;
+    CarouselLink: string;
+    PlayTime: number;
+    StoreID: number;
+    ImageID: number;
+    ItemID: number;
+    ItemType: string;
+    SequenceNumber: number;
+    ImageURL: string;
+    CreatedAt: string;
+    UpdatedAt: string;
 }
+
+export type HomePageCarouselResponse = ResponseType<HomePageCarouselData[]>;
 
 
 export type Coupon = {

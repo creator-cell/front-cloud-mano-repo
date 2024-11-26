@@ -1,5 +1,5 @@
-import { StoreBlogResponse } from "@/store/api/marketing/types/blog-types";
-import { CouponCodesResponse } from "@/store/api/storefront/types";
+import { StoreBlogResponse } from "@/store/api/store/marketing/types/blog-types";
+import { CouponCodesResponse } from "@/store/api/store/storefront/types";
 
 export const fetchAllCoupons = async (): Promise<CouponCodesResponse | null> => {
     try {

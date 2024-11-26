@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CouponCodesResponse, HomePageCarouselData } from "./types";
+import { CouponCodesResponse, HomePageCarouselData, HomePageCarouselResponse } from "./types";
 
 export const StoreFrontApi = createApi({
     reducerPath: "storeFront",
@@ -26,9 +26,27 @@ export const StoreFrontApi = createApi({
             }),
             invalidatesTags: ["StoreFrontCarousel"],
         }),
+        getCarousalById: builder.query<HomePageCarouselResponse, string>({
+            query: (id) => `/carousel?StoreCarouselID=${id}`,
+            providesTags: ["StoreFrontCarousel"],
+        }),
         getAllCoupons: builder.query<CouponCodesResponse, void>({
             query: () => "/coupon",
         }),
+        updateHomePageCarousal: builder.mutation<void, { id: number, data: any }>({
+            query: ({ id, data }) => ({
+                url: `/carousel/${id}`,
+                method: "PUT",
+                body: data,
+            }),
+            invalidatesTags: ["StoreFrontCarousel"],
+        }),
+        getAllHomePageCarousal: builder.query<HomePageCarouselResponse, void>({
+            query: () => "/carousel",
+            providesTags: ["StoreFrontCarousel"],
+        }),
+
+
     })
 
 })
@@ -37,5 +55,8 @@ export const {
     usePostSocialLinksMutation,
     useGetAllSocialLinksQuery,
     useCreateHomePageCarousalMutation,
-    useGetAllCouponsQuery
+    useGetCarousalByIdQuery,
+    useUpdateHomePageCarousalMutation,
+    useGetAllCouponsQuery,
+    useGetAllHomePageCarousalQuery
 } = StoreFrontApi

@@ -1,4 +1,4 @@
-import { StoreBlogResponse } from "@/store/api/marketing/types/blog-types";
+import { StoreBlogResponse } from "@/store/api/store/marketing/types/blog-types";
 
 export const fetchAllBlogposts = async (): Promise<StoreBlogResponse | null> => {
     try {

@@ -18,7 +18,7 @@ import { CheckCheck, CirclePlus, CircleX, Ellipsis, PenLineIcon, SquareChartGant
 import { useRouter } from "next/navigation";
 import SectionLayout from "@/components/common/CommonSectionLayout";
 import Link from "next/link";
-import { Coupon } from "@/store/api/storefront/types";
+import { Coupon } from "@/store/api/store/storefront/types";
 
 interface CouponTableProps {
     data: Coupon[];

@@ -12,8 +12,8 @@ const BlogPage = async () => {
     return (
         <PageWrapper title='Blog'>
             {
-                allBlogPoosts?.data && allBlogPoosts?.data?.length > 0 &&
-                <BlogTable data={allBlogPoosts.data} />
+                allBlogPoosts?.Data && allBlogPoosts?.Data?.length > 0 &&
+                <BlogTable data={allBlogPoosts.Data} />
             }
         </PageWrapper>
     )

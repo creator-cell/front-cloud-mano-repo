@@ -1,9 +1,9 @@
-"use server";
-import { MarketingBannersResponse } from "@/store/api/store/marketing/types/banner-types";
+import { HomePageCarouselData } from "@/store/api/store/storefront/types";
 
-export const fetchAllBanners = async (): Promise<MarketingBannersResponse | null> => {
+
+export const fetchCarousalById = async (id: string): Promise<HomePageCarouselData | null> => {
     try {
-        const apiUrl = `${process.env.API_URL}/api/v1/store/banner`;
+        const apiUrl = `${process.env.API_URL}/api/v1/store/carousel?StoreCarouselID=${id}`;
 
         const response = await fetch(apiUrl, {
             cache: "no-store",
@@ -19,7 +19,7 @@ export const fetchAllBanners = async (): Promise<MarketingBannersResponse | null
             throw new Error("Failed to parse JSON response");
         }
     } catch (error) {
-        console.error("Error fetching marketing banners data:", error);
-        return null;
+        console.error("Error fetching carousal data:", error);
+        return null
     }
 }

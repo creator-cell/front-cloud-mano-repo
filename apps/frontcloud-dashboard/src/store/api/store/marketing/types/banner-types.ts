@@ -1,26 +1,29 @@
 import { ResponseType } from "@/store/types/responseType";
 
+
 export interface MarketingBanner {
     MarketingBannerID: number;
     MarketingBannerName: string;
     Content: string;
     StoreID: number;
     Location: string;
-    CategoryID: number | null;
+    CategoryID: number;
     DateRange: number;
-    StartDate: string | null;
-    EndDate: string | null;
+    StartDate: string; // ISO date string
+    EndDate: string;   // ISO date string
     Visible: number;
     Placement: string;
-    CreatedAt: string;
-    UpdatedAt: string;
+    CreatedAt: string; // ISO date string
+    UpdatedAt: string; // ISO date string
     StoreName: string;
     OwnerName: string;
     TotalSales: number;
-    CategoryName: string | null;
-    Description: string | null;
-    VisibleInMenu: number | null;
-    SeoID: string | null;
+    CategoryName: string;
+    Description: string; // HTML content
+    VisibleInMenu: number;
+    SeoID: number | null;
+    CategoryUrl: string | null;
+    CategorySortBy: number | null;
     ImageID: number;
     ItemID: number;
     ItemType: string;

@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { StoreBlogResponse } from "../types/blog-types";
 
 export const BlogApi = createApi({
     reducerPath: "blogApi",
     baseQuery: fetchBaseQuery({ baseUrl: "/api/v1/store/blog" }),
     tagTypes: ["Blog"],
     endpoints: (builder) => ({
-        getAllBlogs: builder.query({
+        getAllBlogs: builder.query<StoreBlogResponse, void>({
             query: () => "blogs",
             providesTags: ["Blog"],
 
@@ -18,10 +19,11 @@ export const BlogApi = createApi({
             }),
             invalidatesTags: ["Blog"],
         }),
-        udateBlog: builder.mutation<any, string>({
-            query: (id) => ({
-                url: `?blogId${id}`,
+        updateBlog: builder.mutation<any, { id: string, data: any }>({
+            query: ({ id, data }) => ({
+                url: `/${id}`,
                 method: "PUT",
+                body: data,
             }),
             invalidatesTags: ["Blog"],
         }),
@@ -32,12 +34,17 @@ export const BlogApi = createApi({
             }),
             invalidatesTags: ["Blog"],
         }),
+        getBlogById: builder.query<StoreBlogResponse, string>({
+            query: (id) => `?StoreBlogID=${id}`,
+            providesTags: ["Blog"],
+        })
     }),
 })
 
 export const {
     useGetAllBlogsQuery,
     useCreateBlogMutation,
-    useUdateBlogMutation,
-    useDeleteBlogMutation
+    useUpdateBlogMutation,
+    useDeleteBlogMutation,
+    useGetBlogByIdQuery
 } = BlogApi;

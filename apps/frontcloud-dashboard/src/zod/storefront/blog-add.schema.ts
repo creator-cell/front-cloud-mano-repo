@@ -2,21 +2,21 @@ import *  as z from 'zod';
 
 
 export const addBlogSchema = z.object({
-    blogTitle: z.string(),
+    BlogTitle: z.string(),
     url: z.string().optional(),
-    blogBody: z.string().optional(),
-    blogAuthor: z.string().optional(),
-    isDraft: z.boolean().optional(),
-    images: z.any(),
-    storeID: z.string().optional(),
-    blogTag: z.array(z.object({
+    BlogBody: z.string().optional(),
+    BlogAuthor: z.string().optional(),
+    IsDraft: z.boolean().optional(),
+    Image: z.any(),
+    StoreID: z.string().optional(),
+    BlogTag: z.array(z.object({
         value: z.string(),
     })).optional(),
-    seo: z.object({
-        metaTitle: z.string().optional(),
-        metaKeywords: z.string().optional(),
-        metaDescription: z.string().optional(),
-        searchKeywords: z.string().optional(),
+    Seo: z.object({
+        MetaTitle: z.string().optional(),
+        MetaKeywords: z.string().optional(),
+        MetaDescription: z.string().optional(),
+        SearchKeywords: z.string().optional(),
     }).optional(),
 });
 

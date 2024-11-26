@@ -33,6 +33,9 @@ export const MarketingApi = createApi({
                 body,
             }),
         }),
+        getBannerById: builder.query<MarketingBannersResponse, string>({
+            query: (id) => `/banner?MarketingBannerId=${id}`,
+        }),
 
     })
 
@@ -43,4 +46,5 @@ export const {
     useGetAllMarketingBannersQuery,
     useDeleteMarketingBannerMutation,
     useCreateCouponMutation,
+    useGetBannerByIdQuery
 } = MarketingApi

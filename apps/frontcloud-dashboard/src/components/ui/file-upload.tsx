@@ -38,12 +38,14 @@ export const FileUpload = ({
     setError,
     clearErrors,
     multiple = true,
+    defaultFiles = [],
 }: {
     onChange?: (files: File[]) => void;
     fileType?: FileType;
     setError?: UseFormSetError<any>;
     clearErrors?: () => void;
     multiple?: boolean;
+    defaultFiles?: (File | string)[];
 }) => {
     const [files, setFiles] = useState<File[]>([]);
     console.log("🚀 ~ files:", files)

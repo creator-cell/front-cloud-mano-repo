@@ -11,7 +11,7 @@ import { FormFieldType } from '@/enum/formTypes';
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useCreateCouponMutation } from '@/store/api/marketing';
+import { useCreateCouponMutation } from '@/store/api/store/marketing';
 import { toast } from 'sonner';
 
 const categoryOptions = [
