@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useContext } from 'react'
 
 // import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -50,6 +50,7 @@ import {
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp"
+import { LanguageContext, SupportedLanguages } from '@/contexts/LanguageContext';
 
 
 export interface CustomFormFieldProps<T extends FieldValues>
@@ -102,6 +103,10 @@ const modules = {
 
 
 const RenderField = <T extends FieldValues>({ field, props }: { field: any; props: CustomFormFieldProps<T> }) => {
+
+
+    const { state: { lang } } = useContext(LanguageContext)
+
     const { className, onChange, value, control, fieldType, label, selectOptions, ...inputProps } = props; // Destructure unwanted props
     const { ...restfields } = props;
     const commonProps = {
@@ -271,7 +276,7 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
         case FormFieldType.RADIOGROUP:
             return (
                 <FormControl>
-                    <div className={cn(`flex flex-col gap-y-2 justify-start`, className)}>
+                    <div className={cn(`flex flex-col gap-y-2 w-fit justify-start`, className)}>
                         <RadioGroup
                             {...field}
                             {...commonProps}
@@ -280,6 +285,9 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
                                 props.onChange?.(value);
                             }}
 
+                            style={{
+                                direction: lang === SupportedLanguages.English ? "ltr" : "rtl"
+                            }}
                         >
                             {props?.selectOptions?.map(option => (
                                 <div key={option.value} className='flex items-center gap-x-2'>

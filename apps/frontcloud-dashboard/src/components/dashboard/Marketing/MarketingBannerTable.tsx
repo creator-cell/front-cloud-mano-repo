@@ -159,10 +159,11 @@ const MarketingBannerTable: React.FC<MarketinBannerTableProps> = ({ data }) => {
                 setDeleteModal(false)
                 return "Banners Deleted Successfully"
             },
-            error: "Error Deleting Category"
+            error: "Error Deleting Banners"
         })
         try {
             await promise;
+            setSelectedBanners([]);
             router.refresh()
         } catch (err) {
             console.error(err)
@@ -175,7 +176,7 @@ const MarketingBannerTable: React.FC<MarketinBannerTableProps> = ({ data }) => {
             <div className="flex items-center gap-x-5">
                 <Button asChild>
                     <Link href="/dashboard/marketing/banners/create">
-                        <CirclePlus size={20} color="white" className="mr-2" />
+                        <CirclePlus size={16} color="white" className="m-2" />
                         <span>Create Banner</span>
                     </Link>
                 </Button>
@@ -208,7 +209,7 @@ const MarketingBannerTable: React.FC<MarketinBannerTableProps> = ({ data }) => {
                 <TableBody>
                     {table.getRowModel().rows.length ? (
                         table.getRowModel().rows.map((row) => (
-                            <TableRow key={row.id}>
+                            <TableRow key={row.original.MarketingBannerID}>
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id}>
                                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

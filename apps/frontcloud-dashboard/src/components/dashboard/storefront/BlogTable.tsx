@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import CommonDataTable from '@/components/common/CommonDataTable'
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable, VisibilityState } from '@tanstack/react-table'
 import { Button } from '@/components/ui/button'
@@ -39,6 +39,8 @@ import { useDeleteBlogMutation } from '@/store/api/store/marketing/blog'
 import ConfirmationDialog from '@/components/common/ConfirmationDialog'
 import { toast } from 'sonner'
 import { Checkbox } from '@/components/ui/checkbox'
+import { cn } from '@/lib/utils'
+import { LanguageContext, SupportedLanguages } from '@/contexts/LanguageContext'
 
 
 
@@ -55,21 +57,26 @@ const BlogTable = ({ data }: BlogPros) => {
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = React.useState({})
 
+    const { state: { lang } } = useContext(LanguageContext)
+
 
     const columns: ColumnDef<BlogData>[] = [
         {
             id: "select",
             header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
+                <div className={cn('flex items-center justify-start')}>
+                    <Checkbox
+                        checked={
+                            table.getIsAllPageRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && "indeterminate")
+                        }
+                        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                        aria-label="Select all"
+                    />
+                </div>
             ),
             cell: ({ row }) => (
+
                 <Checkbox
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => {
@@ -84,7 +91,12 @@ const BlogTable = ({ data }: BlogPros) => {
         },
         {
             accessorKey: "BlogTitle",
-            header: "Title",
+            header: () => (
+                <div className={cn('flex items-center justify-start')}>
+                    Title
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+            ),
             cell: ({ row }) => (
                 <Link
                     href={`/dashboard/storefront/blog/${row.original.StoreBlogID}`}
@@ -96,12 +108,22 @@ const BlogTable = ({ data }: BlogPros) => {
         },
         {
             accessorKey: "BlogAuthor",
-            header: "Author",
+            header: () => (
+                <div className={cn('flex items-center justify-start')}>
+                    Author
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+            ),
             cell: ({ row }) => <div className="capitalize">{row.getValue("BlogAuthor")}</div>,
         },
         {
             accessorKey: "IsDraft",
-            header: "Status",
+            header: () => (
+                <div className={cn('flex items-center justify-start')}>
+                    Status
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+            ),
             cell: ({ row }) => (
                 <div className={`capitalize ${row.getValue("IsDraft") ? 'text-red-500' : 'text-green-500'}`}>
                     {row.getValue("IsDraft") ? "Draft" : "Published"}
@@ -111,8 +133,10 @@ const BlogTable = ({ data }: BlogPros) => {
         {
             accessorKey: "CreatedAt",
             header: ({ column }) => (
+
                 <Button
                     variant="ghost"
+                    className='flex items-center justify-start p-0'
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
                     Created At
@@ -125,14 +149,24 @@ const BlogTable = ({ data }: BlogPros) => {
         },
         {
             accessorKey: "UpdatedAt",
-            header: "Last Updated",
+            header: () => (
+                <div className={cn('flex items-center justify-start')}>
+                    Last Updated
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+            ),
             cell: ({ row }) => (
                 <div className="lowercase">{new Date(row.getValue("UpdatedAt")).toLocaleDateString()}</div>
             ),
         },
         {
             id: "actions",
-            header: "Actions",
+            header: () => (
+                <div className={cn('flex items-center justify-start')}>
+                    Actions
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </div>
+            ),
             cell: ({ row }) => (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -157,11 +191,12 @@ const BlogTable = ({ data }: BlogPros) => {
                                 <span>View</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                className="cursor-pointer"
-                                onClick={() => console.log("Edit:", row.original.StoreBlogID)}
+                                asChild
                             >
-                                <PenLineIcon className="mr-2 h-4 w-4" />
-                                <span>Edit</span>
+                                <Link href={`/dashboard/storefront/blog/add?id=${row.original.StoreBlogID}`}>
+                                    <PenLineIcon className="mr-2 h-4 w-4" />
+                                    <span>Edit</span>
+                                </Link>
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
@@ -217,6 +252,7 @@ const BlogTable = ({ data }: BlogPros) => {
         })
         try {
             await promise;
+            table.resetRowSelection();
             router.refresh()
         } catch (err) {
             console.error(err)
@@ -231,7 +267,7 @@ const BlogTable = ({ data }: BlogPros) => {
                 <div className='flex items-center gap-x-3 w-full'>
                     <Button asChild>
                         <Link href="/dashboard/storefront/blog/add">
-                            <CirclePlus className="mr-2 h-4 w-4" />
+                            <CirclePlus className="m-2 h-4 w-4" />
                             Add Blog
                         </Link>
                     </Button>
@@ -327,8 +363,6 @@ const BlogTable = ({ data }: BlogPros) => {
                     )}
                 </TableBody>
             </Table>
-
-            {/* </CommonDataTable> */}
         </div>
     )
 }

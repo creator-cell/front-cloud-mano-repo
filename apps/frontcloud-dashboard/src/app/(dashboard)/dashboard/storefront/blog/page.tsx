@@ -10,7 +10,7 @@ const BlogPage = async () => {
     console.log("🚀 ~ BlogPage ~ allBlogPoosts:", allBlogPoosts)
 
     return (
-        <PageWrapper title='Blog'>
+        <PageWrapper title='Blog' >
             {
                 allBlogPoosts?.Data && allBlogPoosts?.Data?.length > 0 &&
                 <BlogTable data={allBlogPoosts.Data} />

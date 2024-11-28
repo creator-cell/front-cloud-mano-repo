@@ -9,10 +9,10 @@ import { Form } from '@/components/ui/form';
 import CustomFormField from '@/components/common/CustomFormField';
 import { FormFieldType } from '@/enum/formTypes';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { Grip } from 'lucide-react';
+import { Grip, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
-import { useGetAllSocialLinksQuery, usePostSocialLinksMutation } from '@/store/api/store/storefront';
+import { useDeleteSocialLinkMutation, useGetAllSocialLinksQuery, usePostSocialLinksMutation } from '@/store/api/store/storefront/social-link';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
@@ -62,7 +62,11 @@ const SocialLinkPage = () => {
 
     const onSubmit = async (data: SocialLinks) => {
 
-        const Data = { ...data, StoreId: 1 }
+        const filterData = Object.fromEntries(
+            Object.entries(data).filter(([_, value]) => value !== "" && value !== null && value !== undefined)
+        )
+
+        const Data = { ...filterData, StoreId: 1 }
         console.log("Form data:", Data);
         const promise = PostSocialLinks(Data).unwrap();
 
@@ -79,6 +83,7 @@ const SocialLinkPage = () => {
         }
 
     };
+
 
     return (
         <PageWrapper>

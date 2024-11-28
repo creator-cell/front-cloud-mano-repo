@@ -9,9 +9,7 @@ export const addBlogSchema = z.object({
     IsDraft: z.boolean().optional(),
     Image: z.any(),
     StoreID: z.string().optional(),
-    BlogTag: z.array(z.object({
-        value: z.string(),
-    })).optional(),
+    BlogTag: z.string().optional(),
     Seo: z.object({
         MetaTitle: z.string().optional(),
         MetaKeywords: z.string().optional(),

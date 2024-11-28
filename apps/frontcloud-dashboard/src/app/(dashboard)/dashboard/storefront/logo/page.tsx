@@ -16,14 +16,16 @@ import { useOutsideClick } from '@/components/ui/animated-modal';
 import logoSchema, { LogoFormValues } from '@/zod/storefront/add-logo.schema';
 import { CustomParagraph } from '@/components/custom/CustomParagraph';
 import ActionBarLayout from '@/components/common/CommonActionBarLayout';
+import { useAddLogoMutation, useGetLogoByStoreIdQuery, useUpdateLogoMutation } from '@/store/api/store/storefront/logo';
+import { toast } from 'sonner';
 
 const LogoPage = () => {
     const form = useForm<LogoFormValues>({
         resolver: zodResolver(logoSchema),
         defaultValues: {
             logo_type: 'logo_text',
-            font_color: '#000000',
-            font_size: '28',
+            FontColor: '#000000',
+            FontSize: '28',
         },
         mode: "all",
         reValidateMode: "onChange",
@@ -39,24 +41,76 @@ const LogoPage = () => {
     } = form;
 
     console.log("errror", errors)
-    const onSubmit = (data: any) => {
+
+    const { data } = useGetLogoByStoreIdQuery("1")
+    console.log("🚀 ~ LogoPage ~ data: ---->>>", data?.Data)
+
+    useEffect(() => {
+
+
+        setValue("logo_type", data?.Data[0].IsLogo ? 'logo_image' : 'logo_text')
+        setValue("FontColor", data?.Data[0].FontColor)
+        setValue("FontSize", data?.Data[0].FontSize.toString())
+        setValue("StoreLogoText", data?.Data[0].StoreLogoText)
+
+
+    }, [data])
+
+    const [UpdateLogo, { isLoading }] = useUpdateLogoMutation()
+    const onSubmit = async (data: LogoFormValues) => {
         console.log("Form data:", data);
+
+        const formData = new FormData();
+
+        if (data.logo_type === "logo_text" && data.FontColor && data.FontSize && data.StoreLogoText) {
+            // Append fields related to text logo
+            formData.append("IsLogo", "false"); // Send false as string for FormData
+            formData.append("FontColor", data.FontColor);
+            formData.append("FontSize", data.FontSize);
+            formData.append("StoreLogoText", data.StoreLogoText);
+        } else if (data.logo_type === "logo_image") {
+            // Append fields related to image logo
+            formData.append("IsLogo", "true");
+            formData.append("Logo", data.Logo?.[0]);
+        }
+        // formData.append("StoreId", "1")
+
+        // Favicon is optional, add only if present
+        if (data.Favicon) {
+            formData.append("Favicon", data.Favicon);
+        }
+
+        const promise = UpdateLogo({ id: "1", data: formData }).unwrap();
+
+        toast.promise(promise, {
+            loading: 'Uploading...',
+            success: 'Logo added successfully',
+            error: 'Failed to add logo',
+        });
+
+        try {
+            const response = await promise;
+            console.log("response", response);
+        } catch (err) {
+            console.log("error", err);
+        }
     };
+
 
 
     useEffect(() => {
 
         if (watch("logo_type") === 'logo_text') {
-            setValue("logo_image", null)
+            setValue("Logo", null)
         } else if (watch("logo_type") === 'logo_image') {
-            setValue("logo_text", undefined)
-            setValue("font_size", undefined)
-            setValue("font_color", undefined)
+            setValue("StoreLogoText", undefined)
+            setValue("FontSize", undefined)
+            setValue("FontColor", undefined)
         }
 
     }, [watch("logo_type")])
 
-    const fontColor = watch("font_color");
+    const fontColor = watch("FontColor");
 
 
     const [openColorPicker, setOpenColorPicker] = useState<boolean>(false)
@@ -101,7 +155,6 @@ const LogoPage = () => {
         setOpenColorPicker(false)
     })
 
-    console.log("watch", watch("font_color"))
 
     return (
         <PageWrapper title='Logo Options' >
@@ -125,7 +178,7 @@ const LogoPage = () => {
                                 <div className='border rounded-md'>
                                     <FileUpload
                                         onChange={(files) => {
-                                            setValue("logo_image", files);
+                                            setValue("Logo", files);
                                         }}
                                         fileType={FileType.ANY_IMAGE}
                                         multiple={false}
@@ -137,7 +190,7 @@ const LogoPage = () => {
                                             <CustomFormField
                                                 control={control}
                                                 fieldType={FormFieldType.SELECT}
-                                                name="font_size"
+                                                name="FontSize"
                                                 label='Font Size'
                                                 className=' focus:ring-0  w-96'
                                                 selectOptions={fontSizeOptions}
@@ -150,7 +203,7 @@ const LogoPage = () => {
                                                     <CustomFormField
                                                         control={control}
                                                         fieldType={FormFieldType.INPUT}
-                                                        name="font_color"
+                                                        name="FontColor"
                                                         className={` focus:ring-1 ring-1 `}
                                                     />
                                                 </div>
@@ -158,13 +211,13 @@ const LogoPage = () => {
                                                 >
 
                                                     <Button asChild className='cursor-pointer size-full' onClick={() => setOpenColorPicker(!openColorPicker)} >
-                                                        <div className={`border relative`} style={{ backgroundColor: watch("font_color") }}>
+                                                        <div className={`border relative`} style={{ backgroundColor: watch("FontColor") }}>
                                                         </div>
                                                     </Button>
                                                     {
                                                         openColorPicker &&
                                                         <div className='absolute top-full left-full z-50' ref={colorPickerRef}>
-                                                            <ColorPicker color={watch("font_color")} onChange={color => setValue("font_color", color.hex)} />
+                                                            <ColorPicker color={watch("FontColor")} onChange={color => setValue("FontColor", color.hex)} />
                                                         </div>
                                                     }
                                                 </div>
@@ -176,10 +229,10 @@ const LogoPage = () => {
                                             <CustomFormField
                                                 control={control}
                                                 fieldType={FormFieldType.TEXTAREA}
-                                                name="logo_text"
+                                                name="StoreLogoText"
                                                 placeholder='Enter text to display as your logo'
                                                 className={` focus:ring-1 ring-1 rounded-md text-[${fontColor}] `}
-                                                style={{ fontSize: Number(watch('font_size')), color: watch('font_color') }}
+                                                style={{ fontSize: Number(watch('FontSize')), color: watch('FontColor') }}
                                             />
                                         </div>
                                     </div>
@@ -191,7 +244,7 @@ const LogoPage = () => {
                         <div className='border rounded-md'>
                             <FileUpload
                                 onChange={(files) => {
-                                    setValue("favicon_image", files);
+                                    setValue("Favicon", files);
                                 }}
                                 fileType={FileType.ANY_IMAGE}
                                 multiple={false}

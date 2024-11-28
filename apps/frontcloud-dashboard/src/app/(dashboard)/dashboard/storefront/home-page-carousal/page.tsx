@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import PageWrapper from "../../_components/PageWrapper";
 import SectionLayout from "@/components/common/CommonSectionLayout";
 import { Button } from "@/components/ui/button";
@@ -13,37 +13,13 @@ import Link from "next/link";
 import { useDeleteHomePageCarousalMutation, useGetAllHomePageCarousalQuery } from "@/store/api/store/storefront/carousel";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { LanguageContext, SupportedLanguages } from "@/contexts/LanguageContext";
 
 const HomePageCarousalPage = () => {
 
     const router = useRouter();
-    // const { data, refetch } = useGetAllHomePageCarousalQuery();
+    const { data, refetch, isLoading: isCarouselDataFetching } = useGetAllHomePageCarousalQuery();
 
-    const [carouselData, setCarouselData] = useState<HomePageCarouselData[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const fetchCarouselData = useCallback(async () => {
-        setLoading(true);
-        try {
-            const response = await fetch("http://localhost:3000/api/v1/store/carousel");
-            if (!response.ok) {
-                throw new Error("Failed to fetch carousel data");
-            }
-            const result: HomePageCarouselResponse = await response.json();
-            setCarouselData(result.Data || []);
-        } catch (error) {
-            console.error("Error fetching carousel data:", error);
-            toast.error("Failed to load carousel data.");
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-    console.log("🚀 ~ HomePageCarousalPage ~ data:", carouselData)
-
-
-    const refetchCarouselData = useCallback(() => {
-        fetchCarouselData();
-    }, [fetchCarouselData]);
 
 
     const [DeleteCaroucel, { isLoading }] = useDeleteHomePageCarousalMutation()
@@ -83,32 +59,31 @@ const HomePageCarousalPage = () => {
 
         try {
             await promise;
-            // await refetch();
-            refetchCarouselData();
+            refetch();
         } catch (error) {
             console.error(error);
         }
     }
 
-    useEffect(() => {
-        fetchCarouselData();
-    }, [fetchCarouselData]);
+
+
+    const { state: { lang } } = useContext(LanguageContext)
 
 
 
     return (
-        <PageWrapper title="Home Page Carousel" className="max-w-6xl ">
+        <PageWrapper title="Home Page Carousel" className="max-w-6xl " dir={lang === SupportedLanguages.English ? "ltr" : "rtl"}  >
             <SectionLayout title="Home Page Carousel" className="px-12 grid grid-cols-3 items-center space-x-2 gap-2">
                 <div className="absolute top-0 right-2 ">
                     <Button asChild>
                         <Link href={`/dashboard/storefront/home-page-carousal/create`}>
-                            <Plus className="pe-2" />  Add Slide
+                            <Plus className="pe-2 ps-2" />  Add Slide
                         </Link>
                     </Button>
                 </div>
                 <div className="w-full col-span-2 h-full border relative flex items-center justify-center">
                     <HomePageCarousalContent
-                        slides={carouselData || []}
+                        slides={data?.Data || []}
                         selectedSlideIndex={selectedSlideIndex}
                     />
                 </div>
@@ -121,7 +96,7 @@ const HomePageCarousalPage = () => {
                                     ref={provided.innerRef}
                                     {...provided.droppableProps}
                                 >
-                                    {carouselData?.map((slide, index) => (
+                                    {data?.Data?.map((slide, index) => (
                                         <Draggable
                                             key={slide.StoreCarouselID.toString()}
                                             draggableId={slide.StoreCarouselID.toString()}
@@ -154,18 +129,24 @@ const HomePageCarousalPage = () => {
                                                         </div>
                                                     </div>
                                                     <motion.div
-                                                        whileTap={{ scale: 0.7 }}
-                                                        initial={{ scale: 1 }}
                                                         className="absolute top-3 right-3 bg-transparent flex gap-3"
                                                     >
-                                                        <Link href={`/dashboard/storefront/home-page-carousal/create?id=${slide.StoreCarouselID}`}>
-                                                            <Edit size={18} strokeWidth={2} color="green" />
-                                                        </Link>
-                                                        <Button
-                                                            onClick={() => handleDeleteSlide(slide.StoreCarouselID)}
-                                                            variant="outline" disabled={isLoading} type="button" className="h-auto p-0 border-none" >
-                                                            <Trash2 size={18} strokeWidth={2} color="red" />
-                                                        </Button>
+                                                        <motion.div
+                                                            whileTap={{ scale: 0.7 }}
+                                                            initial={{ scale: 1 }}>
+                                                            <Link aria-disabled={isCarouselDataFetching} href={`/dashboard/storefront/home-page-carousal/create?id=${slide.StoreCarouselID}`}>
+                                                                <Edit size={18} strokeWidth={2} color="green" />
+                                                            </Link>
+                                                        </motion.div>
+                                                        <motion.div
+                                                            whileTap={{ scale: 0.7 }}
+                                                            initial={{ scale: 1 }}>
+                                                            <Button
+                                                                onClick={() => handleDeleteSlide(slide.StoreCarouselID)}
+                                                                variant="outline" disabled={isCarouselDataFetching} type="button" className="h-auto p-0 border-none" >
+                                                                <Trash2 size={18} strokeWidth={2} color="red" />
+                                                            </Button>
+                                                        </motion.div>
                                                     </motion.div>
                                                 </div>
                                             )}

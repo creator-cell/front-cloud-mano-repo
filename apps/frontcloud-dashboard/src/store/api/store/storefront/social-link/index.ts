@@ -1,10 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { CouponCodesResponse, HomePageCarouselData, HomePageCarouselResponse } from "./types";
 
 export const StoreFrontApi = createApi({
     reducerPath: "storeFront",
     baseQuery: fetchBaseQuery({ baseUrl: "/api/v1/store" }),
-    tagTypes: ["StoreFront"],
+    tagTypes: ["StoreFrontSocialLinks"],
     endpoints: (builder) => ({
         PostSocialLinks: builder.mutation<void, any>({
             query: (body) => ({
@@ -12,15 +11,18 @@ export const StoreFrontApi = createApi({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: ["StoreFront"],
+            invalidatesTags: ["StoreFrontSocialLinks"],
         }),
         getAllSocialLinks: builder.query<any, void>({
             query: () => "/social-link",
-            providesTags: ["StoreFront"],
+            providesTags: ["StoreFrontSocialLinks"],
         }),
-
-        getAllCoupons: builder.query<CouponCodesResponse, void>({
-            query: () => "/coupon",
+        deleteSocialLink: builder.mutation<void, string>({
+            query: (id) => ({
+                url: `/social-link?StoreSocialLinkID=${id}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["StoreFrontSocialLinks"],
         }),
     })
 
@@ -29,5 +31,5 @@ export const StoreFrontApi = createApi({
 export const {
     usePostSocialLinksMutation,
     useGetAllSocialLinksQuery,
-    useGetAllCouponsQuery,
+    useDeleteSocialLinkMutation
 } = StoreFrontApi

@@ -38,14 +38,16 @@ const CouponTable: React.FC<CouponTableProps> = ({ data, refetch }) => {
         {
             id: "select",
             header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                    aria-label="Select all"
-                />
+                <div className={('flex items-center justify-start')}>
+                    <Checkbox
+                        checked={
+                            table.getIsAllPageRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && "indeterminate")
+                        }
+                        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                        aria-label="Select all"
+                    />
+                </div>
             ),
             cell: ({ row }) => (
                 <Checkbox
@@ -59,24 +61,44 @@ const CouponTable: React.FC<CouponTableProps> = ({ data, refetch }) => {
         },
         {
             accessorKey: "CouponName",
-            header: "Coupon Name",
+            header: () => (
+                <div className={('flex items-center justify-start')}>
+                    Coupon Name
+                </div>
+            )
         },
         {
             accessorKey: "CouponCode",
-            header: "Coupon Code",
+            header: () => (
+                <div className={('flex items-center justify-start')}>
+                    Coupon Code
+                </div>
+            )
         },
         {
             accessorKey: "Discount",
-            header: "Discount",
+            header: () => (
+                <div className={('flex items-center justify-start')}>
+                    Discount
+                </div>
+            )
         },
         {
             accessorKey: "ExpireDate",
-            header: "Expiration",
+            header: () => (
+                <div className={('flex items-center justify-start')}>
+                    Expire Date
+                </div>
+            ),
             cell: ({ row }) => new Date(row.original.ExpireDate).toLocaleDateString(),
         },
         {
             accessorKey: "Enabled",
-            header: "Enabled",
+            header: () => (
+                <div className={('flex items-center justify-start')}>
+                    Enabled
+                </div>
+            ),
             cell: ({ row }) => (
                 row.original.Enabled ? (
                     <CheckCheck size={20} color="green" />
@@ -87,7 +109,11 @@ const CouponTable: React.FC<CouponTableProps> = ({ data, refetch }) => {
         },
         {
             id: "actions",
-            header: "Actions",
+            header: () => (
+                <div className={('flex items-center justify-start')}>
+                    Actions
+                </div>
+            ),
             cell: ({ row }) => (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -152,6 +178,7 @@ const CouponTable: React.FC<CouponTableProps> = ({ data, refetch }) => {
 
         try {
             await promise
+            table.resetRowSelection();
             refetch()
         } catch (err) {
             console.error(err)
@@ -165,7 +192,7 @@ const CouponTable: React.FC<CouponTableProps> = ({ data, refetch }) => {
             <div className="flex items-center gap-x-5">
                 <Button asChild>
                     <Link href="/dashboard/marketing/cupon-codes/create">
-                        <CirclePlus size={20} color="white" className="mr-2" />
+                        <CirclePlus size={16} color="white" className="m-2" />
                         <span>Add Coupon</span>
                     </Link>
                 </Button>

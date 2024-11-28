@@ -8,6 +8,7 @@ import SideBarOpenCloseContextProvider from "@/hooks/useSideBarOpenClode";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import StoreProvider from "@/store/StoreProvider";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 export const metadata: Metadata = {
     title: {
@@ -33,7 +34,7 @@ export default function RootLayout({
 }>) {
 
     return (
-        <html lang="en">
+        <html lang="en" >
             <body >
                 <ThemeProvider
                     attribute="class"
@@ -43,12 +44,14 @@ export default function RootLayout({
                 >
                     <StoreProvider>
                         <SideBarOpenCloseContextProvider>
-                            {children}
-                            <Toaster
-                                position="top-right"
-                                richColors
-                                closeButton
-                            />
+                            <LanguageProvider>
+                                {children}
+                                <Toaster
+                                    position="top-right"
+                                    richColors
+                                    closeButton
+                                />
+                            </LanguageProvider>
                         </SideBarOpenCloseContextProvider>
                     </StoreProvider>
                 </ThemeProvider>

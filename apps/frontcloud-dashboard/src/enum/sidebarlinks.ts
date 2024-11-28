@@ -242,7 +242,7 @@ export const sidebarLinks: SidebarLink[] = [
                     },
                     {
                         label: "Coupen Codes",
-                        page: "/dashboard/marketing/cupon-codes",
+                        page: "/dashboard/marketing/coupon-codes",
                         subpage: [
                             {
                                 label: "Add Coupon",

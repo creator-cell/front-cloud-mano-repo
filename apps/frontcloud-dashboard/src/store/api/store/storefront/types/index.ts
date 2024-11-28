@@ -38,3 +38,23 @@ export type Coupon = {
 };
 
 export type CouponCodesResponse = ResponseType<Coupon[]>;
+
+
+interface Image {
+    ImageID: number;
+    ItemType: string;
+    ImageURL: string;
+    SequenceNumber: number;
+}
+
+interface StoreLogoData {
+    StoreLogoID: number;
+    IsLogo: number; // Assuming 0 or 1 to represent boolean (false/true)
+    FontSize: number;
+    FontColor: string;
+    StoreLogoText: string;
+    StoreID: number;
+    Images: Image[];
+}
+
+export type StoreLogoResponse = ResponseType<StoreLogoData[]>;

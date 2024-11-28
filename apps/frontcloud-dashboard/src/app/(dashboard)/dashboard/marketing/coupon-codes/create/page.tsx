@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import PageWrapper from '../../../_components/PageWrapper'
 import SectionLayout from '@/components/common/CommonSectionLayout'
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,8 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useCreateCouponMutation } from '@/store/api/store/marketing';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { LanguageContext, SupportedLanguages } from '@/contexts/LanguageContext';
 
 const categoryOptions = [
     { label: 'Category 1', value: 'category1' },
@@ -104,6 +106,10 @@ const CreateCoupon = () => {
 
 
     // console.log("values", watch("coupon_applied.category"))
+
+
+
+    const { state: { lang } } = useContext(LanguageContext)
     return (
         <PageWrapper className='pb-40'>
             <Form {...form}>
@@ -136,6 +142,7 @@ const CreateCoupon = () => {
                                 { label: "Percentage off each item in the order", value: "eachitempercentage" },
                                 { label: "Free shipping", value: "freeshipping" },
                             ]}
+                            className={cn(lang === SupportedLanguages.English ? "justify-start" : "justify-start")}
                         />
                         {
                             watch("DiscountType") != "free_shipping" &&

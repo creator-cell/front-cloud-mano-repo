@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import SectionLayout from "@/components/common/CommonSectionLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -19,16 +19,15 @@ import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { HomePageCarouselData } from "@/store/api/store/storefront/types";
 import { useCreateHomePageCarousalMutation, useGetHomePageCarousalByIdQuery, useUpdateHomePageCarousalMutation } from "@/store/api/store/storefront/carousel";
+import { LanguageContext, SupportedLanguages } from "@/contexts/LanguageContext";
 
 
 const AddCarousal = () => {
 
     const searchParams = useSearchParams()
-
     const id = searchParams.get('id')
 
     const { data } = useGetHomePageCarousalByIdQuery(id ?? "");
-    console.log("🚀 ~ AddCarousal ~ data:", data)
 
 
 
@@ -93,7 +92,6 @@ const HomePageCarousalContent = ({
     const [UpdateCarousal, { isLoading: isUpdating }] = useUpdateHomePageCarousalMutation()
 
     const handleSubmitSlideData = async (data: homePageCarousalFormValues) => {
-        console.log("🚀 ~ handleSubmitSlideData ~ data:", data);
 
         const formData = new FormData();
 
@@ -160,12 +158,15 @@ const HomePageCarousalContent = ({
         }
     };
 
-    console.log("🚀 ~ watch()?.length:", watch("Image")?.length)
+    const { state: { lang } } = useContext(LanguageContext)
 
 
     return (
-        <Form {...form}>
+        <Form {...form} >
             <form
+                style={{
+                    direction: lang === SupportedLanguages.English ? "ltr" : "rtl"
+                }}
                 onSubmit={form.handleSubmit(handleSubmitSlideData)}
                 className="space-y-6"
             >
