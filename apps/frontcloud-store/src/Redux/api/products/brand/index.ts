@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BrandData, BrandResponse, BrandSingleResponse } from "../types";
+import { BrandResponse } from "../types";
 
 export const BrandApi = createApi({
     reducerPath: "brand",
@@ -23,8 +23,8 @@ export const BrandApi = createApi({
                 body,
             }),
         }),
-        getBrandById: builder.query<BrandResponse, string>({
-            query: (id) => `?BrandId=${+id}`,
+        getBrandById: builder.query<any, string>({
+            query: (id) => `?brandId=${+id}`,
         }),
         deleteBrands: builder.mutation<void, string>({
             query: (ids) => ({

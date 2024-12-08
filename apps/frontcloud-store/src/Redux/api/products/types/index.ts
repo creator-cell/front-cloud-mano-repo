@@ -18,4 +18,3 @@ export interface BrandData {
 }
 
 export type BrandResponse = ResponseType<BrandData[]>
-export type BrandSingleResponse = ResponseType<BrandData>

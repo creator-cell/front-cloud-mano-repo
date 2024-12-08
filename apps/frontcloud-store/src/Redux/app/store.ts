@@ -11,15 +11,9 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { authApi } from "../api/auth";
-import { UserApi } from "../api/user";
 import { RootReducer } from "../root.reduces";
-
-
-const persistConfig = {
-  key: "userPackage",
-  storage,
-};
+import { storeCarouselApi } from "../api/storefront/carousel";
+import { ProductCategoryApi } from "../api/products/category";
 
 
 
@@ -33,9 +27,10 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    })
-      .concat(UserApi.middleware)
-      .concat(authApi.middleware)
+    }).concat(
+      storeCarouselApi.middleware,
+      ProductCategoryApi.middleware
+    ),
 });
 
 const persistor = persistStore(store);

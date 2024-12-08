@@ -11,7 +11,7 @@ import ArrowButton from './shared/CarousalArrows';
 
 
 
-const Carousal = forwardRef(({ images, children }: { images?: StaticImageData[] | undefined, children: React.ReactNode }, ref) => {
+const Carousal = forwardRef(({ images, children }: { images?: any[] | undefined, children: React.ReactNode }, ref) => {
     const swiperRef = useRef<SwiperRef>(null);
 
     const [activeIndex, setActiveIndex] = React.useState<number | undefined>(0);

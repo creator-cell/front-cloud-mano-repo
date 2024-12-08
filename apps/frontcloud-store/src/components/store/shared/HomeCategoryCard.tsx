@@ -14,16 +14,11 @@ import {
 } from "@/components/ui/card"
 import { useRouter } from 'next/navigation';
 import GroceryImages from "@/assets/grocery/index";
+import { ProductCategoryType } from '@/Redux/api/products/types/category-types';
 
-interface Data {
-    title: string;
-    image?: string | undefined;
-    description: string;
-    href: string;
-}
 
 interface HomeCategoryCardProps {
-    data?: Data;
+    data: ProductCategoryType;
 }
 
 const HomeCategoryCard: React.FC<HomeCategoryCardProps> = ({ data }) => {
@@ -33,17 +28,17 @@ const HomeCategoryCard: React.FC<HomeCategoryCardProps> = ({ data }) => {
         <div>
             <Card className="w-full border  pb-0 border-primary rounded-md cursor-pointer  relative overflow-hidden  group">
                 <div className='group-hover:scale-95 duration-150 p-4'>
-                    <CardTitle className='text-base whitespace-nowrap truncate group-hover:text-store-primary duration-150 '>Fashion</CardTitle>
+                    <CardTitle className='text-base whitespace-nowrap truncate group-hover:text-store-primary duration-150 '>{data?.CategoryName}</CardTitle>
                     <CardDescription className='text-xs whitespace-nowrap truncate '>25 items</CardDescription>
                 </div>
-                <CardContent onClick={() => router.push('/store/1')} className='mt-2 space-y-1 group-hover:scale-95 duration-150 p-4'>
+                <CardContent onClick={() => router.push('/store/1')} className='mt-2 min-h-40 max-h-40 space-y-1 group-hover:scale-95 duration-150 p-4'>
                     <CardHeader className='pb-8'>
                         <Image
-                            src={GroceryImages.card1.price}
+                            src={data?.ImageURL ?? GroceryImages.card1.price}
                             alt="product"
                             width={300}
                             height={300}
-                            className="rounded-md"
+                            className="rounded-md object-contain"
                         />
                     </CardHeader>
                 </CardContent>

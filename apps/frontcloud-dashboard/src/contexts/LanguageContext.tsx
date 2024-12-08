@@ -18,7 +18,7 @@ type LanguageStateType = {
 }
 
 const initialLanguage: LanguageStateType = {
-    lang: SupportedLanguages.Arabic,
+    lang: SupportedLanguages.English,
 };
 
 

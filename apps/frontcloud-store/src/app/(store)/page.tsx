@@ -13,6 +13,8 @@ import ProductCategoryCarousal from '@/components/store/shared/ProductCategoryCa
 import HomeCategoryCard from '@/components/store/shared/HomeCategoryCard';
 import OfferCard from '@/components/store/OfferCard';
 import ProductCard from '@/components/store/shared/ProductCard';
+import { useGetAllHomePageCarousalQuery } from '@/Redux/api/storefront/carousel';
+import { useGetAllCategoriesQuery } from '@/Redux/api/products/category';
 
 
 
@@ -223,24 +225,36 @@ const fakeProducts = [
 
 
 
-
 const StorePage = () => {
+    const { data } = useGetAllHomePageCarousalQuery()
+    const { data: AllCategories } = useGetAllCategoriesQuery()
+    console.log("🚀 ~ data:", AllCategories)
     return (
         <div className=' flex flex-col gap-14'>
             <div className='h-[80vh] max-h-52 md:max-h-[40rem] relative '>
-                <Carousal images={[images, images, images, images]} >
-                    <Image
-                        src={images}
-                        alt={'image'}
-                        width={1920}
-                        height={1080}
-                        loading="lazy"
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                        }}
-                    />
+                <Carousal images={data?.Data ?? []} >
+                    {
+                        data?.Data && data.Data.length > 0 ? data?.Data?.map((item, index) => (
+                            <Image
+                                src={item?.ImageURL ?? images}
+                                alt={'image'}
+                                width={1920}
+                                height={1080}
+                                loading="lazy"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                }}
+                            />
+                        ))
+                            :
+                            <div className='size-full bg-gray-300'>
+
+                            </div>
+
+                    }
+
                 </Carousal>
                 {/* <Banner /> */}
                 {/* <div className='absolute  bg-white w-full max-sm:max-w-max sm:max-w-xs md:max-w-xl opacity-90 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50'>
@@ -260,8 +274,8 @@ const StorePage = () => {
                 <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Shop By Categories</CustomHeading>
                 <ProductCategoryCarousal breakpoints={breakpoints} >
                     {
-                        categoryData.map((category, index) => (
-                            <HomeCategoryCard key={index} data={categoryData[0]} />
+                        AllCategories?.Data.map((category, index) => (
+                            <HomeCategoryCard key={index} data={category} />
                         ))
 
                     }

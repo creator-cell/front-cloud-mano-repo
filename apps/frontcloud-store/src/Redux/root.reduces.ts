@@ -1,21 +1,13 @@
 "use client";
 
 import { combineReducers } from "@reduxjs/toolkit";
-import { UserApi } from "./api/user";
-import { authApi } from "./api/auth";
-import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
-import filterReducer from "./slice/filterSlice";
+// import storage from "redux-persist/lib/storage";
+// import { persistReducer } from "redux-persist";
+import { storeCarouselApi } from "./api/storefront/carousel";
+import { ProductCategoryApi } from "./api/products/category";
 
-const persistConfigFilter = {
-  key: "filter",
-  storage,
-};
-
-const persistedClothingFilterReducer = persistReducer(persistConfigFilter, filterReducer)
 
 export const RootReducer = combineReducers({
-  productFilters: persistedClothingFilterReducer,
-  [UserApi.reducerPath]: UserApi.reducer,
-  [authApi.reducerPath]: authApi.reducer,
+  [storeCarouselApi.reducerPath]: storeCarouselApi.reducer,
+  [ProductCategoryApi.reducerPath]: ProductCategoryApi.reducer,
 });

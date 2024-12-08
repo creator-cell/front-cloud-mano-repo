@@ -109,9 +109,13 @@ const columns: ColumnDef<BrandData>[] = [
 const Brands = () => {
 
 
+
+
+
     const [deleteModalOen, setDeleteModalOen] = useState(false)
 
     const { data: AllBrands, refetch } = useGetAllBrandsQuery()
+    console.log("🚀 ~ Brands ~ AllBrands:", AllBrands)
 
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
