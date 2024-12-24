@@ -275,7 +275,6 @@ const StorePage = () => {
             </div>
             {/* Discount Banners */}
             <DiscountBanners />
-
             {/* Shop By Categories */}
             <section className='container'>
                 <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Shop By Categories</CustomHeading>
