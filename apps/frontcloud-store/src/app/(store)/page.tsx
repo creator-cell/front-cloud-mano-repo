@@ -375,7 +375,6 @@ const StorePage = () => {
                 </div>
             </section>
 
-
         </div>
     )
 }
