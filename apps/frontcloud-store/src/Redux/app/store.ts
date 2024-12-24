@@ -14,6 +14,8 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { RootReducer } from "../root.reduces";
 import { storeCarouselApi } from "../api/storefront/carousel";
 import { ProductCategoryApi } from "../api/products/category";
+import { UserApi } from "../api/user";
+import { StoreApi } from "../api/store";
 
 
 
@@ -29,7 +31,9 @@ const store = configureStore({
       },
     }).concat(
       storeCarouselApi.middleware,
-      ProductCategoryApi.middleware
+      ProductCategoryApi.middleware,
+      UserApi.middleware,
+      StoreApi.middleware
     ),
 });
 

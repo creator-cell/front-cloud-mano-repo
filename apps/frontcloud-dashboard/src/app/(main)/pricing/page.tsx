@@ -28,7 +28,7 @@ interface Plan {
     price_per_month?: number;
     online_revenue_limit: number;
     features: string[];
-    custom_pricing?: boolean; // optional property for Enterprise plan
+    custom_pricing?: boolean;
 }
 
 const data: Plan[] = [

@@ -15,6 +15,7 @@ import OfferCard from '@/components/store/OfferCard';
 import ProductCard from '@/components/store/shared/ProductCard';
 import { useGetAllHomePageCarousalQuery } from '@/Redux/api/storefront/carousel';
 import { useGetAllCategoriesQuery } from '@/Redux/api/products/category';
+import { useGetStoreHomeQuery } from '@/Redux/api/store';
 
 
 
@@ -228,6 +229,11 @@ const fakeProducts = [
 const StorePage = () => {
     const { data } = useGetAllHomePageCarousalQuery()
     const { data: AllCategories } = useGetAllCategoriesQuery()
+
+
+    const { data: StoreHomeData } = useGetStoreHomeQuery()
+    console.log("🚀 ~ StorePage ~ StoreHomeData:", StoreHomeData)
+
     console.log("🚀 ~ data:", AllCategories)
     return (
         <div className=' flex flex-col gap-14'>
@@ -236,6 +242,7 @@ const StorePage = () => {
                     {
                         data?.Data && data.Data.length > 0 ? data?.Data?.map((item, index) => (
                             <Image
+                                key={item.ItemID}
                                 src={item?.ImageURL ?? images}
                                 alt={'image'}
                                 width={1920}
@@ -326,7 +333,12 @@ const StorePage = () => {
 
             <section className='container'>
                 <div className='flex items-center justify-between'>
-                    <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Best of Electronics</CustomHeading>
+                    {
+
+                        StoreHomeData && StoreHomeData?.Data && StoreHomeData?.Data?.BestOf && StoreHomeData?.Data?.BestOf?.CategoryName &&
+
+                        <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Best of {StoreHomeData?.Data?.BestOf?.CategoryName}</CustomHeading>
+                    }
                     <Button variant={"link"} asChild  >
                         <Link href='/content?category=electronics'>View More</Link>
                     </Button>
@@ -334,7 +346,8 @@ const StorePage = () => {
 
                 <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4' >
                     {
-                        fakeProducts.map((category, index) => (
+                        StoreHomeData && StoreHomeData?.Data && StoreHomeData?.Data?.BestOf && StoreHomeData?.Data?.BestOf?.Product && StoreHomeData?.Data?.BestOf?.Product.length > 0 &&
+                        StoreHomeData?.Data?.BestOf?.Product?.map((category, index) => (
                             <ProductCard key={index} card={category} />
                         ))
 
@@ -353,8 +366,9 @@ const StorePage = () => {
 
                 <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4' >
                     {
-                        fakeProducts.map((category, index) => (
-                            <ProductCard key={index} card={category} />
+                        StoreHomeData && StoreHomeData?.Data && StoreHomeData?.Data?.BestOf && StoreHomeData?.Data?.MostSelling && StoreHomeData?.Data?.MostSelling.length > 0 &&
+                        StoreHomeData?.Data?.MostSelling?.map((product, index) => (
+                            <ProductCard key={index} card={product} />
                         ))
 
                     }

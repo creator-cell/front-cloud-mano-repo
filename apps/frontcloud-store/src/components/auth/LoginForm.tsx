@@ -9,15 +9,15 @@ import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
 import CustomFormField from '../common/CustomFormField';
 import { FormFieldType } from '@/enum/formTypes';
-import Link from 'next/link';
-
 
 interface LoginFormProps {
     title: string
+    setAuthDialogOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
     title,
+    setAuthDialogOpen
 }) => {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -25,10 +25,32 @@ const LoginForm: React.FC<LoginFormProps> = ({
     const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
     })
+    const { handleSubmit, control, formState: { errors }, reset, watch } = form
 
-    const onSubmit = (values: FormSchema) => {
-        console.log(values)
-        form.reset()
+    const [SignIn, { isLoading }] = useSignInMutation()
+
+    const onSubmit = (data: FormSchema) => {
+        console.log(data)
+        // form.reset()
+        try {
+
+            toast.promise(
+                SignIn({ Email: data.email, Password: data.password }),
+                {
+                    loading: 'Signing in...',
+                    success: (response) => {
+                        console.log(response)
+                        reset();
+                        setAuthDialogOpen(false)
+                        return 'Signed in successfully!'
+                    },
+                    error: 'Failed to sign in. Please try again.',
+                }
+            )
+
+        } catch (e) {
+            console.log(e)
+        }
     }
 
 
@@ -81,7 +103,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                             </Button>
                         </div>
                     </div>
-                    <Button type="submit" variant={"default"} className='w-full border-none !mt-8 bg-primary text-white text-[15px] rounded-[5px] py-6'>Submit</Button>
+                    <Button type="submit" variant={"default"} className='w-full border-none !mt-8 bg-primary text-white text-[15px] rounded-[5px] py-6' disabled={isLoading}>Submit</Button>
                 </form>
             </Form>
 
@@ -98,6 +120,9 @@ import * as z from 'zod';
 import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Label } from '../ui/label';
+import { ActiveForm } from '../store/shared/Header';
+import { useSignInMutation } from '@/Redux/api/user';
+import { toast } from 'sonner';
 
 const schema = z.object({
     email: z.string().email('Invalid email address'),

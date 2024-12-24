@@ -16,24 +16,26 @@ import {
     ModalBody,
     ModalContent,
     ModalFooter,
+    ModalProvider,
     ModalTrigger,
 } from "@/components/ui/animated-modal";
 import LoginForm from '@/components/auth/LoginForm';
 
-type ActiveForm = "login" | "register" | "forgot-password";
+export type ActiveForm = "login" | "register" | "forgot-password"
 
 const Header = () => {
     const isSticky = useScroll();
 
 
     const [activeForm, setActiveForm] = useState<ActiveForm>("login");
+    const [authDialogOpen, setAuthDialogOpen] = useState<boolean>(false)
 
     const AuthForm = ({ activeForm }: { activeForm: ActiveForm }) => {
         switch (activeForm) {
             case "login":
-                return <LoginForm title='Login' />;
+                return <LoginForm title='Login' setAuthDialogOpen={setAuthDialogOpen} />;
             case "register":
-                return <SignUpForm title='Create an account' />;
+                return <SignUpForm title='Create an account' setActiveForm={setActiveForm} />;
             case "forgot-password":
                 return <ForgotPasswordForm title='Forgot password' />;
             default:
@@ -82,57 +84,56 @@ const Header = () => {
                         </Link>
                     </Button>
 
-                    <Modal>
-                        <ModalTrigger variant={"outline"}>
-                            Login
-                        </ModalTrigger>
-                        <ModalBody className='!p-0 border-none min-h-[80%]'>
-                            <ModalContent className='grid grid-cols-1 xsm:grid-cols-7 gap-3 xsm:gap-0 sm:gap-3 !p-0 items-center overflow-hidden'>
-                                {/* Side images (fixed) */}
-                                <div className='col-span-3 overflow-hidden sticky inset-0 max-xsm:hidden h-full'>
-                                    <SideImages />
-                                </div>
-
-                                {/* Form area */}
-                                <div className='col-span-4 flex flex-col h-full overflow-y-auto'>
-                                    {/* Add a scrollable container for the form content */}
-                                    <div className='flex-grow  px-6 py-5'>
-                                        <AuthForm activeForm={activeForm} />
+                    <ModalProvider open={authDialogOpen} setOpen={setAuthDialogOpen}>
+                        <Modal   >
+                            <ModalTrigger variant={"outline"}>
+                                Login
+                            </ModalTrigger>
+                            <ModalBody className='!p-0 border-none min-h-[80%]'>
+                                <ModalContent className='grid grid-cols-1 xsm:grid-cols-7 gap-3 xsm:gap-0 sm:gap-3 !p-0 items-center overflow-hidden'>
+                                    {/* Side images (fixed) */}
+                                    <div className='col-span-3 overflow-hidden sticky inset-0 max-xsm:hidden h-full'>
+                                        <SideImages />
                                     </div>
 
-                                    {/* Bottom navigation (login/register/forgot buttons) */}
-                                    <div className='w-full flex items-center justify-between text-gray-500 max-w-sm px-6 py-4'>
-                                        {
-                                            activeForm === "login" ? (
-                                                <div className='flex gap-2'>
-                                                    <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Don&apos;t have an account?</h1>
-                                                    <Button onClick={() => setActiveForm("register")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Sign Up</Button>
-                                                </div>
-                                            ) : activeForm === "register" ? (
-                                                <div className='flex gap-2'>
-                                                    <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Already have an account?</h1>
-                                                    <Button onClick={() => setActiveForm("login")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Login</Button>
-                                                </div>
-                                            ) : activeForm === "forgot-password" ? (
-                                                <div className='flex gap-2'>
-                                                    <h1 className=' text-[12px] cursor-pointer'>Already have an account?</h1>
-                                                    <Button onClick={() => setActiveForm("login")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Login</Button>
-                                                </div>
-                                            ) : null
-                                        }
-                                        {
-                                            activeForm !== "forgot-password" && (
-                                                <Button onClick={() => setActiveForm("forgot-password")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Forgot?</Button>
-                                            )
-                                        }
+                                    {/* Form area */}
+                                    <div className='col-span-4 flex flex-col h-full overflow-y-auto'>
+                                        {/* Add a scrollable container for the form content */}
+                                        <div className='flex-grow  px-6 py-5'>
+                                            <AuthForm activeForm={activeForm} />
+                                        </div>
+
+                                        {/* Bottom navigation (login/register/forgot buttons) */}
+                                        <div className='w-full flex items-center justify-between text-gray-500 max-w-sm px-6 py-4'>
+                                            {
+                                                activeForm === "login" ? (
+                                                    <div className='flex gap-2'>
+                                                        <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Don&apos;t have an account?</h1>
+                                                        <Button onClick={() => setActiveForm("register")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Sign Up</Button>
+                                                    </div>
+                                                ) : activeForm === "register" ? (
+                                                    <div className='flex gap-2'>
+                                                        <h1 className='text-[12px] cursor-pointer max-xsm:hidden'>Already have an account?</h1>
+                                                        <Button onClick={() => setActiveForm("login")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Login</Button>
+                                                    </div>
+                                                ) : activeForm === "forgot-password" ? (
+                                                    <div className='flex gap-2'>
+                                                        <h1 className=' text-[12px] cursor-pointer'>Already have an account?</h1>
+                                                        <Button onClick={() => setActiveForm("login")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Login</Button>
+                                                    </div>
+                                                ) : null
+                                            }
+                                            {
+                                                activeForm !== "forgot-password" && (
+                                                    <Button onClick={() => setActiveForm("forgot-password")} variant='ghost' className='text-primary text-[14px] p-0 h-fit hover:bg-transparent hover:text-primary hover:underline'>Forgot?</Button>
+                                                )
+                                            }
+                                        </div>
                                     </div>
-                                </div>
-                            </ModalContent>
-                        </ModalBody>
-                    </Modal>
-
-
-
+                                </ModalContent>
+                            </ModalBody>
+                        </Modal>
+                    </ModalProvider>
                 </div>
             </div>
         </div>

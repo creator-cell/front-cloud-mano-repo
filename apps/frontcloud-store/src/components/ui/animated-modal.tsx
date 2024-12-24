@@ -2,7 +2,9 @@
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import React, {
+  Dispatch,
   ReactNode,
+  SetStateAction,
   createContext,
   useContext,
   useEffect,
@@ -18,8 +20,8 @@ interface ModalContextType {
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-export const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const [open, setOpen] = useState(false);
+export const ModalProvider = ({ children, open, setOpen }: { children: ReactNode, open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
+  // const [open, setOpen] = useState(false);
 
   return (
     <ModalContext.Provider value={{ open, setOpen }}>
@@ -37,7 +39,7 @@ export const useModal = () => {
 };
 
 export function Modal({ children }: { children: ReactNode }) {
-  return <ModalProvider>{children}</ModalProvider>;
+  return <>{children}</>;
 }
 
 export const ModalTrigger = ({

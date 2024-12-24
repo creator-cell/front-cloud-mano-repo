@@ -1,37 +1,11 @@
 "use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useContext, useMemo, useState } from 'react';
-import { Plus, Star } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
-
 import 'react-quill/dist/quill.snow.css';
 
-import { AdProductFormSections, ProductFormSectionIds } from '@/enum/dashboard/products/add';
-import { AddProductFormSchemaNew, addProductFormValuesNew } from '@/zod/addProduct.schema';
-import ActionBarLayout from '@/components/common/CommonActionBarLayout';
-import { CustomParagraph } from '@/components/custom/CustomParagraph';
-import { SideBarOpenCloseContext } from '@/hooks/useSideBarOpenClode';
-import SectionLayout from '@/components/common/CommonSectionLayout';
-import CustomFormField from '@/components/common/CustomFormField';
-
-import useMediaQuery from '@/hooks/useMedia';
-
-import { FileUpload } from '@/components/ui/file-upload';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Form } from '@/components/ui/form';
-
-import { FormFieldType } from '@/enum/formTypes';
-import { FileType } from '@/enum/fileTypes';
-import VariantAttributeForm from '@/components/VariantOptionsForm';
-import { toast } from 'sonner';
 import { useAddProductsMutation, useGetProductByIdQuery } from '@/store/api/products';
 import { useRouter, useSearchParams } from 'next/navigation';
-import camelcaseKeys from "camelcase-keys";
 import { useGetAllCategoriesQuery } from '@/store/api/products/category';
 import AddProductFrom from '@/components/dashboard/products/ProductAddForm';
 

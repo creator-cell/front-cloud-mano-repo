@@ -105,17 +105,12 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
     productData,
     parentCategoryOptions
 }) => {
-    console.log("🚀 ~ parentCategoryOptions:", parentCategoryOptions)
-    console.log("🚀 ~ productData:", productData)
     let camelCaseData: ProductData | undefined;
     if (productData) {
         camelCaseData = camelcaseKeys(productData as any, { deep: true });
-        console.log("🚀 ~ camelCaseData:", camelCaseData)
-
     }
 
 
-    console.log(Number(camelCaseData?.productShipping.shippingCost))
 
     const form = useForm<addProductFormValuesNew>({
         resolver: zodResolver(AddProductFormSchemaNew),
@@ -123,45 +118,45 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
         criteriaMode: 'all',
         progressive: true,
         reValidateMode: 'onChange',
-        defaultValues: productData && {
-            product: {
-                storeID: "1",
-                productName: productData?.product?.ProductName,
-                SKU: productData?.product?.SKU,
-                productType: productData?.product?.ProductType,
-                brand: productData?.product?.Brand,
-                manufacturePartNumber: productData?.product?.ManufacturePartNumber,
-                productUPC: productData?.product?.ProductUPC,
-                globalTradeItemNumber: productData?.product?.GlobalTradeItemNumber,
-                description: productData?.product?.Description,
-                isDropShipped: productData?.product?.IsDropShipped === 0 as any ? false : true,
-            },
-            productDimensions: {
-                weight: productData?.productDimensions?.Weight,
-                height: productData?.productDimensions?.Height,
-                width: productData?.productDimensions?.Width,
-                depth: productData?.productDimensions?.Depth,
-            },
-            productPricing: {
-                storePrice: productData?.productPricing?.StorePrice,
-                supplierPrice: productData?.productPricing?.SupplierPrice,
-                priceType: productData?.productPricing?.PriceType,
-                discountType: productData?.productPricing?.DiscountType,
-            },
-            productShipping: {
-                shippingType: productData?.productShipping?.ShippingType,
-                shippingPrice: productData?.productShipping?.ShippingCost,
-                weight: productData?.productShipping?.ShippingWeight,
-                height: productData?.productShipping?.ShippingHeight,
-                width: productData?.productShipping?.ShippingWidth,
-                depth: productData?.productShipping?.ShippingDepth,
-            },
-            seo: {
-                metaTitle: productData?.seo?.MetaTitle,
-                metaDescription: productData?.seo?.MetaDescription,
-                metaKeywords: productData?.seo?.MetaKeywords,
-            }
-        },
+        // defaultValues: productData && {
+        //     product: {
+        //         storeID: "1",
+        //         productName: productData?.product?.ProductName,
+        //         SKU: productData?.product?.SKU,
+        //         productType: productData?.product?.ProductType,
+        //         brand: productData?.product?.Brand,
+        //         manufacturePartNumber: productData?.product?.ManufacturePartNumber,
+        //         productUPC: productData?.product?.ProductUPC,
+        //         globalTradeItemNumber: productData?.product?.GlobalTradeItemNumber,
+        //         description: productData?.product?.Description,
+        //         isDropShipped: productData?.product?.IsDropShipped === 0 as any ? false : true,
+        //     },
+        //     productDimensions: {
+        //         weight: productData?.productDimensions?.Weight,
+        //         height: productData?.productDimensions?.Height,
+        //         width: productData?.productDimensions?.Width,
+        //         depth: productData?.productDimensions?.Depth,
+        //     },
+        //     productPricing: {
+        //         storePrice: productData?.productPricing?.StorePrice,
+        //         supplierPrice: productData?.productPricing?.SupplierPrice,
+        //         priceType: productData?.productPricing?.PriceType,
+        //         discountType: productData?.productPricing?.DiscountType,
+        //     },
+        //     productShipping: {
+        //         shippingType: productData?.productShipping?.ShippingType,
+        //         shippingPrice: productData?.productShipping?.ShippingCost,
+        //         weight: productData?.productShipping?.ShippingWeight,
+        //         height: productData?.productShipping?.ShippingHeight,
+        //         width: productData?.productShipping?.ShippingWidth,
+        //         depth: productData?.productShipping?.ShippingDepth,
+        //     },
+        //     seo: {
+        //         metaTitle: productData?.seo?.MetaTitle,
+        //         metaDescription: productData?.seo?.MetaDescription,
+        //         metaKeywords: productData?.seo?.MetaKeywords,
+        //     }
+        // },
     });
 
     const {
@@ -176,12 +171,44 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
     const [AddProduct, { isLoading }] = useAddProductsMutation()
     const [UpdateProduct, { isLoading: isUpdating }] = useUpdateProductMutation()
 
-    const onSubmit = async (data: any) => {
+
+
+
+    const appendFormData = (formData: FormData, data: any, parentKey?: string) => {
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+                const value = data[key];
+                const formKey = parentKey ? `${parentKey}[${key}]` : key;
+
+                if (value instanceof File) {
+                    formData.append(formKey, value); // Handle files
+                } else if (Array.isArray(value)) {
+                    value.forEach((item, index) => {
+                        appendFormData(formData, { [index]: item }, formKey);
+                    });
+                } else if (typeof value === "object" && value !== null) {
+                    appendFormData(formData, value, formKey); // Handle nested objects
+                } else {
+                    formData.append(formKey, value); // Handle primitive values
+                }
+            }
+        }
+    };
+
+
+
+
+    const onSubmit = async (data: addProductFormValuesNew) => {
         console.log("Form data:", data);
+
+        // Create a new FormData instance
+        const formData = new FormData();
+        appendFormData(formData, data);
+
         try {
             if (productData) {
 
-                const promise = UpdateProduct(data).unwrap()
+                const promise = UpdateProduct(formData).unwrap()
 
                 toast.promise(promise, {
                     loading: 'Updating Product...',
@@ -198,7 +225,8 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                 }
             } else {
 
-                const promise = AddProduct(data).unwrap()
+
+                const promise = AddProduct(formData).unwrap()
 
                 toast.promise(promise, {
                     loading: 'Adding Product...',
@@ -259,7 +287,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
 
 
 
-    const selectedCategory = watch("product.categoryID");
+    const selectedCategory = watch("Product.CategoryID");
 
     const CategoryOptions = {
         "categories": [
@@ -285,24 +313,18 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
     }
     const discountTypeOptions = [
         { label: "Percentage", value: "percentage" },
-        { label: "Fixed Amount", value: "fixed_amount" },
-        { label: "Buy One Get One Free (BOGO)", value: "bogo" },
-        { label: "Free Shipping", value: "free_shipping" },
+        { label: "Fixed Amount", value: "fixed" },
+        { label: "Unit Discount", value: "unit" },
     ];
     const priceTypeOptions = [
-        { label: "Retail Price", value: "retail_price" },
-        { label: "Wholesale Price", value: "wholesale_price" },
-        { label: "Cost Price", value: "cost_price" },
-        { label: "Discounted Price", value: "discounted_price" },
-        { label: "Dynamic Pricing", value: "dynamic_pricing" },
+        { label: "Default Price", value: "default" },
+        { label: "Wholesale Price", value: "msrp" },
+        { label: "MSRP Price", value: "cost" },
+        { label: "Sale Price", value: "sale" },
     ];
     const shippingTypeOptions = [
-        { label: "Standard Shipping", value: "standard_shipping" },
-        { label: "Express Shipping", value: "express_shipping" },
-        { label: "Overnight Shipping", value: "overnight_shipping" },
-        { label: "International Shipping", value: "international_shipping" },
-        { label: "Free Shipping", value: "free_shipping" },
-        { label: "Local Pickup", value: "local_pickup" },
+        { label: "Standard Shipping", value: "charged" },
+        { label: "Free Shipping", value: "free" },
     ];
 
 
@@ -333,7 +355,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                             section.sections.map((subSection, index) => (
                                                 <Label
                                                     size={"small"}
-                                                    key={index}
+                                                    key={subSection.idName}
                                                     onClick={() => handleScrollToSection(subSection.idName)}
                                                     className={`text-sm font-normal cursor-pointer hover:bg-gray-200 py-1  px-2 rounded-md`}>
                                                     {subSection.label}
@@ -365,8 +387,8 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                 <div className='flex items-center gap-x-3 h-6 '>
                                     <CustomFormField
                                         fieldType={FormFieldType.CHECKBOX}
-                                        name={"product.isDropShipped"}
-                                        checked={watch("product.isDropShipped") || productData?.product?.IsDropShipped}
+                                        name={"Product.IsDropShipped"}
+                                        checked={watch("Product.IsDropShipped") || productData?.product?.IsDropShipped}
                                         control={control}
                                         placeholder='Is Drop Shipped'
                                         className='w-6 h-6'
@@ -377,7 +399,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>Product Name</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
-                                            name={"product.productName"}
+                                            name={"Product.ProductName"}
                                             control={control}
                                             placeholder='Sample Product Name'
                                             className='ring-1 ring-gray-300 rounded-md'
@@ -387,7 +409,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>SKU</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
-                                            name={"product.SKU"}
+                                            name={"Product.SKU"}
                                             control={control}
                                             placeholder='THX-1138'
                                             className='ring-1 ring-gray-300 rounded-md'
@@ -397,7 +419,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>Product Type</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.SELECT}
-                                            name={"product.productType"}
+                                            name={"Product.ProductType"}
                                             control={control}
                                             selectOptions={[
                                                 { label: "Physical", value: "physical" },
@@ -411,7 +433,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                         <Label variant='gray' size={"medium"} className=' font-[400]'> Brand</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.SELECT}
-                                            name={"product.brand"}
+                                            name={"Product.Brand"}
                                             control={control}
                                             selectOptions={[
                                                 { label: "Physical", value: "physical" },
@@ -436,9 +458,10 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <CustomFormField
                                         control={control}
                                         fieldType={FormFieldType.SELECT}
-                                        name={`product.categoryID`}
+                                        name={`Product.CategoryID`}
                                         placeholder="Select Category"
                                         className="focus:ring-0"
+                                        // selectOptions={CategoryOptions.categories}
                                         selectOptions={parentCategoryOptions}
                                     />
                                     {
@@ -446,7 +469,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                         <CustomFormField
                                             control={control}
                                             fieldType={FormFieldType.SELECT}
-                                            name={`product.subCategoryID`}
+                                            name={`Product.SubCategoryID`}
                                             placeholder="Select SubCategory"
                                             className="focus:ring-0"
                                             selectOptions={subcategories}
@@ -463,8 +486,8 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                 <ReactQuill
                                     theme="snow"
                                     className='h-72'
-                                    value={watch("product.description")}
-                                    onChange={(value) => setValue("product.description", value)}
+                                    value={watch("Product.Description")}
+                                    onChange={(value) => setValue("Product.Description", value)}
                                     modules={modules}
                                 />
                             </div>
@@ -472,7 +495,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
 
 
                         {/* Images & Videos */}
-                        {/* <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.IMAGES_AND_VIDEOS} offsetHeight>
+                        <SectionLayout className='px-6  space-y-6 ' idName={ProductFormSectionIds.IMAGES_AND_VIDEOS} offsetHeight>
                             <div className='flex items-center justify-between'>
                                 <CustomParagraph variant='medium' className=' text-black text-left'>Images & Videos</CustomParagraph>
 
@@ -480,12 +503,13 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                             <div className='w-full flex flex-col gap-y-1 border'>
                                 <FileUpload
                                     onChange={(files) => {
-                                        setValue("images", files);
+                                        console.log("🚀 ~ files:", files)
+                                        setValue("Media", files);
                                     }}
                                     fileType={FileType.ANY_IMAGE}
                                 />
                             </div>
-                        </SectionLayout> */}
+                        </SectionLayout>
 
 
 
@@ -498,7 +522,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Stock Quentity</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productInventory.stockQuantity"}
+                                        name={"ProductInventory.StockQuantity"}
                                         control={control}
                                         placeholder='123'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -508,7 +532,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Manufacturer Part Number (MPN)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"product.manufacturePartNumber"}
+                                        name={"Product.ManufacturePartNumber"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -518,7 +542,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Product UPC/EAN     </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"product.productUPC"}
+                                        name={"Product.ProductUPC"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -528,7 +552,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Global Trade Item Number (GTIN)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"product.globalTradeItemNumber"}
+                                        name={"Product.GlobalTradeItemNumber"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -538,7 +562,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Bin Picking Number (BPN)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productInventory.binPickingNumber"}
+                                        name={"ProductInventory.BinPickingNumber"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -556,7 +580,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Store Price * (excluding tax)                                    </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productPricing.storePrice"}
+                                        name={"ProductPricing.StorePrice"}
                                         control={control}
                                         placeholder='35'
                                         startAdornment='$'
@@ -570,7 +594,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Supplier Price</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productPricing.supplierPrice"}
+                                        name={"ProductPricing.SupplierPrice"}
                                         control={control}
                                         placeholder='20'
                                         startAdornment='$'
@@ -590,27 +614,29 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <CustomFormField
                                         control={control}
                                         fieldType={FormFieldType.SELECT}
-                                        name={`productPricing.discountType`}
+                                        name={`ProductPricing.DiscountType`}
                                         placeholder="Select Discount Type"
                                         className="focus:ring-0"
                                         selectOptions={discountTypeOptions}
                                     />
                                 </div>
                                 <div className='w-full flex flex-col gap-y-1'>
-                                    <Label variant='gray' size={"medium"} className=' font-[400]'> Price Type                                   </Label>
-                                    {/* <CustomFormField
+                                    {/* <Label variant='gray' size={"medium"} className=' font-[400]'> Price Type                                   </Label> */}
+                                    <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"pricing.salePrice"}
+                                        name={"ProductPricing.Discount"}
                                         control={control}
+                                        label='Discount'
                                         placeholder='$ 0'
                                         className='ring-1 ring-gray-300 rounded-md'
-                                    /> */}
+                                    />
                                     <CustomFormField
                                         control={control}
                                         fieldType={FormFieldType.SELECT}
-                                        name={`productPricing.priceType`}
+                                        name={`ProductPricing.PriceType`}
                                         placeholder="Select Price Type"
                                         className="focus:ring-0"
+                                        label='Price Type '
                                         selectOptions={priceTypeOptions}
                                     />
                                 </div>
@@ -627,7 +653,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>Tax Class</Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.SELECT}
-                                            name={"productTax.taxClass"}
+                                            name={"ProductTax.TaxClass"}
                                             control={control}
                                             selectOptions={[
                                                 { label: "Default Tax Class", value: "default_tax_class" },
@@ -643,7 +669,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                         <Label variant='gray' size={"medium"} className=' font-[400]'>Tax Provider Tax Code                                   </Label>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
-                                            name={"productTax.taxProviderTaxCode"}
+                                            name={"ProductTax.TaxProviderTaxCode"}
                                             control={control}
                                             placeholder='THX-1138'
                                             className='ring-1 ring-gray-300 rounded-md'
@@ -904,7 +930,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Weight (Ounces) </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productDimensions.weight"}
+                                        name={"ProductDimensions.Weight"}
                                         control={control}
                                         placeholder='0'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -914,7 +940,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Width (Inches)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productDimensions.width"}
+                                        name={"ProductDimensions.Width"}
                                         control={control}
                                         placeholder='2'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -924,7 +950,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Height (Inches)      </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productDimensions.height"}
+                                        name={"ProductDimensions.Height"}
                                         control={control}
                                         placeholder='12'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -934,7 +960,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Depth (Inches)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productDimensions.depth"}
+                                        name={"ProductDimensions.Depth"}
                                         control={control}
                                         placeholder='3'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -953,7 +979,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                 <div className='w-full flex flex-col gap-y-1'>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productShipping.shippingPrice"}
+                                        name={"ProductShipping.ShippingPrice"}
                                         control={control}
                                         label='Shiping Price'
                                         placeholder='10'
@@ -964,7 +990,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                 </div>
                                 <CustomFormField
                                     fieldType={FormFieldType.SELECT}
-                                    name={"productShipping.shippingType"}
+                                    name={"ProductShipping.ShippingType"}
                                     control={control}
                                     selectOptions={shippingTypeOptions}
                                     placeholder='select shipping type'
@@ -986,7 +1012,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Weight (Ounces) </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productShipping.weight"}
+                                        name={"ProductShipping.ShippingWeight"}
                                         control={control}
                                         placeholder='0'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -996,7 +1022,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Width (Inches)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productShipping.width"}
+                                        name={"ProductShipping.ShippingWidth"}
                                         control={control}
                                         placeholder='2'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -1006,7 +1032,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Height (Inches)      </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productShipping.height"}
+                                        name={"ProductShipping.ShippingHeight"}
                                         control={control}
                                         placeholder='12'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -1016,7 +1042,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Depth (Inches)</Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"productShipping.depth"}
+                                        name={"ProductShipping.ShippingDepth"}
                                         control={control}
                                         placeholder='3'
                                         className='ring-1 ring-gray-300 rounded-md'
@@ -1132,7 +1158,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <Label variant='gray' size={"medium"} className=' font-[400]'>Page Title  </Label>
                                     <CustomFormField
                                         fieldType={FormFieldType.INPUT}
-                                        name={"seo.metaTitle"}
+                                        name={"Seo.MetaTitle"}
                                         control={control}
                                         placeholder=' '
                                         className='ring-1 ring-gray-300'
@@ -1144,7 +1170,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                         <div className='w-full '>
                                             <CustomFormField
                                                 fieldType={FormFieldType.INPUT}
-                                                name={"seo.SearchKeywords"}
+                                                name={"Seo.SearchKeywords"}
                                                 control={control}
                                                 placeholder='Search Keywords'
                                                 className='ring-1 ring-gray-300 '
@@ -1159,7 +1185,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <div className='w-full '>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
-                                            name={"seo.metaDescription"}
+                                            name={"Seo.MetaDescription"}
                                             control={control}
                                             placeholder=' '
                                             className='ring-1 ring-gray-300 '
@@ -1171,7 +1197,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                     <div className='w-full '>
                                         <CustomFormField
                                             fieldType={FormFieldType.INPUT}
-                                            name={"seo.metaKeywords"}
+                                            name={"Seo.MetaKeywords"}
                                             control={control}
                                             placeholder=' garden, home, kitchen'
                                             className='ring-1 ring-gray-300 '

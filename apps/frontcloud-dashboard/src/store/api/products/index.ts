@@ -6,9 +6,9 @@ export const ProductApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: "/api/v1/products" }),
     tagTypes: ["Products"],
     endpoints: (builder) => ({
-        addProducts: builder.mutation<void, AddProductType>({
+        addProducts: builder.mutation<void, any>({
             query: (body) => ({
-                url: "/products",
+                url: "/",
                 method: "POST",
                 body,
             }),
@@ -33,7 +33,7 @@ export const ProductApi = createApi({
             query: (id) => `/products/1/product/${+id}`,
             providesTags: ["Products"],
         }),
-        updateProduct: builder.mutation<void, AddProductType>({
+        updateProduct: builder.mutation<void, any>({
             query: (body) => ({
                 url: "/",
                 method: "PUT",
