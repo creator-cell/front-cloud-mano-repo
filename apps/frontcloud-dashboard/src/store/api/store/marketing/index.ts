@@ -55,5 +55,6 @@ export const {
     useDeleteMarketingBannerMutation,
     useCreateCouponMutation,
     useGetBannerByIdQuery,
-    useUpdateBannerMutation
+    useUpdateBannerMutation,
+    useLazyGetBannerByIdQuery
 } = MarketingApi

@@ -4,7 +4,6 @@ import ProductCard from '@/components/store/shared/ProductCard';
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '@/Redux/hooks';
-import { removeFilter, setCategory } from '@/Redux/slice/filterSlice';
 import DesktopFilter from '@/components/store/shop/DesktopFilter';
 import MobileFilter from '@/components/store/shop/MobileFilter';
 
@@ -120,43 +119,43 @@ const ShopPage = () => {
 
 
     const dispatch = useAppDispatch();
-    const { category: cta, filters } = useAppSelector(state => state.productFilters)
-    console.log("🚀 ~ ShopPage ~ cta:", cta, filters)
+    // const { category: cta, filters } = useAppSelector(state => state.productFilters)
+    // console.log("🚀 ~ ShopPage ~ cta:", cta, filters)
 
     useEffect(() => {
         if (category) {
-            dispatch(setCategory(category))
+            // dispatch(setCategory(category))
         }
     }, [category])
 
     const handleRemoveFilter = (type: string, value: string) => {
-        dispatch(removeFilter({ type, value }));
+        // dispatch(removeFilter({ type, value }));
     }
 
 
     return (
         <div className='container flex max-lg:flex-col items-start gap-x-6 mt-8'>
             {/* filters */}
-            <DesktopFilter
+            {/* <DesktopFilter
                 category={cta}
                 filters={filters}
                 handleRemoveFilter={handleRemoveFilter}
-            />
+            /> */}
             <div className='w-full lg:hidden pb-3'>
-                <MobileFilter
+                {/* <MobileFilter
                     category={cta}
                     filters={filters}
                     handleRemoveFilter={handleRemoveFilter}
-                />
+                /> */}
             </div>
             {/* products */}
             <section className='flex-1 w-full'>
                 <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-full' >
-                    {
+                    {/* {
                         fakeProducts.map((category, index) => (
                             <ProductCard key={index} card={category} />
                         ))
-                    }
+                    } */}
                 </div>
             </section>
         </div >

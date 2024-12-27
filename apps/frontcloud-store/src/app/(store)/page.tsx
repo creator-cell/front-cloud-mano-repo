@@ -163,66 +163,6 @@ const fakeOffers = [
 ];
 
 
-// fakeProducts.ts
-const fakeProducts = [
-    {
-        productImg: "/assets/extra/product1.jpg", // Ensure this path is correct
-        title: "Stylish Sneakers",
-        price: 2999,
-        discountPrice: 3999,
-        rating: 4.5,
-    },
-    {
-        productImg: "/assets/extra/product2.jpg", // Ensure this path is correct
-        title: "Elegant Watch",
-        price: 4999,
-        discountPrice: 5999,
-        rating: 4.0,
-    },
-    {
-        productImg: "/assets/extra/product3.jpg", // Ensure this path is correct
-        title: "Wireless Headphones",
-        price: 1999,
-        discountPrice: 2999,
-        rating: 4.8,
-    },
-    {
-        productImg: "/assets/extra/product4.jpg", // Ensure this path is correct
-        title: "Leather Backpack",
-        price: 3499,
-        discountPrice: 4499,
-        rating: 4.2,
-    },
-    {
-        productImg: "/assets/extra/product5.jpg", // Ensure this path is correct
-        title: "Smartphone",
-        price: 19999,
-        discountPrice: 24999,
-        rating: 4.6,
-    },
-    {
-        productImg: "/assets/extra/product5.jpg", // Ensure this path is correct
-        title: "Smartphone",
-        price: 19999,
-        discountPrice: 24999,
-        rating: 4.6,
-    },
-    {
-        productImg: "/assets/extra/product5.jpg", // Ensure this path is correct
-        title: "Smartphone",
-        price: 19999,
-        discountPrice: 24999,
-        rating: 4.6,
-    },
-    {
-        productImg: "/assets/extra/product5.jpg", // Ensure this path is correct
-        title: "Smartphone",
-        price: 19999,
-        discountPrice: 24999,
-        rating: 4.6,
-    },
-];
-
 
 
 
@@ -291,10 +231,16 @@ const StorePage = () => {
 
             {/* Fruits & Vegetables */}
             <section className='container'>
-                <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Fruits & Vegetables</CustomHeading>
+                {
+
+                    StoreHomeData && StoreHomeData?.Data && StoreHomeData?.Data?.Random && StoreHomeData?.Data?.Random?.CategoryName &&
+
+                    <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Best of {StoreHomeData?.Data?.Random?.CategoryName}</CustomHeading>
+                }
                 <ProductCategoryCarousal breakpoints={ProductBreakpoints} >
                     {
-                        fakeProducts.map((category, index) => (
+                        StoreHomeData && StoreHomeData?.Data && StoreHomeData?.Data?.Random && StoreHomeData?.Data?.Random?.Product && StoreHomeData?.Data?.Random?.Product.length > 0 &&
+                        StoreHomeData?.Data?.Random?.Product?.map((category, index) => (
                             <ProductCard key={index} card={category} />
                         ))
 
@@ -317,12 +263,13 @@ const StorePage = () => {
 
             <section className='container'>
                 <div className='flex items-center justify-between pr-28 '>
-                    <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Most Rated Products</CustomHeading>
+                    <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Most Selling Products</CustomHeading>
                 </div>
 
                 <ProductCategoryCarousal breakpoints={ProductBreakpoints} >
                     {
-                        fakeProducts.map((category, index) => (
+                        StoreHomeData && StoreHomeData?.Data && StoreHomeData?.Data?.MostSelling && StoreHomeData?.Data?.MostSelling && StoreHomeData?.Data?.MostSelling?.length > 0 &&
+                        StoreHomeData?.Data?.MostSelling?.map((category, index) => (
                             <ProductCard key={index} card={category} />
                         ))
 

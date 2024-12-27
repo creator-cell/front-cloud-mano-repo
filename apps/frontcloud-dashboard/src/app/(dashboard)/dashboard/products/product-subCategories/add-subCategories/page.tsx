@@ -24,8 +24,8 @@ const AddCategories = () => {
 
     console.log("🚀 ~ AddCategories ~ AllCategories:", AllCategories)
     const parentCategoryOptions = useMemo(() => {
-        if (AllCategories && AllCategories.data.length > 0) {
-            return AllCategories.data.map((category) => ({
+        if (AllCategories && AllCategories.Data.length > 0) {
+            return AllCategories.Data.map((category) => ({
                 label: category.CategoryName,
                 value: category?.CategoryID?.toString() ?? " ",
             }));
@@ -43,17 +43,17 @@ const AddCategories = () => {
                 <CustomParagraph variant={"xmedium"} className='text-gray-500 text-left'>Products in your store are grouped by categories, which makes them easier to find. Fill out the form below to create a new category.</CustomParagraph>
             </div>
             {subCategoryId ?
-                parentCategoryOptions && parentCategoryOptions.length > 0 && data && data?.data.length > 0 &&
+                parentCategoryOptions && parentCategoryOptions.length > 0 && data && data?.Data.length > 0 &&
                 <CategoryAddForm
                     hasParentCategory
                     parentCategoryOptions={parentCategoryOptions}
                     categoryID={subCategoryId ?? ""}
-                    formValuesSubCategory={data?.data?.[0]}
+                    formValuesSubCategory={data?.Data?.[0]}
                 /> : <CategoryAddForm
                     hasParentCategory
                     parentCategoryOptions={parentCategoryOptions}
                     categoryID={subCategoryId ?? ""}
-                    formValuesSubCategory={data?.data?.[0]}
+                    formValuesSubCategory={data?.Data?.[0]}
                 />
             }
         </div >

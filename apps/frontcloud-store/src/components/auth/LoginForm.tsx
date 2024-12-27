@@ -13,11 +13,13 @@ import { FormFieldType } from '@/enum/formTypes';
 interface LoginFormProps {
     title: string
     setAuthDialogOpen: Dispatch<SetStateAction<boolean>>
+    refetch: () => void
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
     title,
-    setAuthDialogOpen
+    setAuthDialogOpen,
+    refetch
 }) => {
     const [showPassword, setShowPassword] = useState(false);
 
@@ -35,12 +37,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
         try {
 
             toast.promise(
-                SignIn({ Email: data.email, Password: data.password }),
+                SignIn({ Email: data.email, Password: data.password, StoreID: 1 }).unwrap(),
                 {
                     loading: 'Signing in...',
                     success: (response) => {
                         console.log(response)
                         reset();
+                        refetch();
                         setAuthDialogOpen(false)
                         return 'Signed in successfully!'
                     },

@@ -25,7 +25,7 @@ const ProductCategories = () => {
                 <CustomParagraph variant={"xmedium"} className='text-gray-500 text-left'>Categories allow you to group products by similar attributes. The categories in your store are shown below.</CustomParagraph>
             </div>
             {
-                AllCategories && AllCategories.data && <ProductCategoriesTable datas={AllCategories?.data} />
+                AllCategories && AllCategories.Data && <ProductCategoriesTable datas={AllCategories?.Data} />
             }
         </div>
     )

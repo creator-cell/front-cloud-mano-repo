@@ -27,13 +27,13 @@ import { Form } from '@/components/ui/form';
 
 import { FormFieldType } from '@/enum/formTypes';
 import { FileType } from '@/enum/fileTypes';
-import VariantAttributeForm from '@/components/VariantOptionsForm';
 import { toast } from 'sonner';
 import { useAddProductsMutation, useGetProductByIdQuery, useUpdateProductMutation } from '@/store/api/products';
 import { useRouter, useSearchParams } from 'next/navigation';
 import camelcaseKeys from "camelcase-keys";
 import { useGetAllCategoriesQuery } from '@/store/api/products/category';
 import { AddProductType } from '@/store/api/products/types/products-types';
+import { ProductCategoryType } from '@/store/api/products/types/category-types';
 
 // Dynamically import ReactQuill with SSR disabled
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
@@ -98,12 +98,14 @@ interface ProductData {
 interface ExampleWithProvidersProps {
     productData?: AddProductType
     parentCategoryOptions: { label: string, value: string }[]
+    allCategories?: ProductCategoryType[]
 }
 
 
 const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
     productData,
-    parentCategoryOptions
+    parentCategoryOptions,
+    allCategories
 }) => {
     let camelCaseData: ProductData | undefined;
     if (productData) {
@@ -118,45 +120,6 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
         criteriaMode: 'all',
         progressive: true,
         reValidateMode: 'onChange',
-        // defaultValues: productData && {
-        //     product: {
-        //         storeID: "1",
-        //         productName: productData?.product?.ProductName,
-        //         SKU: productData?.product?.SKU,
-        //         productType: productData?.product?.ProductType,
-        //         brand: productData?.product?.Brand,
-        //         manufacturePartNumber: productData?.product?.ManufacturePartNumber,
-        //         productUPC: productData?.product?.ProductUPC,
-        //         globalTradeItemNumber: productData?.product?.GlobalTradeItemNumber,
-        //         description: productData?.product?.Description,
-        //         isDropShipped: productData?.product?.IsDropShipped === 0 as any ? false : true,
-        //     },
-        //     productDimensions: {
-        //         weight: productData?.productDimensions?.Weight,
-        //         height: productData?.productDimensions?.Height,
-        //         width: productData?.productDimensions?.Width,
-        //         depth: productData?.productDimensions?.Depth,
-        //     },
-        //     productPricing: {
-        //         storePrice: productData?.productPricing?.StorePrice,
-        //         supplierPrice: productData?.productPricing?.SupplierPrice,
-        //         priceType: productData?.productPricing?.PriceType,
-        //         discountType: productData?.productPricing?.DiscountType,
-        //     },
-        //     productShipping: {
-        //         shippingType: productData?.productShipping?.ShippingType,
-        //         shippingPrice: productData?.productShipping?.ShippingCost,
-        //         weight: productData?.productShipping?.ShippingWeight,
-        //         height: productData?.productShipping?.ShippingHeight,
-        //         width: productData?.productShipping?.ShippingWidth,
-        //         depth: productData?.productShipping?.ShippingDepth,
-        //     },
-        //     seo: {
-        //         metaTitle: productData?.seo?.MetaTitle,
-        //         metaDescription: productData?.seo?.MetaDescription,
-        //         metaKeywords: productData?.seo?.MetaKeywords,
-        //     }
-        // },
     });
 
     const {
@@ -328,6 +291,14 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
     ];
 
 
+    const subCategortOptions = allCategories?.find(cat => String(cat.CategoryID) === selectedCategory)?.SubCategory.map(subCat => ({
+        label: subCat.SubCategoryName,
+        value: subCat.SubCategoryID.toString()
+    }));
+    console.log("🚀 ~ subCategortOptions ~ allCategories:", allCategories)
+    console.log("🚀 ~ subCategortOptions ~ subCategortOptions:", selectedCategory, subCategortOptions)
+
+
 
     const subcategories = useMemo(() => {
         const category = CategoryOptions.categories.find(cat => cat.value === selectedCategory);
@@ -472,7 +443,7 @@ const AddProductFrom: React.FC<ExampleWithProvidersProps> = ({
                                             name={`Product.SubCategoryID`}
                                             placeholder="Select SubCategory"
                                             className="focus:ring-0"
-                                            selectOptions={subcategories}
+                                            selectOptions={subCategortOptions}
                                         />
                                     }
                                 </div>

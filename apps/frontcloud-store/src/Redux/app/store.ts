@@ -9,7 +9,6 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { RootReducer } from "../root.reduces";
 import { storeCarouselApi } from "../api/storefront/carousel";
@@ -17,10 +16,8 @@ import { ProductCategoryApi } from "../api/products/category";
 import { UserApi } from "../api/user";
 import { StoreApi } from "../api/store";
 
-
-
-const ONE_DAY = 24 * 60 * 60 * 1000;
-
+const ONE_DAY = 24 * 60 * 60 * 1000; // Milliseconds in a day
+const PERSIST_KEY = "redux-persist-timestamp";
 
 const store = configureStore({
   reducer: RootReducer,
@@ -37,15 +34,23 @@ const store = configureStore({
     ),
 });
 
-const persistor = persistStore(store);
+// const persistor = persistStore(store);
 
-setTimeout(() => {
-  persistor.purge();
-}, ONE_DAY);
+// // Clear stale persisted state if it's older than one day
+// const purgeIfExpired = () => {
+//   const lastPersistTime = parseInt(localStorage.getItem(PERSIST_KEY) || "0", 10);
+//   const currentTime = Date.now();
 
-export default store;
+//   if (currentTime - lastPersistTime > ONE_DAY) {
+//     persistor.purge();
+//     localStorage.setItem(PERSIST_KEY, currentTime.toString());
+//   }
+// };
+// purgeIfExpired();
+
 setupListeners(store.dispatch);
 
+export default store;
+// export { persistor };
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
-export const appDispatch = store.dispatch;
-export type AppStore = ReturnType<typeof store.getState>;

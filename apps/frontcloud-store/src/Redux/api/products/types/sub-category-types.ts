@@ -1,4 +1,5 @@
-import { ResponseType } from "@/store/types/responseType";
+import { ResponseType } from "@/Redux/types/responseType";
+
 
 export interface SubCategoryType {
     SubCategoryID: number;

@@ -19,6 +19,9 @@ import { Heart, Plus } from "lucide-react";
 import { CiHeart } from "react-icons/ci";
 import { StoreProductType } from "@/Redux/api/store/types/store.types";
 import { calculateDiscountedPrice } from "@/utils/calculateDiscountedProductPrice";
+import { useAddToCartMutation, useAddToWishListMutation, useGetUserQuery } from "@/Redux/api/user";
+import { useAppSelector } from "@/Redux/hooks";
+import { toast } from "sonner";
 
 
 interface ProductCardProps {
@@ -27,14 +30,73 @@ interface ProductCardProps {
 
 
 const ProductCard: React.FC<ProductCardProps> = ({
-    card: { ProductName, StorePrice, DiscountType, Discount, rating, MediaURL, }
+    card: { ProductName, StorePrice, DiscountType, Discount, rating, MediaURL, ProductID }
 }) => {
     const router = useRouter()
+
+    const [AddToCart] = useAddToCartMutation()
+    const [AddToWishList] = useAddToWishListMutation()
+
+
+    const { data: User } = useGetUserQuery()
+    console.log("🚀 ~ User:", User)
+
+    const handleAddToWishList = async () => {
+        try {
+            if (!User || !User.Data || !User?.Data?.UserID || !ProductID) {
+                toast.error('Please login to add to cart')
+                return;
+            }
+
+            const promise = AddToWishList({
+                ProductId: ProductID,
+                UserId: User.Data.UserID,
+                StoreId: 1
+            })
+
+
+            toast.promise(promise, {
+                loading: 'Adding to wishlist',
+                success: 'Added to wishlist',
+                error: 'Failed to add to wishlist'
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleAddtoCart = async () => {
+        try {
+            if (!User || !User.Data || !User?.Data?.UserID || !ProductID) {
+                toast.error('Please login to add to cart')
+                return;
+            }
+
+            const promise = AddToCart({
+                ProductId: ProductID,
+                Quantity: 1,
+                UserId: User.Data.UserID,
+                StoreId: 1
+            }).unwrap()
+
+
+            toast.promise(promise, {
+                loading: 'Adding to cart',
+                success: 'Added to cart',
+                error: 'Failed to add to cart'
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const disCountedPrice = calculateDiscountedPrice(Number(StorePrice), DiscountType, Discount)
     return (
         <Card
             className="w-full border p-4 pb-0 border-primary rounded-md cursor-pointer space-y-3 relative">
+            <Button variant={"ghost"} className='absolute top-0 right-2 hover:bg-transparent'>
+                <CiHeart size={25} onClick={handleAddToWishList} />
+            </Button>
             <CardContent onClick={() => router.push('/shop/1')} className='mt-2 space-y-1'>
                 <CardHeader className="h-72">
                     <Image
@@ -45,7 +107,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                         className="rounded-md h-full"
                     />
                 </CardHeader>
-                <CiHeart className='absolute top-0 right-2' size={25} />
+
                 <RatingStar rating={rating} />
                 <CardTitle className='text-base whitespace-nowrap truncate '>{ProductName}</CardTitle>
 
@@ -59,7 +121,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
                     </div>
                 </div>
-                <Button className='size-10 p-0 bg-store-primary hover:bg-store-primary'>
+                <Button
+                    onClick={handleAddtoCart}
+                    className='size-10 p-0 bg-store-primary hover:bg-store-primary'>
                     <Plus size={25} className='' />
                 </Button>
             </CardFooter>

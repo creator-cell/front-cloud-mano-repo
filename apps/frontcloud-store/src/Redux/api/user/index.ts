@@ -1,11 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { AddtoCartPayloadType, UserResponse, userSignInResponse } from "./types/user.types";
+import { setUser } from "./slice/user.slice";
 
 export const UserApi = createApi({
     reducerPath: "userApi",
     baseQuery: fetchBaseQuery({ baseUrl: "/api/v1/user" }),
     tagTypes: ["User"],
     endpoints: (builder) => ({
-        getUser: builder.query({
+        getUser: builder.query<UserResponse, void>({
             query: () => "",
             providesTags: ["User"],
         }),
@@ -31,13 +33,37 @@ export const UserApi = createApi({
                 body: { Email, OTP },
             }),
         }),
-        signIn: builder.mutation<any, { Email: string; Password: string }>({
-            query: ({ Email, Password }) => ({
+        signIn: builder.mutation<userSignInResponse, { Email: string; Password: string, StoreID: number }>({
+            query: ({ Email, Password, StoreID }) => ({
                 url: "login",
                 method: "POST",
-                body: { Email, Password },
+                body: { Email, Password, StoreID },
+            }),
+            async onQueryStarted({ }, { dispatch, queryFulfilled }: { dispatch: any, queryFulfilled: Promise<{ data: userSignInResponse }> }) {
+                try {
+                    const { data } = await queryFulfilled; // Wait for the mutation to complete
+                    console.log("🚀 ~ onQueryStarted ~ data:", data)
+                    dispatch(setUser(data)); // Store the User object in Redux
+                } catch (error) {
+                    console.error("Error during sign-in:", error);
+                }
+            },
+        }),
+        addToCart: builder.mutation<any, AddtoCartPayloadType>({
+            query: ({ ProductId, Quantity, UserId, StoreId }) => ({
+                url: "/cart",
+                method: "POST",
+                body: { ProductId, Quantity, UserId, StoreId },
             }),
         }),
+
+        addToWishList: builder.mutation<any, Omit<AddtoCartPayloadType, "Quantity">>({
+            query: ({ ProductId, UserId, StoreId }) => ({
+                url: "/wishlist",
+                method: "POST",
+                body: { ProductId, UserId, StoreId },
+            }),
+        })
     }),
 });
 
@@ -46,5 +72,7 @@ export const {
     useCreateUserMutation,
     useSendOtpMutation,
     useVerifyOtpMutation,
-    useSignInMutation
+    useSignInMutation,
+    useAddToCartMutation,
+    useAddToWishListMutation
 } = UserApi;

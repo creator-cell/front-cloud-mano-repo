@@ -16,7 +16,7 @@ export const ProductApi = createApi({
         }),
         getProducts: builder.query<ProductResponse, { storeId: number }>({
             query: (body) => ({
-                url: `/products/${body.storeId}`,
+                url: `/${body.storeId}?Limit=10`,
                 method: "GET",
             }),
             providesTags: ["Products"],

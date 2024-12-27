@@ -6,7 +6,7 @@ import CouponTable from "@/components/dashboard/storefront/CouponCodesTable";
 import { useGetAllCouonCodesQuery } from "@/store/api/store/marketing/coupon-code";
 
 
-const page = () => {
+const CouponCodes = () => {
 
     // const AllCoupons = await fetchAllCoupons();
     const { data: AllCoupons, refetch } = useGetAllCouonCodesQuery()
@@ -27,4 +27,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default CouponCodes;

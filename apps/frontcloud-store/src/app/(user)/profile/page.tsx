@@ -8,6 +8,7 @@ import OrderCard from '@/components/profile/OrderCard';
 import { product1, laptop } from "@/assets/extra/index";
 import { FaClock, FaHeart, FaShoppingBag } from 'react-icons/fa';
 import React from 'react';
+import { useGetUserQuery } from '@/Redux/api/user';
 
 
 
@@ -83,23 +84,25 @@ const ProfilePage = () => {
     );
 };
 
-const DashboardOverview = () => (
-    <>
-        <Label className='text-2xl font-semibold'>My Dashboard</Label>
-        <div className='space-y-2'>
-            <Label className=''>Hello, <strong>John Doe</strong></Label>
-            <p className='text-sm'>
-                From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information.
-            </p>
-        </div>
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
-            {fakeData.map((data, index) => (
-                <InfoCard key={index} data={data} />
-            ))}
-        </div>
-    </>
-);
+const DashboardOverview = () => {
+    return (
 
+        <>
+            <Label className='text-2xl font-semibold'>My Dashboard</Label>
+            <div className='space-y-2'>
+                <Label className=''>Hello, <strong>John Doe</strong></Label>
+                <p className='text-sm'>
+                    From your My Account Dashboard you have the ability to view a snapshot of your recent account activity and update your account information.
+                </p>
+            </div>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
+                {fakeData.map((data, index) => (
+                    <InfoCard key={index} data={data} />
+                ))}
+            </div>
+        </>
+    );
+}
 const RecentOrders = () => (
     <div className='space-y-2 mt-7'>
         <Label className='text-xl font-semibold text-start'>Recent Orders</Label>

@@ -1,22 +1,34 @@
 import { ResponseType } from "@/store/types/responseType";
 
-export interface ProductCategoryType {
-    CategoryID?: number;
-    CategoryName: string;
-    url?: string;
-    Description?: string;
-    sort_order?: number;
-    images?: string;
-    VisibleInMenu?: boolean
-    seo: {
-        metaTitle?: string;
-        metaKeywords?: string;
-        metaDescription?: string;
-        searchKeywords?: string;
-    }
-    CreatedAt?: string;
-    UpdatedAt?: string;
+interface SubCategory {
+    SubCategoryID: number;
+    SubCategoryName: string;
+    SubCategoryUrl: string | null;
+    SCDescription: string;
+    SCVisibleInMenu: number;
 }
+
+export interface ProductCategoryType {
+    CategoryID: number;
+    CategoryName: string;
+    Description: string;
+    VisibleInMenu: number;
+    SeoID: string | null;
+    CategoryUrl: string | null;
+    CategorySortBy: string | null;
+    StoreID: number;
+    UpdatedAt: string | null;
+    CreatedAt: string | null;
+    MetaTitle: string | null;
+    MetaDescription: string | null;
+    MetaKeywords: string | null;
+    SearchKeywords: string | null;
+    ImageID: string | null;
+    ImageURL: string | null;
+    SequenceNumber: number | null;
+    SubCategory: SubCategory[];
+}
+
 export type ProductCategoryResponse = ResponseType<ProductCategoryType[]>;
 
 export type ProductCategory = {

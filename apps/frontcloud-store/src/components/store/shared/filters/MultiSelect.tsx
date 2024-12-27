@@ -11,7 +11,6 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { setFilter } from '@/Redux/slice/filterSlice';
 
 
 interface Option {
@@ -30,11 +29,7 @@ const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({ name, options }) 
 
     const handleCheckboxChange = (value: string) => {
 
-        dispatch(setFilter({ type: name, value })); // Dispatch to Redux
     };
-    const filters = useAppSelector(state => state.productFilters.filters); // Access the filters from Redux state
-    const selectedOptions = filters[name] || [];
-
 
     return (
         <Accordion type="single" collapsible className="w-full border-b py-2 px-1 rounded-md shadow-none">
@@ -43,7 +38,7 @@ const CustomMultiSelect: React.FC<CustomMultiSelectProps> = ({ name, options }) 
                 {options.map(option => (
                     <AccordionContent key={option.value} className='flex items-center space-x-2 pl-3 '>
                         <Checkbox
-                            checked={selectedOptions.includes(option.value)}
+                            // checked={selectedOptions.includes(option.value)}
                             onCheckedChange={() => handleCheckboxChange(option.value)}
                             iconClassName='size-4'
                             className='size-4 rounded-[2px]'

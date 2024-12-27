@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect } from "react";
+import React, { Suspense, useContext, useEffect } from "react";
 import SectionLayout from "@/components/common/CommonSectionLayout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,13 +24,24 @@ import { LanguageContext, SupportedLanguages } from "@/contexts/LanguageContext"
 
 const AddCarousal = () => {
 
+
+
+
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <HomePageCarousalPage />
+        </Suspense>
+    );
+};
+
+export default AddCarousal;
+
+const HomePageCarousalPage = () => {
+
     const searchParams = useSearchParams()
     const id = searchParams.get('id')
 
     const { data } = useGetHomePageCarousalByIdQuery(id ?? "");
-
-
-
     return (
         <PageWrapper title="Home Page Carousel" className="max-w-7xl">
             {
@@ -40,9 +51,7 @@ const AddCarousal = () => {
             }
         </PageWrapper >
     );
-};
-
-export default AddCarousal;
+}
 
 
 

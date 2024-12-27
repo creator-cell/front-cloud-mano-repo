@@ -41,23 +41,18 @@ const AddProduct = () => {
     }, [AllCategories]);
 
 
-
-    let camelCaseData;
-    if (data && data.Data) {
-        // camelCaseData = camelcaseKeys(data?.data, { deep: true });
-    }
-
-
     return (
         <div className='w-full '>
             {
-                productId ? data?.Data?.product && (
+                productId ? data?.Data?.product && AllCategories && AllCategories?.Data?.length > 0 && (
                     <AddProductFrom
                         productData={data?.Data}
                         parentCategoryOptions={parentCategoryOptions}
+                        allCategories={AllCategories?.Data}
                     />
                 ) : (
                     <AddProductFrom
+                        allCategories={AllCategories?.Data}
                         parentCategoryOptions={parentCategoryOptions}
                     />
                 )

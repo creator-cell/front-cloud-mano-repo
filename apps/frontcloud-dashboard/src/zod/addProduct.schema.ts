@@ -12,7 +12,7 @@ export const AddProductFormSchemaNew = z.object({
         ProductUPC: z.string().min(3, "product UPC must be at least 3 characters long").optional(),
         GlobalTradeItemNumber: z.string().min(3, "Global Trade Item Number must be at least 3 characters long"),
         CategoryID: z.string().min(1, "Category ID must be at least 3 characters long"),
-        SubCategoryID: z.string().min(3, "Sub Category ID must be at least 3 characters long").optional(),
+        SubCategoryID: z.string().min(1, "Sub Category ID must be at least 3 characters long").optional(),
         StoreID: z.string().min(1, "Store ID must be at least 3 characters long").default("1"),
         Description: z.string().min(3, "Description must be at least 3 characters long").optional(),
         IsDropShipped: z.boolean().optional().default(false),

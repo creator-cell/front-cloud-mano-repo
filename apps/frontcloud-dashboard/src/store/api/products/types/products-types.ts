@@ -72,5 +72,5 @@ export interface Pagination {
     currentPage: number;
 }
 
-export type ProductResponse = ResponseType<{ products: Product[]; pagination: Pagination; }>;
+export type ProductResponse = ResponseType<{ Products: Product[]; pagination: Pagination; }>;
 export type GetProductByIdResponse = ResponseType<AddProductType>;
