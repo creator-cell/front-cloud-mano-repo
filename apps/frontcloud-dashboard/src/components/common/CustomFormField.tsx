@@ -164,7 +164,7 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
                                 props.onChange?.(e);
                             }}
                             className={cn(
-                                "peer h-10 w-full border-b-2 border-gray-300 bg-transparent  text-gray-900 placeholder-transparent focus:outline-none focus:border-blue-600",
+                                "peer h-10 w-full border-b-2 border-gray-300 bg-transparent  text-gray-900 placeholder-transparent focus:outline-none focus:border-[#0B86C0]",
                                 className
                             )}
                             placeholder=" "
@@ -172,7 +172,7 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
                     </FormControl>
                     <FormLabel
                         htmlFor={props.name}
-                        className="absolute left-0 -top-2.5 text-gray-600 text-sm transition-all duration-200 transform -translate-y-1/2 scale-75 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-2.5 peer-focus:-top-3 peer-focus:scale-75 peer-focus:-translate-y-1/2"
+                        className="absolute left-0 -top-2.5 text-gray-600 text-sm transition-all duration-200 transform -translate-y-1/2 scale-75 origin-[0] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:top-2.5 peer-focus:-top-3 peer-focus:scale-75 peer-focus:-translate-y-[-10%] peer-focus:text-[#0B86C0]"
                     >
                         {props.placeholder}
                     </FormLabel>
@@ -284,7 +284,6 @@ const RenderField = <T extends FieldValues>({ field, props }: { field: any; prop
                                 field.onChange(value);
                                 props.onChange?.(value);
                             }}
-
                             style={{
                                 direction: lang === SupportedLanguages.English ? "ltr" : "rtl"
                             }}

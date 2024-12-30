@@ -14,23 +14,32 @@ export const ProductApi = createApi({
             }),
             invalidatesTags: ["Products"],
         }),
-        getProducts: builder.query<ProductResponse, { storeId: number }>({
+        postBulkProducts: builder.mutation<void, any[]>({
             query: (body) => ({
-                url: `/${body.storeId}?Limit=10`,
+                url: "/importsku",
+                method: "POST",
+                body,
+            }),
+            invalidatesTags: ["Products"],
+        }),
+        getProducts: builder.query<ProductResponse, { storeId: number; limit: number; index: number }>({
+            query: (body) => ({
+                url: `/${body.storeId}?Limit=${body.limit}&Index=${body.index}`,
                 method: "GET",
             }),
             providesTags: ["Products"],
         }),
+
         deleteProduct: builder.mutation<void, number[]>({
             query: (ids) => ({
-                url: `/products`,
+                url: `/`,
                 method: "DELETE",
                 body: { ids }
             }),
             invalidatesTags: ["Products"],
         }),
         getProductById: builder.query<GetProductByIdResponse, string>({
-            query: (id) => `/products/1/product/${+id}`,
+            query: (id) => `/1/product/${+id}`,
             providesTags: ["Products"],
         }),
         updateProduct: builder.mutation<void, any>({
@@ -49,5 +58,6 @@ export const {
     useGetProductsQuery,
     useDeleteProductMutation,
     useGetProductByIdQuery,
-    useUpdateProductMutation
+    useUpdateProductMutation,
+    usePostBulkProductsMutation
 } = ProductApi;

@@ -17,7 +17,8 @@ export const AddProductFormSchemaNew = z.object({
         Description: z.string().min(3, "Description must be at least 3 characters long").optional(),
         IsDropShipped: z.boolean().optional().default(false),
     }),
-    Media: z.array(z.any()).min(1, "At least one media file is required"),
+    Media: z.array(z.any()).optional(),
+    // Media: z.array(z.any()).min(1, "At least one media file is required"),
     ProductDimensions: z.object({
         Weight: toPositiveNumber("Weight must be a positive number"),
         Height: toPositiveNumber("Height must be a positive number"),

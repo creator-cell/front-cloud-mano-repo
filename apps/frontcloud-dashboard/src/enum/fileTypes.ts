@@ -6,4 +6,5 @@ export enum FileType {
     IMAGE_WEBP = 'image/webp',
     PDF = 'application/pdf',
     ANY_IMAGE = 'image/*',  // Use this if you want to allow any image type
+    PRODUCT_UPLOAD = '.csv',
 }

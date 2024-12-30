@@ -19,13 +19,11 @@ import Image, { StaticImageData } from "next/image";
 interface CartCardProps {
     product: {
         name: string;
-        image: StaticImageData;
+        image: string;
         price: number;
         discountedPrice: number;
         discount: number;
         packagingFee: number;
-        seller: string;
-        ram: string;
     };
     deliveryInfo: {
         date: string;
@@ -43,18 +41,18 @@ const CartCard: React.FC<CartCardProps> = ({
     onQuantityChange,
     onRemove,
 }) => {
-    const { name, image, price, discountedPrice, discount, packagingFee, seller, ram } = product;
+    const { name, image, price, discountedPrice, discount, packagingFee } = product;
     const { date, cost } = deliveryInfo;
 
     return (
         <Card className="border p-4 rounded-md ">
             <div className="grid grid-cols-7 items-start gap-6">
-                <div className="col-span-5 flex items-start gap-x-3">
+                <div className="col-span-7 flex items-start gap-x-3">
                     <Image
                         src={image}
                         alt={name}
-                        width={200}
-                        height={400}
+                        width={100}
+                        height={300}
                         className="rounded-md"
                     />
                     <div>
@@ -62,8 +60,6 @@ const CartCard: React.FC<CartCardProps> = ({
                             <CardTitle className="text-sm md:text-sm font-[400] truncate line-clamp-1">
                                 {name}
                             </CardTitle>
-                            <CardDescription>{ram} RAM</CardDescription>
-                            <CardDescription>Seller: {seller}</CardDescription>
                         </CardHeader>
                         <div className="pt-6 space-x-2">
                             <Label className="text-sm line-through text-gray-600 ">
@@ -79,11 +75,11 @@ const CartCard: React.FC<CartCardProps> = ({
                         </div>
                     </div>
                 </div>
-                <div className="col-span-2">
+                {/* <div className="col-span-1">
                     <Label className="text-xs whitespace-nowrap">
                         Delivery by {date} | {cost}
                     </Label>
-                </div>
+                </div> */}
             </div>
 
             <CardFooter className="flex justify-start p-0 gap-5 mt-7">

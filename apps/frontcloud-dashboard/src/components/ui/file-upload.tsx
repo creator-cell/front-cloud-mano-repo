@@ -96,6 +96,17 @@ export const FileUpload = ({
                     return toast.error('File size must be less than 5MB');
                 }
                 break;
+
+            case FileType.PRODUCT_UPLOAD:
+                if (
+                    !(newFiles[0]?.type.includes('text/csv') ||
+                        newFiles[0]?.type.includes('application/vnd.ms-excel') ||
+                        newFiles[0]?.type.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'))
+                ) {
+                    toast.error('Only CSV or Excel files (XLS/XLSX) are allowed');
+                    return;
+                }
+                break;
             default:
                 break;
         }

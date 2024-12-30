@@ -238,6 +238,7 @@ const ProductTable = ({ data }: ProductTableProps) => {
 
 
     const [selectedIds, setSelectedIds] = useState<number[]>([]); // Step 1: Define selectedIds as number[]
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
     // Step 2: Filter out undefined values in useEffect
     useEffect(() => {
@@ -255,18 +256,19 @@ const ProductTable = ({ data }: ProductTableProps) => {
     const handleDelete = async () => {
 
         const promise = DeleteProduct(selectedIds).unwrap()
-
-        toast.promise(promise, {
-            loading: "Deleting...",
-            success: "Category Deleted Successfully",
-            error: "Error Deleting Category"
-        })
-
         try {
 
-            await promise;
-            // toast.success("Category Deleted Successfully")
-            router.refresh()
+            toast.promise(promise, {
+                loading: "Deleting...",
+                success: (res) => {
+                    setDeleteModalOpen(false)
+                    router.refresh()
+                    return "Product Deleted Successfully"
+                },
+                error: "Error Deleting Category"
+            })
+
+
         } catch (err) {
             console.error(err)
             // toast.error("Error Deleting Category")
@@ -289,9 +291,11 @@ const ProductTable = ({ data }: ProductTableProps) => {
                         description='WARNING: The selected products will be removed permanently. If the products appear in any Product Pick List options they will also be removed from those options. Are you sure?'
                         confirmLabel='Delete'
                         cancelLabel='Cancle'
+                        onClose={setDeleteModalOpen}
+                        open={deleteModalOpen}
                         onConfirm={handleDelete}
                         isDisabled={table.getSelectedRowModel().rows.length < 1}
-                        triggerLabel={<Trash2 className="h-4 w-8 " />}
+                        triggerLabel={<Trash2 className="h-4 w-12 " />}
                         diasbledMessage='Select At least one product'
 
                     />
@@ -376,26 +380,6 @@ const ProductTable = ({ data }: ProductTableProps) => {
                     )}
                 </TableBody>
             </Table>
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="space-x-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        Previous
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        Next
-                    </Button>
-                </div>
-            </div>
         </div>
 
     )

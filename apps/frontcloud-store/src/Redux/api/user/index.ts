@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { AddtoCartPayloadType, UserResponse, userSignInResponse } from "./types/user.types";
 import { setUser } from "./slice/user.slice";
+import { CartResponseType } from "./types/cart.types";
+import { WishlistResponseType } from "./types/wishlist.types";
 
 export const UserApi = createApi({
     reducerPath: "userApi",
@@ -57,13 +59,27 @@ export const UserApi = createApi({
             }),
         }),
 
+        getAllCartItems: builder.query<CartResponseType, void>({
+            query: () => ({
+                url: `/cart`,
+                method: "GET",
+            }),
+        }),
+
         addToWishList: builder.mutation<any, Omit<AddtoCartPayloadType, "Quantity">>({
             query: ({ ProductId, UserId, StoreId }) => ({
                 url: "/wishlist",
                 method: "POST",
                 body: { ProductId, UserId, StoreId },
             }),
-        })
+        }),
+
+        getAllWishListItems: builder.query<WishlistResponseType, void>({
+            query: () => ({
+                url: `/wishlist`,
+                method: "GET",
+            }),
+        }),
     }),
 });
 
@@ -74,5 +90,7 @@ export const {
     useVerifyOtpMutation,
     useSignInMutation,
     useAddToCartMutation,
-    useAddToWishListMutation
+    useGetAllCartItemsQuery,
+    useAddToWishListMutation,
+    useGetAllWishListItemsQuery
 } = UserApi;

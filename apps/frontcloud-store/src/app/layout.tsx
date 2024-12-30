@@ -43,6 +43,7 @@ export default function RootLayout({
                         <Toaster
                             position="top-right"
                             richColors
+                            closeButton
                         />
                     </ThemeProvider>
                 </AppProvider>

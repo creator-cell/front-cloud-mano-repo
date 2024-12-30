@@ -21,12 +21,12 @@ const ProfileDetails = () => {
             <div className='flex flex-col items-center pt-16'>
                 <Label className='text-xl font-bold'>
                     {
-                        userData && userData?.Data?.length > 0 && userData?.Data[0]?.UserName ? userData?.Data[0]?.UserName : 'John Doe'
+                        userData && userData?.Data && userData?.Data?.UserName ? userData?.Data?.UserName : 'John Doe'
                     }
                 </Label>
                 <Label className='text-sm truncate'>
                     {
-                        userData && userData?.Data?.length > 0 && userData?.Data[0]?.Email ? userData?.Data[0]?.Email : 'John Doe'
+                        userData && userData?.Data && userData?.Data?.Email ? userData?.Data?.Email : 'John Doe'
                     }
                 </Label>
             </div>

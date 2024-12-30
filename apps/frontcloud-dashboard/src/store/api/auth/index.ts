@@ -3,38 +3,20 @@ import { SessionType, SignInAPI } from "./types/auth-types";
 
 export const AuthApi = createApi({
   reducerPath: "auth",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/v1/auth" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "/api/v1/store" }),
   tagTypes: ["Session"],
   endpoints: (builder) => ({
-    signIn: builder.mutation<SignInAPI, any>({
-      query: (data) => ({
-        url: "/sign-in?role=CANDIDATE",
+    signUp: builder.mutation<any, any>({
+      query: (body) => ({
+        url: ``, // signup url
         method: "POST",
-        body: { ...data },
+        body,
       }),
-    }),
-    SignInWithOtp: builder.mutation<SignInAPI, { email: string; otp: number }>({
-      query: (data) => ({
-        url: "/sign-in-otp?role=CANDIDATE",
-        method: "POST",
-        body: { ...data },
-      }),
-    }),
-    getSession: builder.query<SessionType, void>({
-      query: () => "session?role=CANDIDATE",
-      providesTags: ["Session"],
-    }),
-    signOut: builder.mutation<SessionType, void>({
-      query: () => ({ url: "/sign-out", method: "POST" }),
-      invalidatesTags: ["Session"],
     }),
   }),
 });
 
 export const {
-  useSignInMutation,
-  useGetSessionQuery,
-  useSignInWithOtpMutation,
-  useSignOutMutation,
+  useSignUpMutation
 } = AuthApi;
-export const { getSession } = AuthApi.endpoints;
+

@@ -2,6 +2,7 @@
 
 import { CustomHeading } from '@/components/custom/CustomHeading'
 import WishlistCard from '@/components/store/shared/WishlistCard';
+import { useGetAllWishListItemsQuery } from '@/Redux/api/user';
 import React from 'react'
 
 // fakeProducts.ts
@@ -66,13 +67,18 @@ const fakeProducts = [
 
 
 const wishlistPage = () => {
+
+    const { data } = useGetAllWishListItemsQuery()
+    console.log("🚀 ~ wishlistPage ~ data:", data)
+
     return (
-        <section className='container mt-8'>
+        <section className='container my-8'>
             <CustomHeading className='text-black text-sm md:text-3xl text-left pb-6'>Wishlist</CustomHeading>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-4'>
                 {
-                    fakeProducts.map((category, index) => (
-                        <WishlistCard key={index} card={category} />
+                    data && data?.Data.length > 0 && data?.Data?.[0]?.Wishlist.length > 0 &&
+                    data?.Data?.[0]?.Wishlist.map((item, index) => (
+                        <WishlistCard key={index} product={item} />
                     ))
                 }
             </div>

@@ -55,22 +55,46 @@ export interface AddProductType {
 
 
 
+
+
+// Media interface
+interface Media {
+    MediaID: string;
+    MediaURL: string;
+    MediaType: string; // "Image" or "Video"
+}
+
+// Product interface
 export interface Product {
     ProductID: number;
     ProductName: string;
     SKU: string;
     StockQuantity: number;
     StorePrice: string;
-    SupplierPrice: string;
-    PriceType: string;
-    DiscountType: string;
+    SupplierPrice: string | null;
+    PriceType: string; // e.g., "default" or "cost"
+    DiscountType: string | null; // e.g., "fixed", "percentage", or null
+    Discount: number | null;
+    Medias: Media[];
+    InWishlist: number; // 0 or 1
+    InCart: number; // 0 or 1
 }
 
-export interface Pagination {
-    totalCount: number;
-    totalPages: number;
-    currentPage: number;
+// Pagination interface
+interface Pagination {
+    TotalCount: number;
+    TotalPages: number;
+    CurrentPage: number;
 }
 
-export type ProductResponse = ResponseType<{ Products: Product[]; pagination: Pagination; }>;
+// Data interface
+interface ProductData {
+    Products: Product[];
+    Pagination: Pagination;
+}
+
+export type ProductResponse = ResponseType<ProductData>;
 export type GetProductByIdResponse = ResponseType<AddProductType>;
+
+
+

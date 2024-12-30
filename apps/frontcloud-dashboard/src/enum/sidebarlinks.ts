@@ -135,11 +135,11 @@ export const sidebarLinks: SidebarLink[] = [
                     ]
                 },
                 {
-                    label: "Import Product SKUs",
+                    label: "Import Products ",
                     page: "/dashboard/products/import-skus"
                 },
                 {
-                    label: "Export Product SKUs",
+                    label: "Export Products",
                     page: "/dashboard/products/export-skus"
                 }
             ]
