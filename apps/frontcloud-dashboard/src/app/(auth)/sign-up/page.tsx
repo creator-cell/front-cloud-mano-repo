@@ -121,7 +121,14 @@ const SignUp = () => {
             </div>
             {
                 isSuccess ? (
-                    <Success />
+                    <Success
+                        title="Store Created Successfully"
+                        description="Activation Link has been sent to your email"
+                        buttonText="Go to Dashboard"
+                        onClick={() => {
+                            window.location.href = "/dashboard"
+                        }}
+                    />
                 ) : (
 
                     <div className='flex max-md:flex-col  max-md:gap-y-12  gap-x-12 sm:px-12 md:px-0 pb-12 w-full'>

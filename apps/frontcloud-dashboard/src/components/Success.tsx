@@ -1,9 +1,23 @@
+"use client";
 import React from "react";
-import Image from "next/image";
 import { CustomHeading } from "@/components/custom/CustomHeading";
 import { Label } from "./ui/label";
 
-const Success = () => {
+
+
+interface Props {
+    title: string;
+    description: string;
+    buttonText: string;
+    onClick: () => void;
+}
+
+const Success: React.FC<Props> = ({
+    title,
+    description,
+    buttonText,
+    onClick,
+}) => {
     return (
         <div className="w-full  flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-5xl mx-auto ">
@@ -29,14 +43,14 @@ const Success = () => {
                 {/* Heading */}
                 <CustomHeading
                     variant="small"
-                    className="text-3xl text-gray-800 font-semibold mb-4 text-center"
+                    className="text-3xl text-green-800 font-semibold mb-4 text-center"
                 >
-                    Your account has been successfully created!
+                    {title}
                 </CustomHeading>
 
                 {/* Description */}
-                <Label className="text-lg text-gray-600 mb-6">
-                    Check your email to activate your account and start using our services. The activation link has been sent to your inbox.
+                <Label className="text-lg text-white mb-6">
+                    {description}
                 </Label>
 
                 {/* Image (Optional) */}
@@ -51,15 +65,15 @@ const Success = () => {
                 </div> */}
 
                 {/* Call to Action */}
-                <p className="text-sm text-gray-500 mb-4 pt-7">
+                <p className="text-sm text-white mb-4 pt-7">
                     If you don't see the email, please check your spam folder.
                 </p>
-                <a
-                    href="/dashboard"
+                <button
+                    onClick={onClick}
                     className="text-white bg-primary hover:bg-primary-dark rounded-full py-2 px-6 text-lg"
                 >
-                    Go to Dashboard
-                </a>
+                    {buttonText}
+                </button>
             </div>
         </div>
     );

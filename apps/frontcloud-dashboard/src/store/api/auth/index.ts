@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { SessionType, SignInAPI } from "./types/auth-types";
+import { SessionType, SignInAPI, SignInResponse } from "./types/auth-types";
 
 export const AuthApi = createApi({
   reducerPath: "auth",
@@ -13,10 +13,29 @@ export const AuthApi = createApi({
         body,
       }),
     }),
+    verifyAccount: builder.mutation<any, { token: string }>({
+      query: ({ token }) => ({
+        url: `/verify`,
+        method: "POST",
+        body: { Token: token },
+      }),
+    }),
+
+    signIn: builder.mutation<SignInResponse, { Email: string, Password: string }>({
+      query: (body) => ({
+        url: `/login`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Session"],
+    }),
+
   }),
 });
 
 export const {
-  useSignUpMutation
+  useSignUpMutation,
+  useVerifyAccountMutation,
+  useSignInMutation
 } = AuthApi;
 

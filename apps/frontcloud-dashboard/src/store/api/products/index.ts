@@ -16,9 +16,9 @@ export const ProductApi = createApi({
         }),
         postBulkProducts: builder.mutation<void, any[]>({
             query: (body) => ({
-                url: "/importsku",
+                url: "/import",
                 method: "POST",
-                body,
+                body: { Products: body },
             }),
             invalidatesTags: ["Products"],
         }),

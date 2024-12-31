@@ -185,9 +185,11 @@ const Nav = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <Button variant="default" className='uppercase text-[0.875rem] leading-[1.375rem] font-medium tracking-[0.05em] py-2 px-6 max-md:px-3 max-sm:py-0' >Get Started</Button>
+                                    <Button asChild variant="default" className='uppercase text-[0.875rem] leading-[1.375rem] font-medium tracking-[0.05em] py-2 px-6 max-md:px-3 max-sm:py-0' >
+                                        <Link href={"/sign-up"}>Get Started</Link>
+                                    </Button>
                                 </div>
-                                <Link href={"/login"} className='text-[.75rem] text-gray-500 hover:text-gray-700 cursor-pointer leading-9 font-[500] capitalize'>Log in</Link>
+                                <Link href={"/sign-in"} className='text-[.75rem] text-gray-500 hover:text-gray-700 cursor-pointer leading-9 font-[500] capitalize'>Log in</Link>
 
                                 <div className='lg:hidden'>
                                     <Menu size={32} onClick={() => setOpenMenu(true)} />
