@@ -12,6 +12,7 @@ import { FormFieldType } from '@/enum/formTypes';
 import Link from 'next/link';
 import { useSignInMutation } from '@/store/api/auth';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 ;
 
 interface LoginFormProps {
@@ -23,6 +24,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     title,
     setShowForm,
 }) => {
+    const router = useRouter()
     const [SignIn, { isLoading }] = useSignInMutation()
 
     const form = useForm<FormSchema>({
@@ -42,6 +44,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 success: (data) => {
                     console.log(data)
                     form.reset()
+                    router.push('/dashboard')
                     return data?.IsVerify ? 'Login successful' : "Account not verified , Verification link sent to your email"
                 },
                 error: (error) => {

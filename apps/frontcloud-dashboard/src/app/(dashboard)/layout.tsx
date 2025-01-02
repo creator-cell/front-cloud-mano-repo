@@ -24,6 +24,7 @@ import ActionBarLayout from "@/components/common/CommonActionBarLayout";
 import useMediaQuery from "@/hooks/useMedia";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { closeSideBar, closeSubSidebarLink, openSideBar, openSubSidebarLink } from "@/store/sidebar";
+import NavUser from "@/components/dashboard/NavUser";
 
 
 
@@ -209,8 +210,13 @@ export default function Dashboard({
                             )
                         }
                     </div>
-                    <div className="border-t pt-3 border-gray-300 px-4 ">
-                        <Link href="/help" className="text-white text-left cursor-pointer whitespace-nowrap" >Help</Link>
+                    <div className="border-t pt-3 border-gray-300 px-3 ">
+                        {/* <Link href="/help" className="text-white text-left cursor-pointer whitespace-nowrap" >Help</Link> */}
+                        <NavUser user={{
+                            name: "shadcn",
+                            email: "m@example.com",
+                            avatar: "/avatars/shadcn.jpg",
+                        }} />
                     </div>
                 </SidebarBody>
             </Sidebar>
